@@ -13,7 +13,6 @@ elements:
         from_bus: electricity
         to_bus: heat_decentral
         expandable: True
-        capacity: 0
     sequences:
       - efficiency
 
@@ -24,7 +23,6 @@ elements:
         from_bus: electricity
         to_bus: heat_central
         expandable: True
-        capacity: 0
 
   solar:
     component: volatile
@@ -32,7 +30,6 @@ elements:
       - name: pv_roof
         bus: electricity
         expandable: True
-        capacity: 0
 
   storages:
     component: storage
@@ -40,19 +37,15 @@ elements:
       - name: electricity-liion_battery
         bus: electricity
         expandable: True
-        capacity: 0
       - name: heat_central-aquifer_storage
         bus: heat_central
         expandable: True
-        capacity: 0
       - name: heat_central-district_heating_storage
         bus: heat_central
         expandable: True
-        capacity: 0
       - name: heat_decentral-buffer_storage
         bus: heat_decentral
         expandable: True
-        capacity: 0
 
   heaters:
     component: conversion
@@ -61,17 +54,14 @@ elements:
         from_bus: h2
         to_bus: heat_central
         expandable: True
-        capacity: 0
       - name: h2-boiler_small
         from_bus: h2
         to_bus: heat_decentral
         expandable: True
-        capacity: 0
       - name: h2-gt
         from_bus: h2
         to_bus: heat_central
         expandable: True
-        capacity: 0
 
   backpressures:
     component: backpressure
@@ -81,7 +71,6 @@ elements:
         electricity_bus: electricity
         heat_bus: heat_central
         expandable: True
-        capacity: 0
 
   demands:
     component: load

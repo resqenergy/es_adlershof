@@ -1,0 +1,33 @@
+
+raw_dir: preprocessed
+
+elements:
+  - path: scalars/capacities.csv
+    scenario: 2050-el_eff
+    scenario_column: scenario_key
+  - path: scalars/carrier_costs.csv
+    scenario: 2050-el_eff
+    scenario_column: scenario_key
+  - path: scalars/costs_efficiencies.csv
+    scenario: 2050-el_eff
+    scenario_column: scenario_key
+  - path: scalars/demands.csv
+    scenario: 2050-el_eff
+    scenario_column: scenario_key
+  - path: scalars/el_gas_constraint.csv
+    scenario: 2050-el_eff
+    scenario_column: scenario_key
+  - path: scalars/emission_constraint.csv
+    scenario: 2050-el_eff
+    scenario_column: scenario_key
+  - path: scalars/import_export_prices.csv
+    scenario: 2050-el_eff
+    scenario_column: scenario_key
+  - path: scalars/potentials.csv
+    scenario: 2050-el_eff
+    scenario_column: scenario_key
+sequences:
+  - path: ts_load_electricity.csv
+    sequence_name: demands_profile
+    scenario: 2050-el_eff
+    scenario_column: scenario_key
