@@ -1,10 +1,9 @@
 """Module to preprocess the heat demand data"""
-from typing import Any
 
 import pandas as pd
 from pathlib import Path
 
-from pandas import DataFrame, Series
+from pandas import Series
 
 RAW_DIR = Path(__file__).parent.parent / "raw"
 HEAT_LOAD_DIR = RAW_DIR / "heat_load"
@@ -22,7 +21,7 @@ HEAT_MAPPING = {
     "ghd": "heat_central",
     "lab": "heat_central",
     "uni": "heat_central",
-    "office": "heat_central"
+    "office": "heat_central",
 }
 
 
@@ -47,19 +46,31 @@ def preprocess_heat_demand(region: str = "AD", year: int = 2050):
     result_df = pd.concat(all_timeseries, axis=1)
 
     # Calculate aggregated timeseries (total)
-    heat_central_cols = [f"{c}_heat" for c, heat_type in HEAT_MAPPING.items() if heat_type == "heat_central"]
-    heat_decentral_cols = [f"{c}_heat" for c, heat_type in HEAT_MAPPING.items() if heat_type == "heat_decentral"]
+    heat_central_cols = [
+        f"{c}_heat"
+        for c, heat_type in HEAT_MAPPING.items()
+        if heat_type == "heat_central"
+    ]
+    heat_decentral_cols = [
+        f"{c}_heat"
+        for c, heat_type in HEAT_MAPPING.items()
+        if heat_type == "heat_decentral"
+    ]
     elec_cols = [c for c in result_df.columns if "electricity" in c]
 
     result_df["heat_central-demand-profile"] = result_df[heat_central_cols].sum(axis=1)
-    result_df["heat_decentral-demand-profile"] = result_df[heat_decentral_cols].sum(axis=1)
+    result_df["heat_decentral-demand-profile"] = result_df[heat_decentral_cols].sum(
+        axis=1
+    )
     result_df["electricity-demand-profile"] = result_df[elec_cols].sum(axis=1)
 
     # Ensure output directory exists
     PREPROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
     # Add timeindex
-    result_df["timeindex"] = pd.date_range(start=f"{year}-01-01 00:00:00", freq="h", periods=len(result_df))
+    result_df["timeindex"] = pd.date_range(
+        start=f"{year}-01-01 00:00:00", freq="h", periods=len(result_df)
+    )
 
     # Store in TIMESERIES_OUTPUT
     result_df.to_csv(TIMESERIES_OUTPUT, index=False, sep=";")
@@ -90,5 +101,3 @@ def get_heat_timeseries(type_name: str, distribution: dict, filename: str) -> Se
 
 if __name__ == "__main__":
     preprocess_heat_demand()
-
-
