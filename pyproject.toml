@@ -1,0 +1,11 @@
+[project]
+name = "es-adlershof"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "oemof-pipe",
+]
+
+[tool.uv.sources]
+oemof-pipe = { path = "../dp_pipe", editable = true }
