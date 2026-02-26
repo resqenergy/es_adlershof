@@ -31,3 +31,7 @@ sequences:
     sequence_name: demands_profile
     scenario: 2050-el_eff
     scenario_column: scenario_key
+  - path: ts_heat_load.csv
+    sequence_name: demands_profile
+    scenario: 2050-el_eff
+    scenario_column: scenario_key
