@@ -1,37 +1,41 @@
 
-raw_dir: preprocessed
+raw_dir: .
 
 elements:
-  - path: scalars/capacities.csv
+  - path: preprocessed/scalars/capacities.csv
     scenario: 2050-el_eff
     scenario_column: scenario_key
-  - path: scalars/carrier_costs.csv
+  - path: preprocessed/scalars/carrier_costs.csv
     scenario: 2050-el_eff
     scenario_column: scenario_key
-  - path: scalars/costs_efficiencies.csv
+  - path: preprocessed/scalars/costs_efficiencies.csv
     scenario: 2050-el_eff
     scenario_column: scenario_key
-  - path: scalars/demands.csv
+  - path: preprocessed/scalars/demands.csv
     scenario: 2050-el_eff
     scenario_column: scenario_key
-  - path: scalars/el_gas_constraint.csv
+  - path: preprocessed/scalars/el_gas_constraint.csv
     scenario: 2050-el_eff
     scenario_column: scenario_key
-  - path: scalars/emission_constraint.csv
+  - path: preprocessed/scalars/emission_constraint.csv
     scenario: 2050-el_eff
     scenario_column: scenario_key
-  - path: scalars/import_export_prices.csv
+  - path: preprocessed/scalars/import_export_prices.csv
     scenario: 2050-el_eff
     scenario_column: scenario_key
-  - path: scalars/potentials.csv
+  - path: preprocessed/scalars/potentials.csv
     scenario: 2050-el_eff
     scenario_column: scenario_key
 sequences:
-  - path: ts_load_electricity.csv
+  - path: preprocessed/ts_electricity_load.csv
     sequence_name: demands_profile
     scenario: 2050-el_eff
     scenario_column: scenario_key
-  - path: ts_heat_load.csv
+  - path: preprocessed/ts_heat_load.csv
+    sequence_name: demands_profile
+    scenario: 2050-el_eff
+    scenario_column: scenario_key
+  - path: raw/time_series/ts_load_h2.csv
     sequence_name: demands_profile
     scenario: 2050-el_eff
     scenario_column: scenario_key
