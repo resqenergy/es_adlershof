@@ -84,8 +84,10 @@ elements:
         bus: electricity
       - name: heat_decentral-demand
         bus: heat_decentral
+        amount: 1.0
       - name: heat_central-demand
         bus: heat_central
+        amount: 1.0
       - name: h2-demand
         bus: h2
 
