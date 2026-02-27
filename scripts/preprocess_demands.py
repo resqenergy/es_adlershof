@@ -25,7 +25,7 @@ HEAT_MAPPING = {
 }
 
 ELECTRICITY_LOAD_DIR = RAW_DIR / "electricity_load"
-ELECTRICITY_OUTPUT_FILE = PREPROCESSED_DIR / "ts_elelctricity_load.csv"
+ELECTRICITY_OUTPUT_FILE = PREPROCESSED_DIR / "ts_electricity_load.csv"
 ELECTRICITY_COLUMN = "Zone 1 (kW)"
 ELECTRICITY_MAPPING = {
     "sfh": "electricity-demand-profile",
@@ -54,6 +54,7 @@ def preprocess_demand(
     column: str,
     mapping: dict[str, str],
     output_filename: Path,
+    scaling_factor: float = 1.0,
     region: str = "AD",
     year: int = 2050,
 ):
@@ -69,7 +70,7 @@ def preprocess_demand(
 
         # Multiply by distribution
         dist_value = building_distribution[type_name]
-        timeseries = timeseries * dist_value
+        timeseries = timeseries * dist_value * scaling_factor
         all_timeseries.append(timeseries)
 
     # Combine all types
@@ -111,10 +112,13 @@ def get_timeseries(column: str, filename: str, directory: Path) -> Series:
 
 
 if __name__ == "__main__":
-    preprocess_demand(HEAT_LOAD_DIR, HEAT_COLUMN, HEAT_MAPPING, HEAT_OUTPUT_FILE)
+    preprocess_demand(
+        HEAT_LOAD_DIR, HEAT_COLUMN, HEAT_MAPPING, HEAT_OUTPUT_FILE, scaling_factor=1e-3
+    )
     preprocess_demand(
         ELECTRICITY_LOAD_DIR,
         ELECTRICITY_COLUMN,
         ELECTRICITY_MAPPING,
         ELECTRICITY_OUTPUT_FILE,
+        scaling_factor=1e-3,
     )
