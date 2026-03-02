@@ -55,6 +55,8 @@ sequences:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
+  - path: preprocessed/ts_cop.csv
+    sequence_name: heatpumps_profile
   - path: raw/time_series/ts_load_h2.csv
     sequence_name: demands_profile
     scenario:
