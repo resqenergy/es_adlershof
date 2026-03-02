@@ -55,7 +55,7 @@ def main():
             # Add fix operational costs
             if f"{suffix}fixom_cost" not in var_values:
                 continue
-            val = var_values["fixom_cost"]
+            val = var_values[f"{suffix}fixom_cost"]
             if pd.isna(val) or val == "":
                 continue
             fixom = float(val)
