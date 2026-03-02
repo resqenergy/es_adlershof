@@ -17,6 +17,11 @@ elements:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
+  - path: preprocessed/scalars/capacity_costs.csv
+    scenario:
+      - 2050-base
+      - 2050-el_eff
+    scenario_column: scenario_key
   - path: preprocessed/scalars/demands.csv
     scenario:
       - 2050-base
