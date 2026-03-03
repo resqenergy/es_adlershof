@@ -72,7 +72,7 @@ sequences:
     sequence_name: solar_profile
     mapping:
       time: timeindex
-      DE30: pv_roof-profile
+      DE30: solar-pv_roof-profile
     csv_options:
       skip: 2
       sep: ","

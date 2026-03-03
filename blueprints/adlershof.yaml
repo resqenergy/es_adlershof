@@ -27,7 +27,7 @@ elements:
   solar:
     component: volatile
     instances:
-      - name: pv_roof
+      - name: solar-pv_roof
         bus: electricity
         expandable: True
 
