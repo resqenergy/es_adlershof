@@ -68,3 +68,11 @@ sequences:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
+  - path: raw/time_series/ninja_pv_country_DE_merra-2_nuts-2_corrected.csv
+    sequence_name: solar_profile
+    mapping:
+      time: timeindex
+      DE30: pv_roof-profile
+    csv_options:
+      skip: 2
+      sep: ","
