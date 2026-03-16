@@ -8,4 +8,4 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-oemof-pipe = { path = "../dp_pipe", editable = true }
+oemof-pipe = { git = "https://github.com/rl-institut/oemof_pipe" }
