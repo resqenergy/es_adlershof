@@ -5,7 +5,8 @@ from pathlib import Path
 import duckdb
 
 PREPROCESSED_DIR = Path(__file__).parent.parent / "preprocessed"
-PREPROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+SCALARS_DIR = PREPROCESSED_DIR / "scalars"
+SCALARS_DIR.mkdir(parents=True, exist_ok=True)
 RAW_DIR = Path(__file__).parent.parent / "raw"
 
 
@@ -23,7 +24,7 @@ def set_name_column(source: Path, target: Path):
 
 
 for file in (RAW_DIR / "scalars").iterdir():
-    target_path = PREPROCESSED_DIR / "scalars" / file.name
+    target_path = SCALARS_DIR / file.name
     set_name_column(file, target_path)
 
 set_name_column(
