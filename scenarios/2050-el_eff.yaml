@@ -2,73 +2,73 @@
 raw_dir: .
 
 elements:
-  - path: preprocessed/scalars/capacities.csv
+  - path: s3://resq/preprocessed/scalars/capacities.csv
     scenario:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
-  - path: preprocessed/scalars/carrier_costs.csv
+  - path: s3://resq/preprocessed/scalars/carrier_costs.csv
     scenario:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
-  - path: preprocessed/scalars/costs_efficiencies.csv
+  - path: s3://resq/preprocessed/scalars/costs_efficiencies.csv
     scenario:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
-  - path: preprocessed/scalars/capacity_costs.csv
+  - path: s3://resq/preprocessed/scalars/capacity_costs.csv
     scenario:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
-  - path: preprocessed/scalars/demands.csv
+  - path: s3://resq/preprocessed/scalars/demands.csv
     scenario:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
-  - path: preprocessed/scalars/el_gas_constraint.csv
+  - path: s3://resq/preprocessed/scalars/el_gas_constraint.csv
     scenario:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
-  - path: preprocessed/scalars/emission_constraint.csv
+  - path: s3://resq/preprocessed/scalars/emission_constraint.csv
     scenario:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
-  - path: preprocessed/scalars/import_export_prices.csv
+  - path: s3://resq/preprocessed/scalars/import_export_prices.csv
     scenario:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
-  - path: preprocessed/scalars/potentials.csv
+  - path: s3://resq/preprocessed/scalars/potentials.csv
     scenario:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
 sequences:
-  - path: preprocessed/ts_electricity_load.csv
+  - path: s3://resq/preprocessed/ts_electricity_load.csv
     sequence_name: demands_profile
     scenario:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
-  - path: preprocessed/ts_heat_load.csv
+  - path: s3://resq/preprocessed/ts_heat_load.csv
     sequence_name: demands_profile
     scenario:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
-  - path: preprocessed/ts_cop.csv
+  - path: s3://resq/preprocessed/ts_cop.csv
     sequence_name: heatpumps_profile
-  - path: raw/time_series/ts_load_h2.csv
+  - path: s3://resq/raw/time_series/ts_load_h2.csv
     sequence_name: demands_profile
     scenario:
       - 2050-base
       - 2050-el_eff
     scenario_column: scenario_key
-  - path: raw/time_series/ninja_pv_country_DE_merra-2_nuts-2_corrected.csv
+  - path: s3://resq/raw/time_series/ninja_pv_country_DE_merra-2_nuts-2_corrected.csv
     sequence_name: solar_profile
     mapping:
       time: timeindex
