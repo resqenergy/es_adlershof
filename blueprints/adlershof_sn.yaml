@@ -1,0 +1,124 @@
+timeindex:
+  start: 2050-01-01 00:00:00
+  periods: 8760
+
+regions:
+  - AD
+
+elements:
+  heatpumps:
+    component: conversion
+    instances:
+      - name: electricity-heatpump_small
+        from_bus: electricity
+        to_bus: heat_decentral
+        expandable: True
+    sequences:
+      - efficiency
+
+  pth:
+    component: conversion
+    instances:
+      - name: electricity-pth
+        from_bus: electricity
+        to_bus: heat_central
+        expandable: True
+
+  solar:
+    component: volatile
+    instances:
+      - name: solar-pv_roof
+        bus: electricity
+        expandable: True
+
+  storages:
+    component: storage
+    instances:
+      - name: electricity-liion_battery
+        bus: electricity
+        expandable: True
+      - name: heat_central-aquifer_storage
+        bus: heat_central
+        expandable: True
+      - name: heat_central-district_heating_storage
+        bus: heat_central
+        expandable: True
+      - name: heat_decentral-buffer_storage
+        bus: heat_decentral
+        expandable: True
+
+  heaters:
+    component: conversion
+    instances:
+      - name: h2-boiler_large
+        from_bus: h2
+        to_bus: heat_central
+        expandable: True
+      - name: h2-boiler_small
+        from_bus: h2
+        to_bus: heat_decentral
+        expandable: True
+      - name: h2-gt
+        from_bus: h2
+        to_bus: heat_central
+        expandable: True
+
+  backpressures:
+    component: backpressure
+    instances:
+      - name: h2-bpchp
+        fuel_bus: h2
+        electricity_bus: electricity
+        heat_bus: heat_central
+        expandable: True
+
+  demands:
+    component: load
+    attributes:
+      - name
+      - bus
+      - amount
+      - profile
+    instances:
+      - name: electricity-demand
+        bus: electricity
+      - name: heat_decentral-demand
+        bus: heat_decentral
+        amount: 1.0
+      - name: heat_central-demand
+        bus: heat_central
+        amount: 1.0
+      - name: h2-demand
+        bus: h2
+
+  imports:
+    component: shortage
+    instances:
+      - name: electricity-import
+        bus: electricity
+        capacity: 1000000000
+      - name: h2-import
+        bus: h2
+        capacity: 1000000000
+      - name: heat_central-import
+        bus: heat_central
+        capacity: 1000000000
+      - name: heat_decentral-import
+        bus: heat_decentral
+        capacity: 1000000000
+
+  exports:
+    component: excess
+    instances:
+      - name: electricity-export
+        bus: electricity
+        capacity: 1000000000
+      - name: h2-export
+        bus: h2
+        capacity: 1000000000
+      - name: heat_central-export
+        bus: heat_central
+        capacity: 1000000000
+      - name: heat_decentral-export
+        bus: heat_decentral
+        capacity: 1000000000
