@@ -4,7 +4,7 @@ timeindex:
 
 elements:
   heatpumps:
-    component: conversion
+    component: heatpump
     instances:
       - name: heatpump_72
         from_bus: electricity
