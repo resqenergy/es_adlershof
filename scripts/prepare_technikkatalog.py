@@ -62,104 +62,136 @@ def calculate_forecast(costs_per_year: dict[int, float], target_year: int) -> fl
     return float(np.interp(target_year, years, costs, left=None, right=None))
 
 
-# Load raw data
-raw_data = pd.read_csv(
-    FLATDATA_FILE_RAW, encoding="iso-8859-1", sep=";", dtype={"Jahr": str}
-)
-raw_data = raw_data.rename(columns={"Parameter": "var_name", "Wert": "var_value"})
+def load_and_clean_data(file_path: pathlib.Path) -> pd.DataFrame:
+    """Load raw data and perform initial cleaning and type conversion."""
+    df = pd.read_csv(file_path, encoding="iso-8859-1", sep=";", dtype={"Jahr": str})
+    df = df.rename(columns={"Parameter": "var_name", "Wert": "var_value"})
 
-# Values are not parsed correctly due to unknown values. Filter non-numeric values
-raw_data["var_value"] = (
-    raw_data["var_value"]
-    .astype(str)
-    .str.replace(".", "", regex=False)
-    .str.replace(",", ".", regex=False)
-)
-# Filter rows where conversion to float fails
-raw_data = raw_data[pd.to_numeric(raw_data["var_value"], errors="coerce").notna()]
-raw_data["var_value"] = raw_data["var_value"].astype(float)
+    # Values are not parsed correctly due to unknown values. Filter non-numeric values
+    df["var_value"] = (
+        df["var_value"]
+        .astype(str)
+        .str.replace(".", "", regex=False)
+        .str.replace(",", ".", regex=False)
+    )
+    # Filter rows where conversion to float fails
+    df = df[pd.to_numeric(df["var_value"], errors="coerce").notna()]
+    df["var_value"] = df["var_value"].astype(float)
+    return df
 
-# Preprocess parameters if function is given:
-for parameter, parameter_function in PARAMETER_PREPROCESSING.items():
-    matching_rows = raw_data.loc[raw_data["var_name"].str.contains(parameter, na=False)]
-    raw_data.loc[matching_rows.index, "var_value"] = matching_rows["var_value"].apply(
-        parameter_function
+
+def preprocess_parameters(
+    df: pd.DataFrame, preprocessing_mapping: dict
+) -> pd.DataFrame:
+    """Apply preprocessing functions to specific parameters."""
+    for parameter, parameter_function in preprocessing_mapping.items():
+        matching_rows = df.loc[df["var_name"].str.contains(parameter, na=False)]
+        df.loc[matching_rows.index, "var_value"] = matching_rows["var_value"].apply(
+            parameter_function
+        )
+    return df
+
+
+def add_forecasts(df: pd.DataFrame, forecast_years: tuple[int, ...]) -> pd.DataFrame:
+    """Calculate and add forecast rows for capacity costs and O&M costs."""
+    forecast_rows = []
+    for technologie in df["Technologie"].unique():
+        name_data = df[df["Technologie"] == technologie]
+
+        # Get forecast parameters
+        a = {}
+        b = {}
+        try:
+            for year in (2025, 2030, 2040):
+                a[year] = name_data.loc[
+                    (name_data["var_name"] == "Parameter a")
+                    & (name_data["Jahr"] == str(year)),
+                    "var_value",
+                ].iloc[0]
+                b[year] = name_data.loc[
+                    (name_data["var_name"] == "Parameter b")
+                    & (name_data["Jahr"] == str(year)),
+                    "var_value",
+                ].iloc[0]
+        except IndexError:
+            continue
+
+        capacity_cost_data = name_data[name_data["var_name"] == "Thermische Leistung"]
+        for idx, row in capacity_cost_data.iterrows():
+
+            # Get capacity in kWth
+            capacity = row["var_value"]
+            if row["Dimensionierungseinheit"] == "MWth":
+                capacity *= 1000
+
+            # Calculate costs per year using formula
+            costs_per_year = {}
+            for year in a:
+                costs_per_year[year] = a[year] * capacity ** b[year]
+
+            for forecast_year in forecast_years:
+                # Calculate capacity cost from forecasted total cost
+                forecast_value = (
+                    calculate_forecast(costs_per_year, forecast_year) / capacity
+                )
+
+                # Create new row with forecast scenario
+                forecast_row = row.copy()
+                forecast_row["Jahr"] = str(forecast_year)
+                forecast_row["var_name"] = "Spezifische Investitionskosten"
+                forecast_row["var_value"] = forecast_value
+                forecast_rows.append(forecast_row)
+
+        # Copy OM cost for each forecast year
+        fixom_cost_data = name_data[name_data["var_name"] == "Jährliche Fixkosten O&M"]
+        for idx, row in fixom_cost_data.iterrows():
+            for forecast_year in forecast_years:
+                # Create new row with copied O&M cost (as they stay the same)
+                forecast_row = row.copy()
+                forecast_row["Jahr"] = str(forecast_year)
+                forecast_rows.append(forecast_row)
+
+    if forecast_rows:
+        forecast_df = pd.DataFrame(forecast_rows)
+        df = pd.concat([df, forecast_df], ignore_index=True)
+    return df
+
+
+def apply_mappings_and_format(
+    df: pd.DataFrame, name_mapping: dict, parameter_mapping: dict
+) -> pd.DataFrame:
+    """Rename scenarios, merge technology/dimension, and apply final mappings."""
+    # Rename scenario entries as oemof-pipe will otherwise read them as int which causes errors
+    df["scenario"] = "scenario_" + df["Jahr"]
+
+    # We need to merge technology and dimension as values depend on both
+    df["name"] = df.apply(
+        lambda row: f'{row["Technologie"]}_{row["Dimensionierung"]}', axis=1
     )
 
-forecast_rows = []
-for technologie in raw_data["Technologie"].unique():
-    name_data = raw_data[raw_data["Technologie"] == technologie]
-
-    # Get forecast parameters
-    a = {}
-    b = {}
-    try:
-        for year in (2025, 2030, 2040):
-            a[year] = name_data.loc[
-                (name_data["var_name"] == "Parameter a")
-                & (name_data["Jahr"] == str(year)),
-                "var_value",
-            ].iloc[0]
-            b[year] = name_data.loc[
-                (name_data["var_name"] == "Parameter b")
-                & (name_data["Jahr"] == str(year)),
-                "var_value",
-            ].iloc[0]
-    except IndexError:
-        continue
-
-    capacity_cost_data = name_data[name_data["var_name"] == "Thermische Leistung"]
-    for idx, row in capacity_cost_data.iterrows():
-
-        # Get capacity in kWth
-        capacity = row["var_value"]
-        if row["Dimensionierungseinheit"] == "MWth":
-            capacity *= 1000
-
-        # Calculate costs per year using formula
-        costs_per_year = {}
-        for year in a:
-            costs_per_year[year] = a[year] * capacity ** b[year]
-
-        for forecast_year in FORECAST_YEARS:
-            # Calculate capacity cost from forecasted total cost
-            forecast_value = (
-                calculate_forecast(costs_per_year, forecast_year) / capacity
-            )
-
-            # Create new row with forecast scenario
-            forecast_row = row.copy()
-            forecast_row["Jahr"] = str(forecast_year)
-            forecast_row["var_name"] = "Spezifische Investitionskosten"
-            forecast_row["var_value"] = forecast_value
-            forecast_rows.append(forecast_row)
-
-    # Copy OM cost for each forecast year
-    fixom_cost_data = name_data[name_data["var_name"] == "Jährliche Fixkosten O&M"]
-    for idx, row in fixom_cost_data.iterrows():
-        for forecast_year in FORECAST_YEARS:
-            # Create new row with copied O&M cost (as they stay the same)
-            forecast_row = row.copy()
-            forecast_row["Jahr"] = str(forecast_year)
-            forecast_rows.append(forecast_row)
-
-if forecast_rows:
-    forecast_df = pd.DataFrame(forecast_rows)
-    raw_data = pd.concat([raw_data, forecast_df], ignore_index=True)
-
-# Rename scenario entries as oemof-pipe will otherwise read them as int which causes errors
-raw_data["scenario"] = "scenario_" + raw_data["Jahr"]
-
-# We need to merge technology and dimension as values depend on both
-raw_data["name"] = raw_data.apply(
-    lambda row: f'{row["Technologie"]}_{row["Dimensionierung"]}', axis=1
-)
-
-# Apply mapping if needed
-raw_data["name"] = raw_data["name"].map(NAME_MAPPING)
-raw_data = raw_data.dropna(subset=["name"])
-raw_data["var_name"] = raw_data["var_name"].map(PARAMETER_MAPPING)
+    # Apply mapping if needed
+    df["name"] = df["name"].map(name_mapping)
+    df = df.dropna(subset=["name"])
+    df["var_name"] = df["var_name"].map(parameter_mapping)
+    return df
 
 
-# Save to CSV
-raw_data.to_csv(FLATDATA_FILE_PREPROCESSED, index=False, sep=";")
+def main():
+    # Load raw data
+    raw_data = load_and_clean_data(FLATDATA_FILE_RAW)
+
+    # Preprocess parameters if function is given:
+    raw_data = preprocess_parameters(raw_data, PARAMETER_PREPROCESSING)
+
+    # Add forecast
+    raw_data = add_forecasts(raw_data, FORECAST_YEARS)
+
+    # Apply final mappings and formatting
+    raw_data = apply_mappings_and_format(raw_data, NAME_MAPPING, PARAMETER_MAPPING)
+
+    # Save to CSV
+    raw_data.to_csv(FLATDATA_FILE_PREPROCESSED, index=False, sep=";")
+
+
+if __name__ == "__main__":
+    main()
