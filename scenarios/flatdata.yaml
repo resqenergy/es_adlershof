@@ -1,0 +1,8 @@
+
+raw_dir: .
+
+elements:
+  - path: preprocessed/kww_technikkatalog.csv
+    scenario: "scenario_2025"
+  - path: preprocessed/kww_technikkatalog_capacity_cost.csv
+    scenario: "scenario_2025"

@@ -6,24 +6,24 @@ import pandas as pd
 from economics import annuity
 
 PREPROCESSED_DIR = Path(__file__).parent.parent / "preprocessed"
-OVERNIGHT_COSTS_FILE = PREPROCESSED_DIR / "scalars" / "costs_efficiencies.csv"
-RESULT_FILEPATH = PREPROCESSED_DIR / "scalars" / "capacity_costs.csv"
 
 WACC = 0.04
 
 
-def main():
+def calculate_annual_cost(
+    input_file: Path, output_file: Path, scenario_key: str = "scenario_key"
+) -> None:
     """Calculate capacity costs from overnight capacity costs."""
     # Read the costs and efficiencies
-    df = pd.read_csv(OVERNIGHT_COSTS_FILE, sep=";")
+    df = pd.read_csv(input_file, sep=";")
 
     # Results list
     capacitiy_costs = []
 
     # Group by scenario and name (technology)
     # Exclude rows where scenario_key is ALL for the calculations
-    calc_df = df[df["scenario_key"] != "ALL"]
-    grouped = calc_df.groupby(["scenario_key", "name"])
+    calc_df = df[df[scenario_key] != "ALL"]
+    grouped = calc_df.groupby([scenario_key, "name"])
 
     for (scenario, name), group in grouped:
         # Get values
@@ -39,7 +39,7 @@ def main():
             continue
 
         result = {
-            "scenario_key": scenario,
+            scenario_key: scenario,
             "name": name,
         }
         for suffix in ("", "storage_"):
@@ -67,9 +67,17 @@ def main():
 
     # Convert to DataFrame and save
     res_df = pd.DataFrame(capacitiy_costs)
-    res_df.to_csv(RESULT_FILEPATH, index=False, sep=";")
-    print(f"Saved results to {RESULT_FILEPATH}")
+    res_df.to_csv(output_file, index=False, sep=";")
+    print(f"Saved results to {output_file}")
 
 
 if __name__ == "__main__":
-    main()
+    calculate_annual_cost(
+        PREPROCESSED_DIR / "scalars" / "costs_efficiencies.csv",
+        PREPROCESSED_DIR / "scalars" / "capacity_costs.csv",
+    )
+    calculate_annual_cost(
+        PREPROCESSED_DIR / "kww_technikkatalog.csv",
+        PREPROCESSED_DIR / "kww_technikkatalog_capacity_cost.csv",
+        scenario_key="scenario",
+    )
