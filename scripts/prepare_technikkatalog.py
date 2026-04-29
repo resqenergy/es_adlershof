@@ -13,7 +13,12 @@ import pandas as pd
 import numpy as np
 
 
-NAME_MAPPING = {"AbwaermeWP_zentral_0,3": "heatpump_22", "BHKW_zentral_0,3": "bhkw"}
+NAME_MAPPING = {
+    "AbwaermeWP_zentral_2": "heatpump_office",
+    "AbwaermeWP_zentral_10": "heatpump_nt",
+    "AbwaermeWP_zentral_20": "heatpump_mt",
+    "BHKW_zentral_0,3": "bhkw",
+}
 PARAMETER_MAPPING = {
     "Spezifische Investitionskosten": "capacity_cost_overnight",
     "Wirkungsgrad thermisch": "thermal_efficiency",
