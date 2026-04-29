@@ -25,6 +25,7 @@ PARAMETER_MAPPING = {
     "Wirkungsgrad elektrisch": "electric_efficiency",
     "Lebensdauer": "lifetime",
     "Jährliche Fixkosten O&M": "fixom_cost",
+    "Variable Kosten O&M": "marginal_cost",
 }
 
 PARAMETER_PREPROCESSING = {
