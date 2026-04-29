@@ -18,7 +18,7 @@ def calculate_annual_cost(
     df = pd.read_csv(input_file, sep=";")
 
     # Results list
-    capacitiy_costs = []
+    capacity_costs = []
 
     # Group by scenario and name (technology)
     # Exclude rows where scenario_key is ALL for the calculations
@@ -63,10 +63,10 @@ def calculate_annual_cost(
             total_annualized_cost = ann_capex + fixom
             result[f"{suffix}capacity_cost"] = total_annualized_cost
 
-        capacitiy_costs.append(result)
+        capacity_costs.append(result)
 
     # Convert to DataFrame and save
-    res_df = pd.DataFrame(capacitiy_costs)
+    res_df = pd.DataFrame(capacity_costs)
     res_df.to_csv(output_file, index=False, sep=";")
     print(f"Saved results to {output_file}")
 

@@ -148,14 +148,17 @@ def add_forecasts(df: pd.DataFrame, forecast_years: tuple[int, ...]) -> pd.DataF
                 forecast_row["var_value"] = forecast_value
                 forecast_rows.append(forecast_row)
 
-        # Copy OM cost for each forecast year
-        fixom_cost_data = name_data[name_data["var_name"] == "Jährliche Fixkosten O&M"]
-        for idx, row in fixom_cost_data.iterrows():
-            for forecast_year in forecast_years:
-                # Create new row with copied O&M cost (as they stay the same)
-                forecast_row = row.copy()
-                forecast_row["Jahr"] = str(forecast_year)
-                forecast_rows.append(forecast_row)
+        # Copy parameters for each forecast year
+        for parameter in PARAMETER_MAPPING:
+            if parameter == "Spezifische Investitionskosten":
+                continue
+            parameter_data = name_data[name_data["var_name"] == parameter]
+            for idx, row in parameter_data.iterrows():
+                for forecast_year in forecast_years:
+                    # Create new row with copied O&M cost (as they stay the same)
+                    forecast_row = row.copy()
+                    forecast_row["Jahr"] = str(forecast_year)
+                    forecast_rows.append(forecast_row)
 
     if forecast_rows:
         forecast_df = pd.DataFrame(forecast_rows)

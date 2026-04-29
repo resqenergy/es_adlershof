@@ -3,9 +3,9 @@ raw_dir: .
 
 elements:
   - path: preprocessed/kww_technikkatalog.csv
-    scenario: "scenario_2025"
+    scenario: "scenario_2035"
   - path: preprocessed/kww_technikkatalog_capacity_cost.csv
-    scenario: "scenario_2025"
+    scenario: "scenario_2035"
 
 sequences:
   - path: s3://resq/resq_demands/results/wasteheat/cop_2035.csv
