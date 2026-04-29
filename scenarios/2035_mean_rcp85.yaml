@@ -6,6 +6,9 @@ elements:
     scenario: "scenario_2035"
   - path: preprocessed/kww_technikkatalog_capacity_cost.csv
     scenario: "scenario_2035"
+  - path: s3://resq/resq_demands/results/total_demands.csv
+    scenario_column: "year_climate"
+    scenario: "2035_mean_rcp85"
 
 sequences:
   - path: s3://resq/resq_demands/results/wasteheat/cop_2035.csv

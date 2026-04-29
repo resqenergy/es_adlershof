@@ -131,31 +131,31 @@ elements:
     instances:
       - name: electricity-residential-demand
         bus: electricity
-        profile: electricity_residential
+        profile: electricity-residential
       - name: electricity-non_residential-demand
         bus: electricity
-        profile: electricity_non-residential
+        profile: electricity-non_residential
       - name: heat_central-residential-demand
         bus: heat_central
-        profile: heat_residential_central
+        profile: heat_central-residential
       - name: heat_central-non_residential-demand
         bus: heat_central
-        profile: heat_non-residential_central
+        profile: heat_central-non_residential
       - name: heat_lt_central-residential-demand
         bus: heat_lt_central
-        profile: heat_residential_low_temp_central
+        profile: heat_low_temp_central-residential
       - name: heat_decentral-residential-demand
         bus: heat_decentral
-        profile: heat_residential_decentral
+        profile: heat_decentral-residential
       - name: heat_decentral-non_residential-demand
         bus: heat_decentral
-        profile: heat_non-residential_decentral
+        profile: heat_decentral-non_residential
       - name: cool-residential-demand
         bus: cool
-        profile: cool_residential
+        profile: cool-residential
       - name: cool-non_residential-demand
         bus: cool
-        profile: cool_non-residential
+        profile: cool-non_residential
 
   imports:
     component: shortage
