@@ -1,24 +1,24 @@
 timeindex:
-  start: 2025-01-01 00:00:00
+  start: 2035-01-01 00:00:00
   periods: 8760
 
 elements:
   heatpumps:
     component: heatpump
     instances:
-      - name: heatpump_72
+      - name: heatpump_mt
         from_bus: electricity
         to_bus: heat_central
         expandable: True
-      - name: heatpump_45
+      - name: heatpump_office
         from_bus: electricity
         to_bus: heat_central
         expandable: True
-      - name: heatpump_32
+      - name: heatpump_nt
         from_bus: electricity
         to_bus: heat_central
         expandable: True
-      - name: heatpump_22
+      - name: heatpump_geothermal
         from_bus: electricity
         to_bus: heat_central
         expandable: True
@@ -26,7 +26,7 @@ elements:
         from_bus: electricity
         to_bus: heat_central
         expandable: True
-      - name: heatpump_riverwater
+      - name: heatpump_canal
         from_bus: electricity
         to_bus: heat_central
         expandable: True
