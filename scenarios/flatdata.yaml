@@ -12,3 +12,5 @@ sequences:
     sequence_name: heatpumps_profile
   - path: s3://resq/resq_demands/results/wasteheat/2035_mean_rcp85.csv
     sequence_name: heatpumps_profile
+  - path: s3://resq/resq_demands/results/demand_profiles/2035_mean_rcp85.csv
+    sequence_name: demands_profile
