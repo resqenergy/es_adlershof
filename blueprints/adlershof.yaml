@@ -104,10 +104,6 @@ elements:
         from_bus: gas
         to_bus: heat_decentral
         expandable: True
-      - name: gas_turbine
-        from_bus: gas
-        to_bus: heat_central
-        expandable: True
       - name: cool-absorption
         from_bus: electricity
         to_bus: cool
@@ -121,6 +117,11 @@ elements:
     component: backpressure
     instances:
       - name: bhkw
+        fuel_bus: gas
+        electricity_bus: electricity
+        heat_bus: heat_central
+        expandable: True
+      - name: gasturbine
         fuel_bus: gas
         electricity_bus: electricity
         heat_bus: heat_central
