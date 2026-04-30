@@ -3,7 +3,7 @@
 from pathlib import Path
 import pandas as pd
 
-from economics import annuity
+from utils.economics import annuity
 
 PREPROCESSED_DIR = Path(__file__).parent.parent / "preprocessed"
 
