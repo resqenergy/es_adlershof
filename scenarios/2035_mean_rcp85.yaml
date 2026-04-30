@@ -9,6 +9,8 @@ elements:
   - path: s3://resq/resq_demands/results/total_demands.csv
     scenario_column: "year_climate"
     scenario: "2035_mean_rcp85"
+  - path: s3://resq/resq_demands/results/wasteheat/capacity.csv
+    scenario: "2035_mean_rcp85"
 
 sequences:
   - path: s3://resq/resq_demands/results/wasteheat/cop_2035.csv
