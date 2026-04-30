@@ -18,6 +18,7 @@ NAME_MAPPING = {
     "AbwaermeWP_zentral_10": "heatpump_nt",
     "AbwaermeWP_zentral_20": "heatpump_mt",
     "BHKW_zentral_0,3": "bhkw",
+    "Tiefengeothermie_ab400_direkt_zentral_10": "heatpump_geothermal",
 }
 PARAMETER_MAPPING = {
     "Spezifische Investitionskosten": "capacity_cost_overnight",
