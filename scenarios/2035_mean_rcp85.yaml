@@ -7,10 +7,17 @@ elements:
   - path: preprocessed/kww_technikkatalog_capacity_cost.csv
     scenario: "scenario_2035"
   - path: s3://resq/resq_demands/results/total_demands.csv
-    scenario_column: "year_climate"
+    column_mapping:
+      year_climate: scenario
     scenario: "2035_mean_rcp85"
   - path: s3://resq/resq_demands/results/wasteheat/capacity.csv
     scenario: "2035_mean_rcp85"
+  - path: s3://resq/resq_demands/results/costs_and_efficiencies.csv
+    column_mapping:
+      tech: name
+      "Ann. CapEx (€/kW·a)": capacity_cost
+      "Marginal Cost (€/MWh)": marginal_cost
+
 
 sequences:
   - path: s3://resq/resq_demands/results/wasteheat/cop_2035.csv
