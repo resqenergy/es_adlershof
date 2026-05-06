@@ -5,8 +5,18 @@ description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
     "minio>=7.2.20",
+    "coolprop>=7.2.0",
+    "npro",
+    "openpyxl>=3.1.5",
+    "pandas>=3.0.2",
+    "python-dotenv>=1.2.2",
+    "pyyaml>=6.0.3",
+    "requests>=2.33.1",
+    "s3fs>=2026.3.0",
     "oemof-pipe",
+    "oemof-tabular>=0.0.2",
 ]
 
 [tool.uv.sources]
+npro = { git = "https://github.com/resqenergy/npro" }
 oemof-pipe = { git = "https://github.com/rl-institut/oemof_pipe" }

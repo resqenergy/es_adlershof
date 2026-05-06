@@ -4,3 +4,6 @@
 /.idea/*
 /preprocessed/
 /.env
+/results/
+/npro_weather/
+/npro_scenarios/

@@ -1,0 +1,14 @@
+
+# Shares of existing and new build buildings per year
+# These values are used to create NPRO scenarios per non-residential building type
+# (Values for existing and newBuild must sum up to 1.0)
+
+"statusquo":
+  existing: 1.0
+  new: 0
+"2035":
+  existing: 0.8338
+  new: 0.1662
+"2050":
+  existing: 0.5844
+  new: 0.4156

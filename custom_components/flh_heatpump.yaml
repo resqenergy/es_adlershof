@@ -4,7 +4,6 @@ busses:
   - to_bus
 
 sequences:
-  - low_temperature_potential
 
 attributes:
   region:
@@ -35,10 +34,10 @@ attributes:
     type: str
     unit: n/a
     description: The output bus this component is connected to
-  low_temperature_potential:
+  full_load_time_max:
     type: float
     unit: MWh
-    description: Limit output flow by low temperature potential per hour
+    description: Limit output flow by max outflow
   capacity:
     type: float
     unit: MW

@@ -1,6 +1,7 @@
 timeindex:
   start: 2035-01-01 00:00:00
   periods: 8760
+  format: "%Y-%m-%d %H:%M:%S"
 
 elements:
   heatpumps:
@@ -18,6 +19,16 @@ elements:
         from_bus: electricity
         to_bus: heat_central
         expandable: True
+      - name: heatpump_air
+        from_bus: electricity
+        to_bus: heat_decentral
+        expandable: True
+    sequences:
+      - efficiency
+
+  flh_heatpumps:
+    component: flh_heatpump
+    instances:
       - name: heatpump_geothermal
         from_bus: electricity
         to_bus: heat_central
@@ -29,14 +40,6 @@ elements:
       - name: heatpump_canal
         from_bus: electricity
         to_bus: heat_central
-        expandable: True
-      - name: heatpump_air
-        from_bus: electricity
-        to_bus: heat_decentral
-        expandable: True
-      - name: heatpump_exhaust
-        from_bus: electricity
-        to_bus: heat_decentral
         expandable: True
     sequences:
       - efficiency
