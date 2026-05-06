@@ -26,3 +26,8 @@ sequences:
     sequence_name: heatpumps_profile
   - path: s3://resq/resq_demands/results/demand_profiles/2035_mean_rcp85.csv
     sequence_name: demands_profile
+  - path: s3://resq/resq_demands/results/volatile_profiles/pv_timeseries-try_mean_rcp85-2035.csv
+    sequence_name: volatile_profile
+    column_mapping:
+      pv_facade: pv_facade-profile
+      pv_roof: pv_roof-profile
