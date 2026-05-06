@@ -30,5 +30,5 @@ datapackage:
 	uv run oemof-pipe blueprint -f adlershof
 	uv run oemof-pipe scenario -f adlershof 2035_mean_rcp85
 
-export:
+export_datapackage:
 	uv run -m utils.export_to_s3 adlershof_2035_mean_rcp85
