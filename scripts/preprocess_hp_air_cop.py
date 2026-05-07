@@ -9,8 +9,8 @@ WEATHER_DIR = RAW_DIR / "weatherdata"
 TEMPERATURE_LOW_COLUMN = "temp_air"
 
 PREPROCESSED_DIR = Path(__file__).parent.parent / "preprocessed"
-RESULT_FILENAME = "ts_cop.csv"
-RESULT_COLUMN_NAME = "AD-electricity-heatpump_small-profile"
+RESULT_FILENAME = "ts_hp_air_cop.csv"
+RESULT_COLUMN_NAME = "heatpump_air-profile"
 
 QUALITY_GRADE = 0.4
 KELVIN = 273.15
