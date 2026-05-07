@@ -188,8 +188,9 @@ def apply_mappings_and_format(
         for technology, new_name in technology_mapping.items()
     }
     df["name"] = df["name"].map(technology_mapping)
-    df = df.dropna(subset=["name"])
     df["var_name"] = df["var_name"].map(parameter_mapping)
+    df = df.dropna(subset=["name", "var_name"])
+    df.sort_values(["name", "var_name", "Jahr"], inplace=True)
     return df
 
 
