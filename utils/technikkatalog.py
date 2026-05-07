@@ -102,6 +102,27 @@ def preprocess_parameters(
     return df
 
 
+def add_zusaetzliche_kosten(df: pd.DataFrame) -> pd.DataFrame:
+    """Add 'Zusätzliche Kosten' on top of 'Spezifische Investitionskosten'.
+
+    The raw CSV stores them separately. Forecast years already include both
+    because the formula is fitted to 'Investitionskosten gesamt'.
+    """
+    zusatz = df[df["var_name"].str.strip() == "Zusätzliche Kosten"].copy()
+    if zusatz.empty:
+        return df
+
+    for idx, row in df[df["var_name"] == "Spezifische Investitionskosten"].iterrows():
+        match = zusatz[
+            (zusatz["Technologie"] == row["Technologie"])
+            & (zusatz["Dimensionierung"] == row["Dimensionierung"])
+            & (zusatz["Jahr"] == row["Jahr"])
+        ]
+        if not match.empty:
+            df.at[idx, "var_value"] += match["var_value"].iloc[0]
+    return df
+
+
 def add_forecasts(df: pd.DataFrame, forecast_years: tuple[int, ...]) -> pd.DataFrame:
     """Calculate and add forecast rows for capacity costs and O&M costs."""
     forecast_rows = []
@@ -200,6 +221,9 @@ def get_technology_data(technology_mapping: dict):
 
     # Preprocess parameters if function is given:
     preprocessed_data = preprocess_parameters(raw_data, PARAMETER_PREPROCESSING)
+
+    # Add Zusätzliche Kosten to Spezifische Investitionskosten
+    preprocessed_data = add_zusaetzliche_kosten(preprocessed_data)
 
     # Add forecast
     forecast_data = add_forecasts(preprocessed_data, FORECAST_YEARS)
