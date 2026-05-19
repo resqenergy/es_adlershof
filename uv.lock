@@ -779,12 +779,14 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "coolprop" },
+    { name = "loguru" },
     { name = "minio" },
     { name = "npro" },
     { name = "oemof-pipe" },
     { name = "oemof-tabular" },
     { name = "openpyxl" },
     { name = "pandas" },
+    { name = "pvlib" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
     { name = "requests" },
@@ -794,12 +796,14 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "coolprop", specifier = ">=7.2.0" },
+    { name = "loguru", specifier = ">=0.7.3" },
     { name = "minio", specifier = ">=7.2.20" },
     { name = "npro", git = "https://github.com/resqenergy/npro" },
     { name = "oemof-pipe", git = "https://github.com/rl-institut/oemof_pipe" },
     { name = "oemof-tabular", specifier = ">=0.0.2" },
     { name = "openpyxl", specifier = ">=3.1.5" },
     { name = "pandas", specifier = ">=3.0.2" },
+    { name = "pvlib", specifier = ">=0.15.1" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "requests", specifier = ">=2.33.1" },

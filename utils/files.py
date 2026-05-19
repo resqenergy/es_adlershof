@@ -84,7 +84,7 @@ def write_file(data: pd.DataFrame | dict, filepath: str | Path, **kwargs) -> Non
 
     if S3_ENDPOINT is None or STORE_FILES_LOCALLY:
         filepath.parent.mkdir(parents=True, exist_ok=True)
-        if isinstance(data, pd.DataFrame):
+        if isinstance(data, (pd.DataFrame, pd.Series)):
             data.to_csv(filepath, **kwargs)
         elif filepath.suffix == ".json":
             with filepath.open("w", encoding="utf-8") as f:
@@ -99,7 +99,7 @@ def write_file(data: pd.DataFrame | dict, filepath: str | Path, **kwargs) -> Non
     # Write file to S3
     filepath_rel = filepath.relative_to(Path.cwd())
 
-    if isinstance(data, pd.DataFrame):
+    if isinstance(data, (pd.DataFrame, pd.Series)):
         filepath_s3 = f"s3://{S3_BUCKET}/{S3_FOLDER}/{filepath_rel}"
         data.to_csv(filepath_s3, storage_options=STORAGE_OPTIONS, **kwargs)
         return

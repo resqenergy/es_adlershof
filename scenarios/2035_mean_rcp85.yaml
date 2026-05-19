@@ -31,3 +31,7 @@ sequences:
     column_mapping:
       pv_facade: pv_facade-profile
       pv_roof: pv_roof-profile
+  - path: s3://resq/resq_demands/results/solar_thermal_collector/solar_thermal_power_try_mean_rcp85.p2.csv
+    sequence_name: volatile_profile
+    column_mapping:
+      solar_thermal_power: heat_lt_central-solarthermal-profile
