@@ -25,16 +25,15 @@ SOLAR_DIR = RESULTS_DIR / "solar_thermal_collector"
 PERIODS = {"p1": 2025, "p2": 2035, "p3": 2050}
 
 # Values taken from https://www.duurzaamloket.nl/DBF/PDF_Downloads/DS_4592.pdf
-
 ETA_0 = 0.718
 A1 = 3.89
 A2 = 0.018
+
 TILT = 0
 AZIMUT = 20  # South
-TEMP_INLET = 50
+TEMP_INLET = 50  # Vorlauftemperatur
 LAT = 52.43
 LONG = 13.54
-TEMP_MEAN = 10
 
 
 def flat_plate_precalc(
@@ -228,7 +227,7 @@ def calculate_solar_thermal_power_for_weather(
         A1,
         A2,
         TEMP_INLET,
-        TEMP_INLET - TEMP_MEAN,
+        TEMP_INLET - weather_data["air_temperature_mean"].mean(),
         weather_data["radiation_downwelling"],
         weather_data["radiation_diffuse"],
         weather_data["air_temperature_mean"],
