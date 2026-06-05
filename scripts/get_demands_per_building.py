@@ -70,6 +70,9 @@ def get_npro_buildings(
                 "based_on": based_on,
                 "floorArea": current_area,
                 "numApart": current_units,
+                "calculate_cooling_demand": True,
+                "shOption": "heatLoad",  # Needed so that space heating depends on weather
+                "peakDemHeatOption": "total",  # Needed for shOption
             }
         else:
             # Non-residential buildings must be separated into existing and new units
@@ -82,6 +85,9 @@ def get_npro_buildings(
                 "floorArea": current_area,
                 "numApart": existing_units,
                 "buildingSubtype": "existing",
+                "calculate_cooling_demand": True,
+                "shOption": "heatLoad",  # Needed so that space heating depends on weather
+                "peakDemHeatOption": "total",  # Needed for shOption
             }
             if new_units == 0:
                 continue
@@ -90,6 +96,9 @@ def get_npro_buildings(
                 "floorArea": str(current_area),
                 "numApart": str(new_units),
                 "buildingSubtype": "newBuild",
+                "calculate_cooling_demand": True,
+                "shOption": "heatLoad",  # Needed so that space heating depends on weather
+                "peakDemHeatOption": "total",  # Needed for shOption
             }
 
     return buildings
