@@ -16,15 +16,6 @@ import numpy as np
 
 Technology = namedtuple("Technology", ["name", "capacity"])
 
-TECHNOLOGY_MAPPING = {
-    Technology("AbwaermeWP_zentral", 2): "heatpump_office",
-    Technology("AbwaermeWP_zentral", 10): "heatpump_nt",
-    Technology("AbwaermeWP_zentral", 20): "heatpump_mt",
-    Technology("BHKW_zentral", 0.3): "bhkw",
-    Technology("Tiefengeothermie_ab400_direkt_zentral", 10): "heatpump_geothermal",
-    Technology("AbwasserWP_zentral", 10): "heatpump_wastewater",
-    Technology("GewaesserWP_zentral", 10): "heatpump_canal",
-}
 PARAMETER_MAPPING = {
     "Spezifische Investitionskosten": "capacity_cost_overnight",
     "Wirkungsgrad thermisch": "thermal_efficiency",
