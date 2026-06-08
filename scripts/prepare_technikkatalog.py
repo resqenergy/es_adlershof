@@ -24,6 +24,7 @@ TECHNOLOGY_MAPPING = {
     Technology("Tiefengeothermie_ab400_direkt_zentral", 10): "heatpump_geothermal",
     Technology("AbwasserWP_zentral", 10): "heatpump_wastewater",
     Technology("GewaesserWP_zentral", 10): "heatpump_canal",
+    Technology("Solarthermie_flach_dezentral", 10): "heat_decentral-solarthermal",
 }
 
 FLATDATA_FILE_PREPROCESSED = PREPROCESSED_DIR / "kww_technikkatalog.csv"
