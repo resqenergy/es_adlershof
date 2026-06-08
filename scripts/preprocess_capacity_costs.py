@@ -4,6 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 from utils.economics import annuity
+from utils.files import read_file, write_file
 
 PREPROCESSED_DIR = Path(__file__).parent.parent / "preprocessed"
 
@@ -15,7 +16,7 @@ def calculate_annual_cost(
 ) -> None:
     """Calculate capacity costs from overnight capacity costs."""
     # Read the costs and efficiencies
-    df = pd.read_csv(input_file, sep=";")
+    df = read_file(input_file, sep=";")
 
     # Results list
     capacity_costs = []
@@ -67,17 +68,21 @@ def calculate_annual_cost(
 
     # Convert to DataFrame and save
     res_df = pd.DataFrame(capacity_costs)
-    res_df.to_csv(output_file, index=False, sep=";")
+    write_file(res_df, output_file, index=False, sep=";")
     print(f"Saved results to {output_file}")
 
 
 if __name__ == "__main__":
-    calculate_annual_cost(
-        PREPROCESSED_DIR / "scalars" / "costs_efficiencies.csv",
-        PREPROCESSED_DIR / "scalars" / "capacity_costs.csv",
-    )
+    # calculate_annual_cost(
+    #     PREPROCESSED_DIR / "scalars" / "costs_efficiencies.csv",
+    #     PREPROCESSED_DIR / "scalars" / "capacity_costs.csv",
+    # )
     calculate_annual_cost(
         PREPROCESSED_DIR / "kww_technikkatalog.csv",
         PREPROCESSED_DIR / "kww_technikkatalog_capacity_cost.csv",
         scenario_key="scenario",
+    )
+    calculate_annual_cost(
+        PREPROCESSED_DIR / "solar_thermal_parameters.csv",
+        PREPROCESSED_DIR / "solar_thermal_capacity_cost.csv",
     )

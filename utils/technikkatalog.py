@@ -26,8 +26,9 @@ PARAMETER_MAPPING = {
 }
 
 PARAMETER_PREPROCESSING = {
-    "Wirkungsgrad thermisch": lambda x: x / 100,
-    "Wirkungsgrad elektrisch": lambda x: x / 100,
+    "Wirkungsgrad thermisch": lambda value, _capacity: value / 100,
+    "Wirkungsgrad elektrisch": lambda value, _capacity: value / 100,
+    "Jährliche Fixkosten O&M": lambda value, capacity: value / capacity,
 }
 
 ROOT_DIR = pathlib.Path(__file__).parent.parent
@@ -81,15 +82,40 @@ def load_and_clean_data(file_path: pathlib.Path) -> pd.DataFrame:
     return df
 
 
+def _get_capacity_kwth(df: pd.DataFrame, row: pd.Series) -> float:
+    """Look up thermal capacity in kWth for a given row's technology and dimensionierung."""
+    cap_rows = df[
+        (df["Technologie"] == row["Technologie"])
+        & (df["Dimensionierung"] == row["Dimensionierung"])
+        & (df["Jahr"] == row["Jahr"])
+        & (df["var_name"] == "Thermische Leistung")
+    ]
+    if cap_rows.empty:
+        return 1.0
+    capacity = cap_rows["var_value"].iloc[0]
+    if cap_rows["Dimensionierungseinheit"].iloc[0] == "MWth":
+        capacity *= 1000
+    return float(capacity)
+
+
 def preprocess_parameters(
-    df: pd.DataFrame, preprocessing_mapping: dict
+    df: pd.DataFrame,
+    preprocessing_mapping: dict,
+    technology_mapping: dict[Technology, str],
 ) -> pd.DataFrame:
-    """Apply preprocessing functions to specific parameters."""
+    """Apply preprocessing functions to specific parameters.
+
+    Args:
+        df: Raw technology data.
+        preprocessing_mapping: Maps parameter name substrings to functions ``(value, capacity_kwth) -> float``.
+        technology_mapping: Technology mapping used to resolve the capacity column per technology.
+    """
     for parameter, parameter_function in preprocessing_mapping.items():
-        matching_rows = df.loc[df["var_name"].str.contains(parameter, na=False)]
-        df.loc[matching_rows.index, "var_value"] = matching_rows["var_value"].apply(
-            parameter_function
-        )
+        matching_indices = df.index[df["var_name"].str.contains(parameter, na=False)]
+        for idx in matching_indices:
+            row = df.loc[idx]
+            capacity = _get_capacity_kwth(df, row)
+            df.at[idx, "var_value"] = parameter_function(row["var_value"], capacity)
     return df
 
 
@@ -211,7 +237,9 @@ def get_technology_data(technology_mapping: dict):
     raw_data = load_and_clean_data(FLATDATA_FILE_RAW)
 
     # Preprocess parameters if function is given:
-    preprocessed_data = preprocess_parameters(raw_data, PARAMETER_PREPROCESSING)
+    preprocessed_data = preprocess_parameters(
+        raw_data, PARAMETER_PREPROCESSING, technology_mapping
+    )
 
     # Add Zusätzliche Kosten to Spezifische Investitionskosten
     preprocessed_data = add_zusaetzliche_kosten(preprocessed_data)

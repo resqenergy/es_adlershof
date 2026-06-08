@@ -2,9 +2,17 @@
 raw_dir: .
 
 elements:
-  - path: preprocessed/kww_technikkatalog.csv
+  - path: s3://resq/resq_demands/preprocessed/kww_technikkatalog.csv
     scenario: "scenario_2035"
-  - path: preprocessed/kww_technikkatalog_capacity_cost.csv
+  - path: s3://resq/resq_demands/preprocessed/kww_technikkatalog_capacity_cost.csv
+    scenario: "scenario_2035"
+  - path: s3://resq/resq_demands/preprocessed/solar_thermal_parameters.csv
+    column_mapping:
+      scenario_key: scenario
+    scenario: "scenario_2035"
+  - path: s3://resq/resq_demands/preprocessed/solar_thermal_capacity_cost.csv
+    column_mapping:
+      scenario_key: scenario
     scenario: "scenario_2035"
   - path: s3://resq/resq_demands/results/total_demands.csv
     column_mapping:
