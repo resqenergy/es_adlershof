@@ -180,9 +180,6 @@ elements:
       - name: electricity-export
         bus: electricity
         capacity: 1000000000
-      - name: gas-export
-        bus: gas
-        capacity: 1000000000
       - name: heat_central-export
         bus: heat_central
         capacity: 1000000000
