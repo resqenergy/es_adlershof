@@ -7,7 +7,7 @@ areas:
 areas_forecast: areas
 	uv run -m scripts.get_area_per_type_of_use_projection
 
-npro_scenarios:
+npro_scenarios: areas_forecast
 	uv run -m scripts.get_demands_per_building
 
 npro_buildings: npro_scenarios

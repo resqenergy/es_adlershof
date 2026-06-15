@@ -8,7 +8,7 @@ from typing import Any
 import yaml
 from npro.settings import SCENARIOS_DIR, WEATHER_DIR
 from utils.files import read_file, write_file
-from settings import RESULTS_DIR, CONFIG_DIR
+from settings import RESULTS_DIR, CONFIG_DIR, logger
 
 BUILDING_SHARES_PATH = CONFIG_DIR / "building_shares.yaml"
 
@@ -123,7 +123,8 @@ def create_npro_scenario(
 def create_all_resq_scenarios() -> None:
     """Create all resq scenarios."""
     period_mapping = {"p1": "statusquo", "p2": "2035", "p3": "2050"}
-    for weather_file in WEATHER_DIR.glob("*.txt"):
+    for weather_file in WEATHER_DIR.glob("*.csv"):
+        logger.info(f"Creating scenario for {weather_file.stem}")
         period = weather_file.stem.split(".")[1]
         year = period_mapping[period]
         climate = weather_file.stem.split(".")[0][4:]

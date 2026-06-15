@@ -17,6 +17,8 @@ dependencies = [
     "oemof-tabular>=0.0.2",
     "pvlib>=0.15.1",
     "loguru>=0.7.3",
+    "windpowerlib>=0.2.2",
+    "frictionless[aws]>=5.19.0",
 ]
 
 [tool.uv.sources]

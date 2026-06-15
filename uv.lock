@@ -779,6 +779,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "coolprop" },
+    { name = "frictionless", extra = ["aws"] },
     { name = "loguru" },
     { name = "minio" },
     { name = "npro" },
@@ -791,11 +792,13 @@ dependencies = [
     { name = "pyyaml" },
     { name = "requests" },
     { name = "s3fs" },
+    { name = "windpowerlib" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "coolprop", specifier = ">=7.2.0" },
+    { name = "frictionless", extras = ["aws"], specifier = ">=5.19.0" },
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "minio", specifier = ">=7.2.20" },
     { name = "npro", git = "https://github.com/resqenergy/npro" },
@@ -808,6 +811,7 @@ requires-dist = [
     { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "requests", specifier = ">=2.33.1" },
     { name = "s3fs", specifier = ">=2026.3.0" },
+    { name = "windpowerlib", specifier = ">=0.2.2" },
 ]
 
 [[package]]
@@ -956,6 +960,11 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/8d/21/3494557b8c72b8375597cdd5b85d46c76eb978994c2f34f5737262047438/frictionless-5.19.0.tar.gz", hash = "sha256:75a060c8806c4a84dd72112ceeb919277d84982b07420295b9b920e8e30a65ab", size = 74375968, upload-time = "2026-04-13T13:05:53.293Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/1b/3a/e568ea129fbcf9ee0f148178c67f8a2fc4e88de3aa34c840a180bcce4775/frictionless-5.19.0-py3-none-any.whl", hash = "sha256:81436b94a950b1a5cf83e953921e64dc888c00f51400f783ea0aa824319a6d67", size = 535173, upload-time = "2026-04-13T13:05:50.897Z" },
+]
+
+[package.optional-dependencies]
+aws = [
+    { name = "boto3" },
 ]
 
 [[package]]

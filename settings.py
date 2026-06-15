@@ -2,6 +2,7 @@ import os
 import pathlib
 
 from dotenv import load_dotenv
+from loguru import logger
 
 load_dotenv()
 
@@ -12,5 +13,10 @@ STORE_FILES_LOCALLY = os.getenv("STORE_FILES_LOCALLY", "False") == "True"
 
 ROOT_DIR = pathlib.Path(__file__).parent
 CONFIG_DIR = ROOT_DIR / "config"
-RAW_DIR = ROOT_DIR / "raw_data"
+RAW_DIR = ROOT_DIR / "raw"
 RESULTS_DIR = ROOT_DIR / "results"
+
+if S3_ENDPOINT:
+    logger.info(f"Using S3 endpoint: {S3_ENDPOINT}.")
+else:
+    logger.info("No S3 endpoint set, using local files.")
