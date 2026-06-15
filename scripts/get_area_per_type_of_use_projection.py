@@ -1,19 +1,22 @@
 import pandas as pd
 
-from utils.files import read_file, write_file
-from settings import RESULTS_DIR
+from settings import DATASETS_DIR
+
+AREAS_DIR = DATASETS_DIR / "areas"
+AREAS_FORECAST_DIR = DATASETS_DIR / "areas_forecast"
+AREAS_FORECAST_DIR.mkdir(exist_ok=True)
 
 # --------------------------------------------------
 # Dateien laden
 # --------------------------------------------------
 
-total_central_path = RESULTS_DIR / "total_area_and_units_central.csv"
-total_low_temp_central_path = RESULTS_DIR / "total_area_and_units_low_temp_central.csv"
-total_decentral_path = RESULTS_DIR / "total_area_and_units_decentral.csv"
+total_central_path = AREAS_DIR / "total_area_and_units_central.csv"
+total_low_temp_central_path = AREAS_DIR / "total_area_and_units_low_temp_central.csv"
+total_decentral_path = AREAS_DIR / "total_area_and_units_decentral.csv"
 
-total_central = read_file(total_central_path, sep=",")
-total_low_temp_central = read_file(total_low_temp_central_path, sep=",")
-total_decentral = read_file(total_decentral_path, sep=",")
+total_central = pd.read_csv(total_central_path, sep=",")
+total_low_temp_central = pd.read_csv(total_low_temp_central_path, sep=",")
+total_decentral = pd.read_csv(total_decentral_path, sep=",")
 
 # --------------------------------------------------
 # Cluster → Übercluster Mapping
@@ -137,20 +140,15 @@ decentral_out = apply_growth(total_decentral)
 # Speichern
 # --------------------------------------------------
 
-write_file(
-    central_out,
-    RESULTS_DIR / "total_area_and_units_central_with_forecast.csv",
+central_out.to_csv(
+    AREAS_FORECAST_DIR / "total_area_and_units_central_with_forecast.csv",
     index=False,
 )
-write_file(
-    low_temp_central_out,
-    RESULTS_DIR / "total_area_and_units_low_temp_central_with_forecast.csv",
+low_temp_central_out.to_csv(
+    AREAS_FORECAST_DIR / "total_area_and_units_low_temp_central_with_forecast.csv",
     index=False,
 )
-write_file(
-    decentral_out,
-    RESULTS_DIR / "total_area_and_units_decentral_with_forecast.csv",
+decentral_out.to_csv(
+    AREAS_FORECAST_DIR / "total_area_and_units_decentral_with_forecast.csv",
     index=False,
 )
-
-print("Fertig!")

@@ -8,12 +8,12 @@ Steps:
 4. Use resulting CSV in oemof-pipe scenario
 """
 
-import pathlib
-from utils.files import write_file
 from utils.technikkatalog import Technology, get_technology_data
 
-ROOT_DIR = pathlib.Path(__file__).parent.parent
-PREPROCESSED_DIR = ROOT_DIR / "preprocessed"
+from settings import DATASETS_DIR
+
+FLATDATA_FILE_PREPROCESSED = DATASETS_DIR / "technology_cost" / "kww_technikkatalog.csv"
+FLATDATA_FILE_PREPROCESSED.parent.mkdir(exist_ok=True)
 
 
 TECHNOLOGY_MAPPING = {
@@ -27,9 +27,7 @@ TECHNOLOGY_MAPPING = {
     Technology("Solarthermie_flach_dezentral", 10): "heat_decentral-solarthermal",
 }
 
-FLATDATA_FILE_PREPROCESSED = PREPROCESSED_DIR / "kww_technikkatalog.csv"
-
 
 if __name__ == "__main__":
     technology_df = get_technology_data(TECHNOLOGY_MAPPING)
-    write_file(technology_df, FLATDATA_FILE_PREPROCESSED, index=False, sep=";")
+    technology_df.to_csv(FLATDATA_FILE_PREPROCESSED, index=False, sep=";")

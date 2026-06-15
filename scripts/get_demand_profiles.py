@@ -3,11 +3,10 @@
 import json
 import pandas as pd
 import pathlib
-from utils.files import write_file
-from settings import RESULTS_DIR
+from settings import DATASETS_DIR
 
-BUILDINGS_DIR = RESULTS_DIR / "npro_buildings"
-PROFILES_DIR = RESULTS_DIR / "demand_profiles"
+BUILDINGS_DIR = DATASETS_DIR / "npro_buildings"
+PROFILES_DIR = DATASETS_DIR / "demand_profiles"
 
 
 def get_scenario_info(folder_name):
@@ -126,7 +125,7 @@ def aggregate_demands():
         id_vars="year_climate", var_name="name", value_name="amount"
     )
     df_demand_transformed["name"] = df_demand_transformed["name"] + "-demand"
-    write_file(df_demand_transformed, RESULTS_DIR / "total_demands.csv", index=False)
+    df_demand_transformed.to_csv(PROFILES_DIR / "total_demands.csv", index=False)
 
     # Save point 2: demand_profiles
     for (year, climate), df_prof in all_profiles.items():
@@ -137,7 +136,7 @@ def aggregate_demands():
             df_prof / df_total[df_total["year_climate"] == f"{year}_{climate}"].iloc[0]
         )
         df_normalized["timeindex"] = timeindex
-        write_file(df_normalized, PROFILES_DIR / filename, index=False)
+        df_normalized.to_csv(PROFILES_DIR / filename, index=False)
 
 
 if __name__ == "__main__":

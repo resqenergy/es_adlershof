@@ -1,15 +1,15 @@
 import pandas as pd
 import os
 import glob
-from settings import RESULTS_DIR, ROOT_DIR
+from settings import DATASETS_DIR, ROOT_DIR
 from utils.files import write_file
 
 from utils.technikkatalog import get_technology_data, Technology, PARAMETER_MAPPING
 
-NPRO_BUILDINGS_DIR = RESULTS_DIR / "npro_buildings"
+NPRO_BUILDINGS_DIR = DATASETS_DIR / "npro_buildings"
 COP_FILE = ROOT_DIR / "preprocessed" / "ts_hp_air_cop.csv"
 
-HEATPUMP_DIR = RESULTS_DIR / "heatpump_air"
+HEATPUMP_DIR = DATASETS_DIR / "heatpump_air"
 HEATPUMP_DIR.mkdir(parents=True, exist_ok=True)
 
 TECHNIKKATALOG_HP_CAPACITIES = (5, 10, 20, 30, 40, 50, 60, 80, 100)
@@ -49,7 +49,7 @@ def calculate_heatpump_capacities_per_building_type(scenario_name, year):
             continue
 
         # Load Nutzeinheiten
-        units_file = RESULTS_DIR / f"total_area_and_units_{topology}_with_forecast.csv"
+        units_file = DATASETS_DIR / f"total_area_and_units_{topology}_with_forecast.csv"
         if not units_file.exists():
             print(
                 f"Warning: Units file {units_file} does not exist. Skipping topology {topology}."

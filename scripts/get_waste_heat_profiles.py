@@ -1,19 +1,16 @@
 import pandas as pd
 import numpy as np
-from utils.files import read_file, write_file
-from settings import RAW_DIR, RESULTS_DIR
+from settings import RAW_DIR, DATASETS_DIR
 
 # =========================
 # PATHS
 # =========================
-DEMANDS_DIR = RESULTS_DIR / "demand_profiles"
+DEMANDS_DIR = DATASETS_DIR / "demand_profiles"
 
 WASTEHEAT_POTENTIAL_FILE = (
-    RAW_DIR
-    / "Abwaermepotenzial_Adlershof_BfEE"
-    / "Abwaermepotenzial_Adlershof_BfEE.csv"
+    RAW_DIR / "wasteheat_potentials" / "Abwaermepotenzial_Adlershof_BfEE.csv"
 )
-WASTEHEAT_POTENTIAL = read_file(WASTEHEAT_POTENTIAL_FILE, sep=",")
+WASTEHEAT_POTENTIAL = pd.read_csv(WASTEHEAT_POTENTIAL_FILE, sep=",")
 
 
 # =========================
@@ -33,13 +30,13 @@ WASTEHEAT_POTENTIAL["Temp_Level"] = WASTEHEAT_POTENTIAL["Temperaturbereich"].app
 )
 
 WASTEHEAT_POTENTIAL_ENERGIES_FILE = (
-    RAW_DIR / "Abwaermepotenzial_Adlershof_BfEE" / "Abwärmepotenziale_Adlershof.xlsx"
+    RAW_DIR / "wasteheat_potentials" / "Abwärmepotenziale_Adlershof.xlsx"
 )
-WASTEHEAT_POTENTIAL_ENERGIES = read_file(WASTEHEAT_POTENTIAL_ENERGIES_FILE).set_index(
-    "(Ab-)Wärmequelle"
-)
-OUTPUT_DIR = RESULTS_DIR / "wasteheat"
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+WASTEHEAT_POTENTIAL_ENERGIES = pd.read_excel(
+    WASTEHEAT_POTENTIAL_ENERGIES_FILE
+).set_index("(Ab-)Wärmequelle")
+OUTPUT_DIR = DATASETS_DIR / "wasteheat_profiles"
+OUTPUT_DIR.mkdir(exist_ok=True)
 
 # Lookup column in WASTEHEAT_POTENTIAL_ENERGIES_FILE (first column is used as index)
 YEAR_INDEX_LOOKUP = {2025: 0, 2035: 1, 2050: 2}
@@ -56,7 +53,7 @@ def create_wasteheat_profiles(scenario_name: str, year: int):
     # =========================
     # LOAD DATA
     # =========================
-    demand_profiles = read_file(DEMANDS_DIR / f"{scenario_name}.csv")
+    demand_profiles = pd.read_csv(DEMANDS_DIR / f"{scenario_name}.csv")
 
     # =========================
     # TIME INDEX
@@ -256,8 +253,12 @@ def create_wasteheat_profiles(scenario_name: str, year: int):
             "heatpump_office-low_temperature_potential": office_profile,
         }
     )
-    write_file(df, OUTPUT_DIR / f"{scenario_name}.csv", index=False)
+    df.to_csv(OUTPUT_DIR / f"{scenario_name}.csv", index=False)
 
 
 if __name__ == "__main__":
-    create_wasteheat_profiles("2035_mean_rcp85", 2035)
+    import sys
+
+    _scenario = sys.argv[1] if len(sys.argv) > 1 else "2035_mean_rcp85"
+    _year = int(sys.argv[2]) if len(sys.argv) > 2 else 2035
+    create_wasteheat_profiles(_scenario, _year)

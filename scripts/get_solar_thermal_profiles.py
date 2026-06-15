@@ -17,11 +17,11 @@ import pandas as pd
 import pvlib
 from npro.settings import WEATHER_DIR
 
-from utils.files import write_file
-from settings import RESULTS_DIR
+from settings import DATASETS_DIR
 from loguru import logger
 
-SOLAR_DIR = RESULTS_DIR / "solar_thermal_collector"
+SOLAR_DIR = DATASETS_DIR / "solar_thermal_profiles"
+SOLAR_DIR.mkdir(exist_ok=True)
 PERIODS = {"p1": 2025, "p2": 2035, "p3": 2050}
 
 # Values taken from https://www.duurzaamloket.nl/DBF/PDF_Downloads/DS_4592.pdf
@@ -237,13 +237,13 @@ def calculate_solar_thermal_power_for_weather(
         {"collectors_heat": "solar_thermal_power"}, axis=1, inplace=True
     )
     solar_thermal_data.index.name = "timeindex"
-    output_path = SOLAR_DIR / f"solar_thermal_power_{weather_filename.stem}.csv"
-    write_file(solar_thermal_data["solar_thermal_power"], output_path, index=True)
+    output_path = SOLAR_DIR / f"solar_thermal_profile_{weather_filename.stem}.csv"
+    solar_thermal_data["solar_thermal_power"].to_csv(output_path, index=True)
     logger.info(f"Wrote {output_path}")
 
 
 if __name__ == "__main__":
-    for file in WEATHER_DIR.glob("*.txt"):
+    for file in WEATHER_DIR.glob("*.csv"):
         period = file.stem.split(".")[1]
         year = PERIODS[period]
         calculate_solar_thermal_power_for_weather(file, year)

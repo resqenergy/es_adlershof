@@ -1,18 +1,14 @@
 import warnings
-from pathlib import Path
 
 import pandas as pd
 from windpowerlib import ModelChain, WindTurbine
 
-from utils.files import write_file, read_file
+from settings import RAW_DIR, DATASETS_DIR
 
-ROOT_DIR = Path(__file__).parent.parent
-RAW_DIR = ROOT_DIR / "raw"
-RESULTS_DIR = ROOT_DIR / "results" / "wind_timeseries"
-WEATHER_DATA_DIR = ROOT_DIR / "npro_weather"
+WEATHER_DATA_DIR = RAW_DIR / "weather"
 TURBINE_MODELS_NREL = RAW_DIR / "wind_turbine_models"
-
-RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+RESULTS_DIR = DATASETS_DIR / "wind_profiles"
+RESULTS_DIR.mkdir(exist_ok=True)
 
 args = {
     "year": None,
@@ -128,7 +124,7 @@ def read_and_preprocess_weather_data(weatherdata_file):
     year = resolve_year(weatherdata_file.name, args["year"])
     columns = ["pressure_surface", "wind_speed", "air_temperature_mean"]
 
-    df = read_file(weatherdata_file, sep=";", usecols=columns)
+    df = pd.read_csv(weatherdata_file, sep=";", usecols=columns)
     df = df.set_index(
         pd.date_range(start=f"1/1/{year}", periods=args["periods"], freq="h")
     )
@@ -151,7 +147,7 @@ def read_and_preprocess_weather_data(weatherdata_file):
 
 def preprocess_nrel_turbine_model(nrel_turbine_model_path):
     columns = ["Wind Speed [m/s]", "Power [kW]"]
-    power_curve_df = read_file(nrel_turbine_model_path, usecols=columns)
+    power_curve_df = pd.read_csv(nrel_turbine_model_path, usecols=columns)
     power_curve_df = power_curve_df.rename(
         columns={
             "Wind Speed [m/s]": "wind_speed",
@@ -234,7 +230,7 @@ def run_windpowerlib(turbine_model, modelchain_data, weather_windpowerlib):
 
 if __name__ == "__main__":
     for file in WEATHER_DATA_DIR.iterdir():
-        if file.is_file() and file.suffix == ".txt" in file.name:
+        if file.is_file() and file.suffix == ".csv" in file.name:
 
             weather_windpowerlib = read_and_preprocess_weather_data(file)
 
@@ -262,4 +258,4 @@ if __name__ == "__main__":
                 RESULTS_DIR
                 / f"wind_timeseries-{file.stem}-{wind_timeseries_normalized.index.year[0]}.csv"
             )
-            write_file(wind_timeseries_normalized, result_path)
+            wind_timeseries_normalized.to_csv(result_path)

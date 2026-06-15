@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+import yaml
+import pandas as pd
 import math
 from typing import Any
 
-import yaml
 from npro.settings import SCENARIOS_DIR, WEATHER_DIR
-from utils.files import read_file, write_file
-from settings import RESULTS_DIR, CONFIG_DIR, logger
+from settings import DATASETS_DIR, CONFIG_DIR, logger
+
+AREAS_FORECAST_DIR = DATASETS_DIR / "areas_forecast"
 
 BUILDING_SHARES_PATH = CONFIG_DIR / "building_shares.yaml"
 
@@ -44,8 +46,8 @@ def get_npro_buildings(
         else None
     )
 
-    total_area_and_units = read_file(
-        RESULTS_DIR / f"{distribution_name}.csv", encoding="utf-8"
+    total_area_and_units = pd.read_csv(
+        AREAS_FORECAST_DIR / f"{distribution_name}.csv", encoding="utf-8"
     )
     shares = get_building_shares()
 
@@ -111,13 +113,14 @@ def create_npro_scenario(
     buildings = get_npro_buildings(building_distribution_name, year, topology)
     scenario_data = {"weather": weather, "buildings": buildings}
     filepath = SCENARIOS_DIR / f"{name}.yaml"
-    write_file(
-        scenario_data,
-        filepath,
-        default_flow_style=False,
-        allow_unicode=True,
-        sort_keys=False,
-    )
+    with filepath.open("w") as yaml_file:
+        yaml.dump(
+            scenario_data,
+            yaml_file,
+            default_flow_style=False,
+            allow_unicode=True,
+            sort_keys=False,
+        )
 
 
 def create_all_resq_scenarios() -> None:

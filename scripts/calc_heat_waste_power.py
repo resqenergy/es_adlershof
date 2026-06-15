@@ -1,18 +1,19 @@
 import pandas as pd
 
-from utils.files import read_file, write_file
-from settings import RAW_DIR, RESULTS_DIR
+from settings import RAW_DIR, DATASETS_DIR
 
-OUTPUT_FILE = RESULTS_DIR / "wasteheat" / "capacity.csv"
+OUTPUT_DIR = DATASETS_DIR / "wasteheat_capacity"
+OUTPUT_DIR.mkdir(exist_ok=True)
+OUTPUT_FILE = OUTPUT_DIR / "capacity.csv"
 
 PERCENTILE = 95
 
 WASTEHEAT_POTENTIAL_ENERGIES_FILE = (
-    RAW_DIR / "Abwaermepotenzial_Adlershof_BfEE" / "Abwärmepotenziale_Adlershof.xlsx"
+    RAW_DIR / "wasteheat_potentials" / "Abwärmepotenziale_Adlershof.xlsx"
 )
-WASTEHEAT_POTENTIAL_ENERGIES = read_file(WASTEHEAT_POTENTIAL_ENERGIES_FILE).set_index(
-    "(Ab-)Wärmequelle"
-)
+WASTEHEAT_POTENTIAL_ENERGIES = pd.read_excel(
+    WASTEHEAT_POTENTIAL_ENERGIES_FILE
+).set_index("(Ab-)Wärmequelle")
 
 YEAR_INDEX_LOOKUP = {2025: 0, 2035: 1, 2050: 2}
 POWER_LOOKUP = 7
@@ -85,8 +86,8 @@ def calculate_thermal_power(
 
 def get_dynamic_hp_powers(scenario: str, year: int) -> list[dict]:
     # Define paths
-    cop_file = RESULTS_DIR / "wasteheat" / f"cop_{year}.csv"
-    energy_file = RESULTS_DIR / "wasteheat" / f"{scenario}.csv"
+    cop_file = DATASETS_DIR / "wasteheat_cop" / f"cop_{year}.csv"
+    energy_file = DATASETS_DIR / "wasteheat_profiles" / f"{scenario}.csv"
 
     # Read CSVs
     # cop.csv uses 'timeindex'
@@ -141,4 +142,4 @@ if __name__ == "__main__":
     dynamic_capacities = get_dynamic_hp_powers("2035_mean_rcp85", 2035)
     static_capacities_and_flh = get_static_hp_data("2035_mean_rcp85", 2035)
     df = pd.DataFrame(dynamic_capacities + static_capacities_and_flh)
-    write_file(df, OUTPUT_FILE, index=False)
+    df.to_csv(OUTPUT_FILE, index=False)

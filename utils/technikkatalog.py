@@ -13,6 +13,12 @@ import pathlib
 import pandas as pd
 import numpy as np
 
+from settings import RAW_DIR
+
+TECHNOLOGY_DIR = RAW_DIR / "technikkatalog"
+FLATDATA_FILE_RAW = (
+    TECHNOLOGY_DIR / "KWW-Technikkatalog-Waermeplanung_12-2025(flatdata_all).csv"
+)
 
 Technology = namedtuple("Technology", ["name", "capacity"])
 
@@ -30,13 +36,6 @@ PARAMETER_PREPROCESSING = {
     "Wirkungsgrad elektrisch": lambda value, _capacity: value / 100,
     "Jährliche Fixkosten O&M": lambda value, capacity: value / capacity,
 }
-
-ROOT_DIR = pathlib.Path(__file__).parent.parent
-RAW_DIR = ROOT_DIR / "raw"
-
-FLATDATA_FILE_RAW = (
-    RAW_DIR / "KWW-Technikkatalog-Waermeplanung_12-2025(flatdata_all).csv"
-)
 
 FORECAST_YEARS = (2035, 2050)
 

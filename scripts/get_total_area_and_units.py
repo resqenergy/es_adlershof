@@ -1,29 +1,36 @@
 import pandas as pd
 
-from utils.files import read_file, write_file
-from settings import RAW_DIR, RESULTS_DIR
+from settings import RAW_DIR, DATASETS_DIR
+
+CLUSTER_DIR = RAW_DIR / "cluster"
+OUTPUT_DIR = DATASETS_DIR / "areas"
+OUTPUT_DIR.mkdir(exist_ok=True)
 
 # --------------------------------------------------
 # Dateien laden
 # --------------------------------------------------
 
-companies_central_path = RAW_DIR / "companies_area_and_units_per_cluster_central.csv"
-companies_decentral_path = (
-    RAW_DIR / "companies_area_and_units_per_cluster_decentral.csv"
+companies_central_path = (
+    CLUSTER_DIR / "companies_area_and_units_per_cluster_central.csv"
 )
-residents_central_path = RAW_DIR / "residents_area_and_units_per_cluster_central.csv"
+companies_decentral_path = (
+    CLUSTER_DIR / "companies_area_and_units_per_cluster_decentral.csv"
+)
+residents_central_path = (
+    CLUSTER_DIR / "residents_area_and_units_per_cluster_central.csv"
+)
 residents_low_temp_central_path = (
-    RAW_DIR / "residents_area_and_units_per_cluster_low_temp_central.csv"
+    CLUSTER_DIR / "residents_area_and_units_per_cluster_low_temp_central.csv"
 )
 residents_decentral_path = (
-    RAW_DIR / "residents_area_and_units_per_cluster_decentral.csv"
+    CLUSTER_DIR / "residents_area_and_units_per_cluster_decentral.csv"
 )
 
-companies_central = read_file(companies_central_path)
-companies_decentral = read_file(companies_decentral_path)
-residents_central = read_file(residents_central_path)
-residents_low_temp_central = read_file(residents_low_temp_central_path)
-residents_decentral = read_file(residents_decentral_path)
+companies_central = pd.read_csv(companies_central_path)
+companies_decentral = pd.read_csv(companies_decentral_path)
+residents_central = pd.read_csv(residents_central_path)
+residents_low_temp_central = pd.read_csv(residents_low_temp_central_path)
+residents_decentral = pd.read_csv(residents_decentral_path)
 
 # --------------------------------------------------
 # Funktionen zum Zusammenführen
@@ -53,18 +60,15 @@ total_decentral = merge_and_sum(companies_decentral, residents_decentral)
 # Speichern
 # --------------------------------------------------
 
-write_file(
-    total_central,
-    RESULTS_DIR / "total_area_and_units_central.csv",
+total_central.to_csv(
+    OUTPUT_DIR / "total_area_and_units_central.csv",
     index=False,
 )
-write_file(
-    total_low_temp_central,
-    RESULTS_DIR / "total_area_and_units_low_temp_central.csv",
+total_low_temp_central.to_csv(
+    OUTPUT_DIR / "total_area_and_units_low_temp_central.csv",
     index=False,
 )
-write_file(
-    total_decentral,
-    RESULTS_DIR / "total_area_and_units_decentral.csv",
+total_decentral.to_csv(
+    OUTPUT_DIR / "total_area_and_units_decentral.csv",
     index=False,
 )

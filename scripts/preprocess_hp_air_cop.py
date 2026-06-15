@@ -1,14 +1,13 @@
 """Module to generate COP timeseries for heatpumps."""
 
-from pathlib import Path
-
 import pandas as pd
 
-RAW_DIR = Path(__file__).parent.parent / "raw"
-WEATHER_DIR = RAW_DIR / "weatherdata"
+from settings import DATASETS_DIR, RAW_DIR
+
+WEATHER_DIR = RAW_DIR / "weather"
 TEMPERATURE_LOW_COLUMN = "temp_air"
 
-PREPROCESSED_DIR = Path(__file__).parent.parent / "preprocessed"
+RESULT_DIR = DATASETS_DIR / "heatpump_air"
 RESULT_FILENAME = "ts_hp_air_cop.csv"
 RESULT_COLUMN_NAME = "heatpump_air-profile"
 
@@ -50,4 +49,4 @@ if __name__ == "__main__":
     )
     cop_series.index = timeindex
     cop_series.index.name = "timeindex"
-    cop_series.to_csv(PREPROCESSED_DIR / RESULT_FILENAME, sep=";", index=True)
+    cop_series.to_csv(RESULT_DIR / RESULT_FILENAME, sep=";", index=True)

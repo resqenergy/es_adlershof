@@ -1,4 +1,7 @@
 
+SCENARIO ?= 2035_mean_rcp85
+YEAR ?= 2035
+
 all: wasteheat_profiles wasteheat_cops areas_forecast parameters datapackage
 
 areas:
@@ -17,10 +20,16 @@ demand_profiles: npro_buildings
 	uv run -m scripts.get_demand_profiles
 
 wasteheat_profiles: demand_profiles
-	uv run -m scripts.get_waste_heat_profiles
+	uv run -m scripts.get_waste_heat_profiles $(SCENARIO) $(YEAR)
 
 wasteheat_cops:
-	uv run -m scripts.calc_heat_waste_cop
+	uv run -m scripts.calc_heat_waste_cop $(YEAR)
+
+wasteheat_capacities:
+	uv run -m scripts.calc_heat_waste_power
+
+solar_thermal:
+	uv run -m scripts.get_solar_thermal_profiles
 
 parameters:
 	uv run -m scripts.prepare_technikkatalog
@@ -28,7 +37,7 @@ parameters:
 
 datapackage:
 	uv run oemof-pipe blueprint -f adlershof
-	uv run oemof-pipe scenario -f adlershof 2035_mean_rcp85
+	uv run oemof-pipe scenario -f adlershof $(SCENARIO)
 
 export_datapackage:
-	uv run -m utils.export_to_s3 adlershof_2035_mean_rcp85
+	uv run -m utils.export_to_s3 adlershof_$(SCENARIO)

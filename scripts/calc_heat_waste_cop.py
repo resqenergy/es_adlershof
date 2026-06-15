@@ -7,8 +7,10 @@ from io import StringIO
 import requests
 import pandas as pd
 
-from settings import RESULTS_DIR
-from utils.files import write_file
+from settings import DATASETS_DIR
+
+RESULT_DIR = DATASETS_DIR / "wasteheat_cop"
+RESULT_DIR.mkdir(exist_ok=True)
 
 KELVIN = 273.15
 TARGET_TEMPERATURE = 88 + KELVIN  # in K
@@ -69,8 +71,12 @@ def calculate_heat_waste_cops(year: int):
         index=timeindex,
     )
 
-    result_file = RESULTS_DIR / "wasteheat" / f"cop_{year}.csv"
-    write_file(cop_results, result_file, index_label="timeindex")
+    result_file = RESULT_DIR / f"cop_{year}.csv"
+    cop_results.to_csv(result_file, index_label="timeindex")
 
 
-calculate_heat_waste_cops(2035)
+if __name__ == "__main__":
+    import sys
+
+    _year = int(sys.argv[1]) if len(sys.argv) > 1 else 2035
+    calculate_heat_waste_cops(_year)
