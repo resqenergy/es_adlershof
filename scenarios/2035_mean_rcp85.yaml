@@ -36,7 +36,7 @@ sequences:
     sequence_name: volatile_profile
     column_mapping:
       wind_profile: wind-profile
-  - path: s3://resqenergy/datasets/volatile_profiles/pv_timeseries-try_mean_rcp85-2035.csv
+  - path: s3://resqenergy/datasets/pv_profiles/pv_timeseries-try_mean_rcp85-2035.csv
     sequence_name: volatile_profile
     column_mapping:
       pv_facade: pv_facade-profile
