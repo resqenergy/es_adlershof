@@ -31,16 +31,16 @@ modelchain_data = {
     "wind_speed_model": "logarithmic",  # 'logarithmic' (default),
     # 'hellman' or
     # 'interpolation_extrapolation'
-    "density_model": "ideal_gas",  # 'barometric' (default), 'ideal_gas'
+    "density_model": "barometric",  # 'barometric' (default), 'ideal_gas'
     #  or 'interpolation_extrapolation'
     "temperature_model": "linear_gradient",  # 'linear_gradient' (def.) or
     # 'interpolation_extrapolation'
-    "power_output_model": "power_coefficient_curve",  # 'power_curve' (default) or
+    "power_output_model": "power_curve",  # 'power_curve' (default) or
     # 'power_coefficient_curve'
-    "density_correction": True,  # False (default) or True
+    "density_correction": False,  # False (default) or True
     "obstacle_height": 0,  # default: 0
-    "hellman_exp": None,
-}  # None (default) or None
+    "hellman_exp": None,  # None (default) or None
+}
 
 
 def resolve_year(weatherdata_name, year=None):
@@ -221,7 +221,9 @@ def run_windpowerlib(turbine_model, modelchain_data, weather_windpowerlib):
 
     # own specifications for ModelChain setup
 
-    mc_my_turbine = ModelChain(my_turbine).run_model(weather_windpowerlib)
+    mc_my_turbine = ModelChain(my_turbine, **modelchain_data).run_model(
+        weather_windpowerlib
+    )
     # write power output time series to WindTurbine object
     my_turbine.power_output = mc_my_turbine.power_output
 
