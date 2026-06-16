@@ -1,6 +1,7 @@
 import pandas as pd
 
 from settings import RAW_DIR, DATASETS_DIR
+from utils.metadata import write_metadata
 
 CLUSTER_DIR = RAW_DIR / "cluster"
 OUTPUT_DIR = DATASETS_DIR / "areas"
@@ -71,4 +72,23 @@ total_low_temp_central.to_csv(
 total_decentral.to_csv(
     OUTPUT_DIR / "total_area_and_units_decentral.csv",
     index=False,
+)
+write_metadata(
+    OUTPUT_DIR,
+    script=__file__,
+    description="Total usable floor area and residential units per building cluster, merged from company and resident cluster CSVs, for central, low-temperature-central, and decentral topologies.",
+    inputs=[
+        companies_central_path,
+        companies_decentral_path,
+        residents_central_path,
+        residents_low_temp_central_path,
+        residents_decentral_path,
+    ],
+    outputs=[
+        OUTPUT_DIR / "total_area_and_units_central.csv",
+        OUTPUT_DIR / "total_area_and_units_low_temp_central.csv",
+        OUTPUT_DIR / "total_area_and_units_decentral.csv",
+    ],
+    params={},
+    sources=[],
 )

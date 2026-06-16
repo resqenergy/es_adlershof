@@ -19,6 +19,7 @@ from npro.settings import WEATHER_DIR
 
 from settings import DATASETS_DIR
 from loguru import logger
+from utils.metadata import write_metadata
 
 SOLAR_DIR = DATASETS_DIR / "solar_thermal_profiles"
 SOLAR_DIR.mkdir(exist_ok=True)
@@ -243,7 +244,29 @@ def calculate_solar_thermal_power_for_weather(
 
 
 if __name__ == "__main__":
+    input_files = []
+    output_files = []
     for file in WEATHER_DIR.glob("*.csv"):
         period = file.stem.split(".")[1]
         year = PERIODS[period]
         calculate_solar_thermal_power_for_weather(file, year)
+        input_files.append(file)
+        output_files.append(SOLAR_DIR / f"solar_thermal_profile_{file.stem}.csv")
+    write_metadata(
+        SOLAR_DIR,
+        script=__file__,
+        description="Hourly solar thermal power output profiles for a flat-plate collector, computed per TRY weather scenario using pvlib irradiance calculations.",
+        inputs=input_files,
+        outputs=output_files,
+        params={
+            "eta_0": ETA_0,
+            "a1": A1,
+            "a2": A2,
+            "tilt_deg": TILT,
+            "azimuth_deg": AZIMUT,
+            "temp_inlet_C": TEMP_INLET,
+            "lat": LAT,
+            "lon": LONG,
+        },
+        sources=[],
+    )

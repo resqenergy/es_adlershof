@@ -4,6 +4,7 @@ import json
 import pandas as pd
 import pathlib
 from settings import DATASETS_DIR
+from utils.metadata import write_metadata
 
 BUILDINGS_DIR = DATASETS_DIR / "npro_buildings"
 PROFILES_DIR = DATASETS_DIR / "demand_profiles"
@@ -128,6 +129,7 @@ def aggregate_demands():
     df_demand_transformed.to_csv(PROFILES_DIR / "total_demands.csv", index=False)
 
     # Save point 2: demand_profiles
+    profile_output_files = []
     for (year, climate), df_prof in all_profiles.items():
         filename = f"{year}_{climate}.csv"
         year_str = 2025 if year == "statusquo" else year
@@ -137,6 +139,17 @@ def aggregate_demands():
         )
         df_normalized["timeindex"] = timeindex
         df_normalized.to_csv(PROFILES_DIR / filename, index=False)
+        profile_output_files.append(PROFILES_DIR / filename)
+
+    write_metadata(
+        PROFILES_DIR,
+        script=__file__,
+        description="Normalized hourly demand profiles (electricity, heat, cooling, mobility) and annual totals per scenario, aggregated from NPRO building simulations.",
+        inputs=[BUILDINGS_DIR],
+        outputs=[PROFILES_DIR / "total_demands.csv", *profile_output_files],
+        params={},
+        sources=[],
+    )
 
 
 if __name__ == "__main__":

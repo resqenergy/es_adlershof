@@ -9,6 +9,7 @@ from typing import Any
 
 from npro.settings import SCENARIOS_DIR, WEATHER_DIR
 from settings import DATASETS_DIR, CONFIG_DIR, logger
+from utils.metadata import write_metadata
 
 AREAS_FORECAST_DIR = DATASETS_DIR / "areas_forecast"
 
@@ -126,11 +127,14 @@ def create_npro_scenario(
 def create_all_resq_scenarios() -> None:
     """Create all resq scenarios."""
     period_mapping = {"p1": "statusquo", "p2": "2035", "p3": "2050"}
+    weather_files = []
+    output_files = []
     for weather_file in WEATHER_DIR.glob("*.csv"):
         logger.info(f"Creating scenario for {weather_file.stem}")
         period = weather_file.stem.split(".")[1]
         year = period_mapping[period]
         climate = weather_file.stem.split(".")[0][4:]
+        weather_files.append(weather_file)
 
         for topology in ("central", "decentral", "low_temp_central"):
             scenario_name = f"{year}_{climate}_{topology}"
@@ -142,6 +146,24 @@ def create_all_resq_scenarios() -> None:
                 year=year,
                 topology=npro_topology,
             )
+            output_files.append(SCENARIOS_DIR / f"{scenario_name}.yaml")
+
+    write_metadata(
+        SCENARIOS_DIR,
+        script=__file__,
+        description="NPRO building simulation scenario YAML files, one per combination of climate scenario, topology, and planning horizon.",
+        inputs=[
+            *weather_files,
+            AREAS_FORECAST_DIR / "total_area_and_units_central_with_forecast.csv",
+            AREAS_FORECAST_DIR / "total_area_and_units_decentral_with_forecast.csv",
+            AREAS_FORECAST_DIR
+            / "total_area_and_units_low_temp_central_with_forecast.csv",
+            BUILDING_SHARES_PATH,
+        ],
+        outputs=output_files,
+        params={},
+        sources=[],
+    )
 
 
 if __name__ == "__main__":

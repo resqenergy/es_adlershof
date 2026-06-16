@@ -5,6 +5,7 @@ import pandas as pd
 
 from utils.economics import annuity
 from settings import DATASETS_DIR, RAW_DIR
+from utils.metadata import write_metadata
 
 TECHNOLOGY_OUTPUT_DIR = DATASETS_DIR / "technology_capacity_cost"
 TECHNOLOGY_OUTPUT_DIR.mkdir(exist_ok=True)
@@ -81,12 +82,29 @@ if __name__ == "__main__":
     #     PREPROCESSED_DIR / "scalars" / "costs_efficiencies.csv",
     #     PREPROCESSED_DIR / "scalars" / "capacity_costs.csv",
     # )
-    calculate_annual_cost(
-        DATASETS_DIR / "technology_cost" / "kww_technikkatalog.csv",
-        TECHNOLOGY_OUTPUT_DIR / "kww_technikkatalog_capacity_cost.csv",
-        scenario_key="scenario",
+    tech_input = DATASETS_DIR / "technology_cost" / "kww_technikkatalog.csv"
+    tech_output = TECHNOLOGY_OUTPUT_DIR / "kww_technikkatalog_capacity_cost.csv"
+    solar_input = RAW_DIR / "solar_thermal" / "solar_thermal_parameters.csv"
+    solar_output = SOLAR_OUTPUT_DIR / "solar_thermal_capacity_cost.csv"
+
+    calculate_annual_cost(tech_input, tech_output, scenario_key="scenario")
+    calculate_annual_cost(solar_input, solar_output)
+
+    write_metadata(
+        TECHNOLOGY_OUTPUT_DIR,
+        script=__file__,
+        description="Annualized capacity costs for district heating technologies, computed from overnight CAPEX, lifetime, WACC, and fixed O&M costs.",
+        inputs=[tech_input],
+        outputs=[tech_output],
+        params={"wacc": WACC},
+        sources=[],
     )
-    calculate_annual_cost(
-        RAW_DIR / "solar_thermal" / "solar_thermal_parameters.csv",
-        SOLAR_OUTPUT_DIR / "solar_thermal_capacity_cost.csv",
+    write_metadata(
+        SOLAR_OUTPUT_DIR,
+        script=__file__,
+        description="Annualized capacity costs for solar thermal collectors, computed from overnight CAPEX, lifetime, WACC, and fixed O&M costs.",
+        inputs=[solar_input],
+        outputs=[solar_output],
+        params={"wacc": WACC},
+        sources=[],
     )

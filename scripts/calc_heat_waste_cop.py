@@ -8,6 +8,7 @@ import requests
 import pandas as pd
 
 from settings import DATASETS_DIR
+from utils.metadata import write_metadata
 
 RESULT_DIR = DATASETS_DIR / "wasteheat_cop"
 RESULT_DIR.mkdir(exist_ok=True)
@@ -80,3 +81,23 @@ if __name__ == "__main__":
 
     _year = int(sys.argv[1]) if len(sys.argv) > 1 else 2035
     calculate_heat_waste_cops(_year)
+    write_metadata(
+        RESULT_DIR,
+        script=__file__,
+        description="Hourly COP time series for waste heat pump components, computed from Wasserportal Berlin canal and waste water temperatures.",
+        inputs=[],
+        outputs=[RESULT_DIR / f"cop_{_year}.csv"],
+        params={
+            "year": _year,
+            "target_temperature_K": TARGET_TEMPERATURE,
+            "quality_grade": QUALITY_GRADE,
+        },
+        sources=[
+            {
+                "name": "Wasserportal Berlin – canal water temperature (station 5866700)",
+                "url": "https://wasserportal.berlin.de/station.php?anzeige=d&station=5866700&thema=owt",
+                "download_date": None,
+                "description": "Hourly water temperature of Teltow-Kanal, fetched live at script runtime.",
+            }
+        ],
+    )

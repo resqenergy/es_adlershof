@@ -1,6 +1,7 @@
 import pandas as pd
 
 from settings import RAW_DIR, DATASETS_DIR
+from utils.metadata import write_metadata
 
 OUTPUT_DIR = DATASETS_DIR / "wasteheat_capacity"
 OUTPUT_DIR.mkdir(exist_ok=True)
@@ -139,7 +140,22 @@ def get_static_hp_data(scenario: str, year: int) -> list[dict]:
 
 
 if __name__ == "__main__":
-    dynamic_capacities = get_dynamic_hp_powers("2035_mean_rcp85", 2035)
-    static_capacities_and_flh = get_static_hp_data("2035_mean_rcp85", 2035)
+    _scenario = "2035_mean_rcp85"
+    _year = 2035
+    dynamic_capacities = get_dynamic_hp_powers(_scenario, _year)
+    static_capacities_and_flh = get_static_hp_data(_scenario, _year)
     df = pd.DataFrame(dynamic_capacities + static_capacities_and_flh)
     df.to_csv(OUTPUT_FILE, index=False)
+    write_metadata(
+        OUTPUT_DIR,
+        script=__file__,
+        description="Waste heat pump capacity potentials derived from waste heat energy profiles and COP time series.",
+        inputs=[
+            WASTEHEAT_POTENTIAL_ENERGIES_FILE,
+            DATASETS_DIR / "wasteheat_cop" / f"cop_{_year}.csv",
+            DATASETS_DIR / "wasteheat_profiles" / f"{_scenario}.csv",
+        ],
+        outputs=[OUTPUT_FILE],
+        params={"scenario": _scenario, "year": _year, "percentile": PERCENTILE},
+        sources=[],
+    )

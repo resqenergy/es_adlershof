@@ -1,6 +1,7 @@
 import pandas as pd
 
 from settings import DATASETS_DIR
+from utils.metadata import write_metadata
 
 AREAS_DIR = DATASETS_DIR / "areas"
 AREAS_FORECAST_DIR = DATASETS_DIR / "areas_forecast"
@@ -151,4 +152,19 @@ low_temp_central_out.to_csv(
 decentral_out.to_csv(
     AREAS_FORECAST_DIR / "total_area_and_units_decentral_with_forecast.csv",
     index=False,
+)
+write_metadata(
+    AREAS_FORECAST_DIR,
+    script=__file__,
+    description="Floor area and unit counts per building cluster with growth projections to 2035 and 2050, derived from Bebauungsplan data.",
+    inputs=[total_central_path, total_low_temp_central_path, total_decentral_path],
+    outputs=[
+        AREAS_FORECAST_DIR / "total_area_and_units_central_with_forecast.csv",
+        AREAS_FORECAST_DIR / "total_area_and_units_low_temp_central_with_forecast.csv",
+        AREAS_FORECAST_DIR / "total_area_and_units_decentral_with_forecast.csv",
+    ],
+    params={
+        "growth_fractions": {"2035": 0.25, "2050": 0.60},
+        "bebauung": bebauung.to_dict(orient="records"),
+    },
 )

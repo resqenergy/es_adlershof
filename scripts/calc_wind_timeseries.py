@@ -4,6 +4,7 @@ import pandas as pd
 from windpowerlib import ModelChain, WindTurbine
 
 from settings import RAW_DIR, DATASETS_DIR
+from utils.metadata import write_metadata
 
 WEATHER_DATA_DIR = RAW_DIR / "weather"
 TURBINE_MODELS_NREL = RAW_DIR / "wind_turbine_models"
@@ -231,17 +232,21 @@ def run_windpowerlib(turbine_model, modelchain_data, weather_windpowerlib):
 
 
 if __name__ == "__main__":
+    input_files = []
+    output_files = []
+
+    turbine_model_path = (
+        TURBINE_MODELS_NREL
+        / args["wind_turbine_class"]
+        / f"{args['wind_turbine_name']}.csv"
+    )
+    turbine_model = preprocess_nrel_turbine_model(turbine_model_path)
+
     for file in WEATHER_DATA_DIR.iterdir():
         if file.is_file() and file.suffix == ".csv" in file.name:
+            input_files.append(file)
 
             weather_windpowerlib = read_and_preprocess_weather_data(file)
-
-            turbine_model_path = (
-                TURBINE_MODELS_NREL
-                / args["wind_turbine_class"]
-                / f"{args['wind_turbine_name']}.csv"
-            )
-            turbine_model = preprocess_nrel_turbine_model(turbine_model_path)
 
             my_turbine = run_windpowerlib(
                 turbine_model, modelchain_data, weather_windpowerlib
@@ -261,3 +266,13 @@ if __name__ == "__main__":
                 / f"wind_timeseries-{file.stem}-{wind_timeseries_normalized.index.year[0]}.csv"
             )
             wind_timeseries_normalized.to_csv(result_path)
+            output_files.append(result_path)
+
+    write_metadata(
+        RESULTS_DIR,
+        script=__file__,
+        description="Normalized wind power time series computed from TRY weather data using windpowerlib ModelChain.",
+        inputs=[turbine_model_path, *input_files],
+        outputs=output_files,
+        params={"wind_turbine": args, "modelchain": modelchain_data},
+    )

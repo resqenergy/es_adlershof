@@ -3,6 +3,7 @@
 import pandas as pd
 
 from settings import DATASETS_DIR, RAW_DIR
+from utils.metadata import write_metadata
 
 WEATHER_DIR = RAW_DIR / "weather"
 TEMPERATURE_LOW_COLUMN = "temp_air"
@@ -49,4 +50,20 @@ if __name__ == "__main__":
     )
     cop_series.index = timeindex
     cop_series.index.name = "timeindex"
-    cop_series.to_csv(RESULT_DIR / RESULT_FILENAME, sep=";", index=True)
+    result_path = RESULT_DIR / RESULT_FILENAME
+    cop_series.to_csv(result_path, sep=";", index=True)
+    RESULT_DIR.mkdir(parents=True, exist_ok=True)
+    write_metadata(
+        RESULT_DIR,
+        script=__file__,
+        description="Hourly COP time series for air-source heat pump, computed from ambient air temperature using a fixed quality grade.",
+        inputs=[WEATHER_DIR / f"weatherdata_{DEFAULT_REGION}_{DEFAULT_YEAR}.csv"],
+        outputs=[result_path],
+        params={
+            "region": DEFAULT_REGION,
+            "year": DEFAULT_YEAR,
+            "temp_high_C": DEFAULT_TEMP_HIGH,
+            "quality_grade": QUALITY_GRADE,
+        },
+        sources=[],
+    )

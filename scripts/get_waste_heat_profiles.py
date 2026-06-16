@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from settings import RAW_DIR, DATASETS_DIR
+from utils.metadata import write_metadata
 
 # =========================
 # PATHS
@@ -253,7 +254,20 @@ def create_wasteheat_profiles(scenario_name: str, year: int):
             "heatpump_office-low_temperature_potential": office_profile,
         }
     )
-    df.to_csv(OUTPUT_DIR / f"{scenario_name}.csv", index=False)
+    output_file = OUTPUT_DIR / f"{scenario_name}.csv"
+    df.to_csv(output_file, index=False)
+    write_metadata(
+        OUTPUT_DIR,
+        script=__file__,
+        description="Hourly waste heat potential profiles per temperature level (HT/MT/NT/office), disaggregated from annual energy totals using demand-driven temporal patterns.",
+        inputs=[
+            WASTEHEAT_POTENTIAL_FILE,
+            WASTEHEAT_POTENTIAL_ENERGIES_FILE,
+            DEMANDS_DIR / f"{scenario_name}.csv",
+        ],
+        outputs=[output_file],
+        params={"scenario": scenario_name, "year": year},
+    )
 
 
 if __name__ == "__main__":

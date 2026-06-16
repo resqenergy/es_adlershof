@@ -8,9 +8,10 @@ Steps:
 4. Use resulting CSV in oemof-pipe scenario
 """
 
-from utils.technikkatalog import Technology, get_technology_data
+from utils.technikkatalog import Technology, get_technology_data, FLATDATA_FILE_RAW
 
 from settings import DATASETS_DIR
+from utils.metadata import write_metadata
 
 FLATDATA_FILE_PREPROCESSED = DATASETS_DIR / "technology_cost" / "kww_technikkatalog.csv"
 FLATDATA_FILE_PREPROCESSED.parent.mkdir(exist_ok=True)
@@ -31,3 +32,13 @@ TECHNOLOGY_MAPPING = {
 if __name__ == "__main__":
     technology_df = get_technology_data(TECHNOLOGY_MAPPING)
     technology_df.to_csv(FLATDATA_FILE_PREPROCESSED, index=False, sep=";")
+    write_metadata(
+        FLATDATA_FILE_PREPROCESSED.parent,
+        script=__file__,
+        description="Filtered and renamed technology cost and efficiency parameters from Technikkatalog, mapped to oemof-pipe component names.",
+        inputs=[FLATDATA_FILE_RAW],
+        outputs=[FLATDATA_FILE_PREPROCESSED],
+        params={
+            "technology_mapping": {str(k): v for k, v in TECHNOLOGY_MAPPING.items()}
+        },
+    )

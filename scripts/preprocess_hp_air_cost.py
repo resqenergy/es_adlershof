@@ -3,6 +3,7 @@ import os
 import glob
 from settings import DATASETS_DIR, ROOT_DIR
 from utils.files import write_file
+from utils.metadata import write_metadata
 
 from utils.technikkatalog import get_technology_data, Technology, PARAMETER_MAPPING
 
@@ -208,3 +209,23 @@ if __name__ == "__main__":
 
     weighted_cost_df = pd.DataFrame(weighted_cost_list)
     write_file(weighted_cost_df, HEATPUMP_DIR / "hp_cost.csv", index=False)
+
+    per_scenario_outputs = [
+        HEATPUMP_DIR / f"heatpump_air_{scenario}.csv" for scenario in scenarios
+    ]
+    write_metadata(
+        HEATPUMP_DIR,
+        script=__file__,
+        description="Air-source heat pump capacity and weighted-mean cost per scenario, derived from NPRO building heat demands, COP profiles, and Technikkatalog cost data.",
+        inputs=[
+            COP_FILE,
+            NPRO_BUILDINGS_DIR,
+            DATASETS_DIR / "areas_forecast",
+        ],
+        outputs=[*per_scenario_outputs, HEATPUMP_DIR / "hp_cost.csv"],
+        params={
+            "technikkatalog_technology": TECHNIKKATALOG_TECHNOLOGY_NAME,
+            "available_capacities_kW": list(TECHNIKKATALOG_HP_CAPACITIES),
+        },
+        sources=[],
+    )
