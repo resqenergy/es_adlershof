@@ -1,3 +1,5 @@
+"""Estimate mean usable heat power from Teltow-Kanal water flow and temperature data."""
+
 import requests
 import pandas as pd
 import os

@@ -1,3 +1,5 @@
+"""Calculate air-source heat pump capacities and weighted-mean costs per scenario from NPRO building demands."""
+
 import pandas as pd
 import os
 import glob

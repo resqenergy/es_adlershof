@@ -1,3 +1,5 @@
+"""Calculate waste heat pump capacity potentials from energy profiles and COP time series."""
+
 import pandas as pd
 
 from settings import RAW_DIR, DATASETS_DIR

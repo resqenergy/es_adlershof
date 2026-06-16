@@ -1,3 +1,5 @@
+"""Disaggregate annual waste heat potentials into hourly profiles by temperature level (HT/MT/NT/office)."""
+
 import pandas as pd
 import numpy as np
 from settings import RAW_DIR, DATASETS_DIR

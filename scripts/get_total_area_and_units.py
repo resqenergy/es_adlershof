@@ -1,3 +1,5 @@
+"""Merge company and resident cluster CSVs into total floor area and unit counts per topology."""
+
 import pandas as pd
 
 from settings import RAW_DIR, DATASETS_DIR

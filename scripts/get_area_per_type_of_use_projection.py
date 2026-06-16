@@ -1,3 +1,5 @@
+"""Project floor area and unit counts per building cluster to 2035 and 2050 using Bebauungsplan growth factors."""
+
 import pandas as pd
 
 from settings import DATASETS_DIR

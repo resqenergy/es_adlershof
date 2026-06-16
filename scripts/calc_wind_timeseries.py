@@ -1,3 +1,5 @@
+"""Generate normalized wind power time series from TRY weather data using windpowerlib."""
+
 import warnings
 
 import pandas as pd
