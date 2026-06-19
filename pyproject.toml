@@ -24,3 +24,8 @@ dependencies = [
 [tool.uv.sources]
 npro = { git = "https://github.com/resqenergy/npro" }
 oemof-pipe = { git = "https://github.com/rl-institut/oemof_pipe" }
+
+[dependency-groups]
+dev = [
+    "zensical>=0.0.45",
+]
