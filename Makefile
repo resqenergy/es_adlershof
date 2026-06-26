@@ -1,6 +1,7 @@
 
 SCENARIO ?= 2035_mean_rcp85
 YEAR ?= 2035
+GSEE_PYTHON := $(shell conda info --base)/envs/gsee37/bin/python
 
 all: wasteheat_profiles wasteheat_cops areas_forecast parameters datapackage
 
@@ -30,6 +31,12 @@ wasteheat_capacities:
 
 solar_thermal:
 	uv run -m scripts.get_solar_thermal_profiles
+
+gsee_timeseries:
+	$(GSEE_PYTHON) scripts/pv_precalc/calc_gsee_timeseries.py
+
+pv_timeseries:
+	uv run -m scripts.calc_pv_timeseries
 
 parameters:
 	uv run -m scripts.prepare_technikkatalog
