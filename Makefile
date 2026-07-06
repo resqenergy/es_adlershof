@@ -48,3 +48,7 @@ datapackage:
 
 export_datapackage:
 	uv run -m utils.export_to_s3 adlershof_$(SCENARIO)
+
+docs:
+	uv run zensical build
+	uv run zensical build -f zensical.en.toml

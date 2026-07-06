@@ -1,0 +1,117 @@
+# English build of the docs. Mirrors zensical.toml (German, site root).
+# Build with: zensical build -f zensical.en.toml
+# Output goes to site/en/, nested under the German build's site/ output.
+
+[project]
+
+site_name = "Energy System Adlershof"
+site_description = "Documentation of the data pipeline and input data for the Adlershof energy system model (ResQEnergy project)."
+site_author = "Hendrik Huyskens"
+
+copyright = """
+Copyright &copy; 2026 Hendrik Huyskens
+"""
+
+docs_dir = "docs/en"
+site_dir = "site/en"
+
+nav = [
+  { "Overview" = "index.md" },
+  { "Setup" = "setup.md" },
+  { "Data structures" = "datenstrukturen.md" },
+  { "Scripts" = [
+    { "Merge building areas" = "scripts/get_total_area_and_units.md" },
+    { "Area forecast" = "scripts/get_area_per_type_of_use_projection.md" },
+    { "NPRO building simulations" = "scripts/get_demands_per_building.md" },
+    { "Aggregate demand profiles" = "scripts/get_demand_profiles.md" },
+    { "Hourly waste-heat profiles" = "scripts/get_waste_heat_profiles.md" },
+    { "COP waste-heat heat pumps" = "scripts/calc_heat_waste_cop.md" },
+    { "Waste-heat capacities" = "scripts/calc_heat_waste_power.md" },
+    { "Teltow Canal heat quantity" = "scripts/calc_waermemenge_teltowkanal.md" },
+    { "Wind power time series" = "scripts/calc_wind_timeseries.md" },
+    { "Solar thermal profiles" = "scripts/get_solar_thermal_profiles.md" },
+    { "Prepare technology catalog" = "scripts/prepare_technikkatalog.md" },
+    { "Capacity costs" = "scripts/preprocess_capacity_costs.md" },
+    { "COP air heat pumps" = "scripts/preprocess_hp_air_cop.md" },
+    { "Costs air heat pumps" = "scripts/preprocess_hp_air_cost.md" },
+  ]},
+]
+
+[project.theme]
+
+language = "en"
+
+features = [
+    "announce.dismiss",
+    "content.code.annotate",
+    "content.code.copy",
+    "content.code.select",
+    "content.footnote.tooltips",
+    "content.tabs.link",
+    "content.tooltips",
+    "navigation.footer",
+    "navigation.indexes",
+    "navigation.instant",
+    "navigation.instant.prefetch",
+    "navigation.path",
+    "navigation.sections",
+    "navigation.top",
+    "navigation.tracking",
+    "search.highlight",
+]
+
+[[project.theme.palette]]
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
+
+[[project.extra.alternate]]
+name = "English"
+link = "/en/"
+lang = "en"
+
+[[project.extra.alternate]]
+name = "Deutsch"
+link = "/"
+lang = "de"
+
+[project.markdown_extensions.abbr]
+[project.markdown_extensions.admonition]
+[project.markdown_extensions.attr_list]
+[project.markdown_extensions.def_list]
+[project.markdown_extensions.footnotes]
+[project.markdown_extensions.md_in_html]
+[project.markdown_extensions.toc]
+permalink = true
+[project.markdown_extensions.pymdownx.arithmatex]
+generic = true
+[project.markdown_extensions.pymdownx.betterem]
+[project.markdown_extensions.pymdownx.caret]
+[project.markdown_extensions.pymdownx.details]
+[project.markdown_extensions.pymdownx.emoji]
+emoji_generator = "zensical.extensions.emoji.to_svg"
+emoji_index = "zensical.extensions.emoji.twemoji"
+[project.markdown_extensions.pymdownx.highlight]
+anchor_linenums = true
+line_spans = "__span"
+pygments_lang_class = true
+[project.markdown_extensions.pymdownx.inlinehilite]
+[project.markdown_extensions.pymdownx.keys]
+[project.markdown_extensions.pymdownx.magiclink]
+[project.markdown_extensions.pymdownx.mark]
+[project.markdown_extensions.pymdownx.smartsymbols]
+[project.markdown_extensions.pymdownx.superfences]
+custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" }
+]
+[project.markdown_extensions.pymdownx.tabbed]
+alternate_style = true
+combine_header_slug = true
+[project.markdown_extensions.pymdownx.tasklist]
+custom_checkbox = true
+[project.markdown_extensions.pymdownx.tilde]

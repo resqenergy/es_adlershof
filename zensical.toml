@@ -37,7 +37,8 @@ copyright = """
 Copyright &copy; 2026 Hendrik Huyskens
 """
 
-docs_dir = "docs"
+docs_dir = "docs/de"
+site_dir = "site"
 
 # Zensical supports both implicit navigation and explicitly defined navigation.
 # If you decide not to define a navigation here then Zensical will simply
@@ -322,6 +323,18 @@ toggle.name = "Switch to light mode"
 #[[project.extra.social]]
 #icon = "fontawesome/brands/github"
 #link = "https://github.com/user/repo"
+
+# Language switcher: this is the German build (site root). The English
+# build lives under /en/ and is produced separately from zensical.en.toml.
+[[project.extra.alternate]]
+name = "Deutsch"
+link = "/"
+lang = "de"
+
+[[project.extra.alternate]]
+name = "English"
+link = "/en/"
+lang = "en"
 
 # ----------------------------------------------------------------------------
 # In this section you can configure the Markdown extensions that are used when
