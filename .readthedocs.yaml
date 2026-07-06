@@ -5,14 +5,25 @@
    tools:
      python: latest
    jobs:
-     # We recommend using a requirements file for reproducible builds.
-     # This is just a quick example to get started.
-     # https://docs.readthedocs.io/page/guides/reproducible-builds.html
+     # Shared by both linked RTD projects (main "de" project + "en"
+     # translation project). RTD sets READTHEDOCS_LANGUAGE from each
+     # project's own configured language, so this picks the right
+     # zensical config and output subtree per project.
      install:
        - pip install zensical
      build:
        html:
-         - zensical build
+         - |
+           if [ "$READTHEDOCS_LANGUAGE" = "en" ]; then
+             zensical build -f zensical.en.toml
+           else
+             zensical build
+           fi
      post_build:
        - mkdir -p $READTHEDOCS_OUTPUT/html/
-       - cp --recursive site/* $READTHEDOCS_OUTPUT/html/
+       - |
+         if [ "$READTHEDOCS_LANGUAGE" = "en" ]; then
+           cp --recursive site/en/* $READTHEDOCS_OUTPUT/html/
+         else
+           cp --recursive site/* $READTHEDOCS_OUTPUT/html/
+         fi
