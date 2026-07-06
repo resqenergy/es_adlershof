@@ -13,7 +13,6 @@
      build:
        html:
          - zensical build
-         - zensical build -f zensical.en.toml
      post_build:
        - mkdir -p $READTHEDOCS_OUTPUT/html/
        - cp --recursive site/* $READTHEDOCS_OUTPUT/html/

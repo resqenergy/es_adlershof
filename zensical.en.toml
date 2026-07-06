@@ -1,13 +1,20 @@
 # English build of the docs. Mirrors zensical.toml (German, site root).
 # Build with: zensical build -f zensical.en.toml
-# Output goes to site/en/, nested under the German build's site/ output.
+#
+# Local preview: output goes to site/en/, nested under the German build's
+# site/ output, so one static server can serve both languages side by side.
+#
+# readthedocs.io: served by a separate linked RTD project (a "Translation"
+# of the main resqenergy project) using .readthedocs-en.yaml, which copies
+# the contents of site/en/ to that project's own output root — RTD adds
+# the /en/latest/ prefix itself.
 
 [project]
 
 site_name = "Energy System Adlershof"
 site_description = "Documentation of the data pipeline and input data for the Adlershof energy system model (ResQEnergy project)."
 site_author = "Hendrik Huyskens"
-site_url = "https://resqenergy.readthedocs.io/en/"
+site_url = "https://resqenergy.readthedocs.io/en/latest/"
 
 copyright = """
 Copyright &copy; 2026 Hendrik Huyskens
@@ -71,15 +78,8 @@ scheme = "slate"
 toggle.icon = "lucide/moon"
 toggle.name = "Switch to light mode"
 
-[[project.extra.alternate]]
-name = "English"
-link = "/en/"
-lang = "en"
-
-[[project.extra.alternate]]
-name = "Deutsch"
-link = "/"
-lang = "de"
+# No extra.alternate language switcher here: see the note on this at the
+# top of the file and in zensical.toml.
 
 [project.markdown_extensions.abbr]
 [project.markdown_extensions.admonition]
