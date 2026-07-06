@@ -7,6 +7,7 @@
 site_name = "Energy System Adlershof"
 site_description = "Documentation of the data pipeline and input data for the Adlershof energy system model (ResQEnergy project)."
 site_author = "Hendrik Huyskens"
+site_url = "https://resqenergy.readthedocs.io/en/"
 
 copyright = """
 Copyright &copy; 2026 Hendrik Huyskens
