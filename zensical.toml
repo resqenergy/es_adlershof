@@ -328,7 +328,7 @@ toggle.name = "Switch to light mode"
 # build lives under /en/ and is produced separately from zensical.en.toml.
 [[project.extra.alternate]]
 name = "Deutsch"
-link = "/"
+link = "/de/"
 lang = "de"
 
 [[project.extra.alternate]]
