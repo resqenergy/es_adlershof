@@ -324,12 +324,17 @@ toggle.name = "Switch to light mode"
 #icon = "fontawesome/brands/github"
 #link = "https://github.com/user/repo"
 
-# No extra.alternate language switcher here: this project is hosted on
-# readthedocs.io under /de/latest/, with English served by a separate
-# linked RTD project (see .readthedocs-en.yaml) under /en/latest/. RTD's
-# own Translations feature provides the language switcher for that setup.
-# A static extra.alternate switcher would need root-relative links that
-# break under RTD's per-language URL prefix.
+# Language switcher: this is the German build (site root). The English
+# build lives under /en/ and is produced separately from zensical.en.toml.
+[[project.extra.alternate]]
+name = "Deutsch"
+link = "/de/"
+lang = "de"
+
+[[project.extra.alternate]]
+name = "English"
+link = "/en/"
+lang = "en"
 
 # ----------------------------------------------------------------------------
 # In this section you can configure the Markdown extensions that are used when
