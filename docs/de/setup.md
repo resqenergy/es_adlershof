@@ -18,7 +18,7 @@ Die Quellen sind in `pyproject.toml` unter `[tool.uv.sources]` konfiguriert und 
 
 ## Umgebungsvariablen
 
-Das Skript zur Erstellung der Beedarfszeitreihen benötigt Zugangsdaten für das Tool NPRO.
+Das Skript zur Erstellung der Bedarfszeitreihen benötigt Zugangsdaten für das Tool NPRO.
 Außerdem müssen die Pfade zu den Datenquellen definiert werden.
 Dies geschieht am einfachtsten in einer `.env`-Datei im Projektordner:
 

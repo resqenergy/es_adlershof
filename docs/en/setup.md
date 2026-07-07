@@ -18,12 +18,18 @@ The sources are configured in `pyproject.toml` under `[tool.uv.sources]` and are
 
 ## Environment variables
 
-The scripts access an S3-compatible object store (MinIO). Credentials must be provided in a `.env` file at the project root:
+The script needs access to the NPRO tool using credentials.
+Additionally, the paths for datasets must be set correctly.
+This can be done in a `.env` file at the project root:
 
 ```ini
-MINIO_ENDPOINT=<endpoint>
-MINIO_ACCESS_KEY=<access-key>
-MINIO_SECRET_KEY=<secret-key>
+NPRO_EMAIL=<user>
+NPRO_PASSWORD=<password>
+NPRO_PROJECT=2591-13-0
+
+NPRO_SCENARIO_DIR=datasets/npro_scenarios
+NPRO_WEATHER_DIR=raw/weather
+NPRO_RESULT_DIR=datasets/npro_buildings
 ```
 
 The `.env` file must **not** be checked into the Git repository (see `.gitignore`). `settings.py` loads the variables automatically via `python-dotenv`.
