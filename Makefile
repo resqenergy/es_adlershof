@@ -3,24 +3,24 @@ SCENARIO ?= 2035_mean_rcp85
 YEAR ?= 2035
 GSEE_PYTHON := $(shell conda info --base)/envs/gsee37/bin/python
 
-all: wasteheat_profiles wasteheat_cops areas_forecast parameters datapackage
+all: areas areas_forecast npro_scenarios npro_buildings demand_profiles wasteheat_profiles wasteheat_cops wasteheat_capacities solar_thermal gsee_timeseries pv_timeseries parameters datapackage
 
 areas:
 	uv run -m scripts.get_total_area_and_units
 
-areas_forecast: areas
+areas_forecast:
 	uv run -m scripts.get_area_per_type_of_use_projection
 
-npro_scenarios: areas_forecast
+npro_scenarios:
 	uv run -m scripts.get_demands_per_building
 
-npro_buildings: npro_scenarios
+npro_buildings:
 	uv run npro run all
 
-demand_profiles: npro_buildings
+demand_profiles:
 	uv run -m scripts.get_demand_profiles
 
-wasteheat_profiles: demand_profiles
+wasteheat_profiles:
 	uv run -m scripts.get_waste_heat_profiles $(SCENARIO) $(YEAR)
 
 wasteheat_cops:
