@@ -18,12 +18,18 @@ Die Quellen sind in `pyproject.toml` unter `[tool.uv.sources]` konfiguriert und 
 
 ## Umgebungsvariablen
 
-Die Skripte greifen auf einen S3-kompatiblen Objektspeicher (MinIO) zu. Die Zugangsdaten müssen in einer `.env`-Datei im Projektstamm hinterlegt werden:
+Das Skript zur Erstellung der Beedarfszeitreihen benötigt Zugangsdaten für das Tool NPRO.
+Außerdem müssen die Pfade zu den Datenquellen definiert werden.
+Dies geschieht am einfachtsten in einer `.env`-Datei im Projektordner:
 
 ```ini
-MINIO_ENDPOINT=<endpunkt>
-MINIO_ACCESS_KEY=<zugangsschlüssel>
-MINIO_SECRET_KEY=<geheimschlüssel>
+NPRO_EMAIL=<user>
+NPRO_PASSWORD=<password>
+NPRO_PROJECT=2591-13-0
+
+NPRO_SCENARIO_DIR=datasets/npro_scenarios
+NPRO_WEATHER_DIR=raw/weather
+NPRO_RESULT_DIR=datasets/npro_buildings
 ```
 
 Die `.env`-Datei darf **nicht** in das Git-Repository eingecheckt werden (`.gitignore` beachten). `settings.py` lädt die Variablen automatisch via `python-dotenv`.
