@@ -1,5 +1,6 @@
 """Generate normalized wind power time series from TRY weather data using windpowerlib."""
 
+import re
 import warnings
 
 import pandas as pd
@@ -91,8 +92,8 @@ def resolve_year(weatherdata_name, year=None):
         "reference": 2011,
     }  # eigene Annahme hstorisches Referenzjahr
 
-    # Check if any period key is present in the name
-    period_in_name = next((k for k in period_map if k in weatherdata_name), None)
+    name_tokens = re.split(r"[._]", weatherdata_name)
+    period_in_name = next((k for k in period_map if k in name_tokens), None)
 
     if year is not None and period_in_name is not None:
         raise ValueError(
