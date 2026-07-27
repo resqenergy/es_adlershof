@@ -1,4 +1,4 @@
-# Setup and execution
+# Installation and Setup
 
 ## Installation
 
@@ -18,8 +18,8 @@ The sources are configured in `pyproject.toml` under `[tool.uv.sources]` and are
 
 ## Environment variables
 
-The script needs access to the NPRO tool using credentials.
-Additionally, the paths for datasets must be set correctly.
+The script for generating demand time series needs access credentials for the NPRO tool.
+Additionally, the paths to the data sources must be defined.
 This can be done in a `.env` file at the project root:
 
 ```ini
