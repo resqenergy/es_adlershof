@@ -3,6 +3,7 @@
 import warnings
 
 import pandas as pd
+import numpy as np
 from windpowerlib import ModelChain, WindTurbine
 
 from settings import RAW_DIR, DATASETS_DIR
@@ -13,15 +14,24 @@ TURBINE_MODELS_NREL = RAW_DIR / "wind_turbine_models"
 RESULTS_DIR = DATASETS_DIR / "wind_profiles"
 RESULTS_DIR.mkdir(exist_ok=True)
 
+# Blending height for the two-stage log-profile extrapolation (see
+# extrapolate_to_blending_height() below). Literature value ~60 m, 40-80 m
+# range acceptable. Source: Zhao et al. (2022), Meteorological Applications,
+# DOI: 10.1002/met.2094; Wieringa (1976), QJRMS.
+BLENDING_HEIGHT = 60
+
 args = {
     "year": None,
     "periods": 8760,
     "coords": (52.43, 13.54),  # coords of pv plant (52.43, 13.54) => Adlershof (Berlin)
-    "roughness_length": 0.6,  # Source: https://wind-data.ch/tools/profile.php?h=2&v=10&z0=0.6&abfrage=Aktualisieren
+    "roughness_length": 0.091, # Source: TUB.Klima Messwerte (Median)
+    "roughness_length_freifeld": 0.03, # Source: WMO Guide to Meteorological Instruments and Methods
+    # of Observation; ECMWF Forecast User Guide, Section 9.3.
+    "displacement_height":16.57, #Source: Messewerte TUB.Klima (Median)
     "weather_columns": [
         ("pressure", 0),
         ("temperature", 2),
-        ("wind_speed", 10),
+        ("wind_speed", BLENDING_HEIGHT),
         ("roughness_length", 0),
     ],  # (variable name, heights) source: heights taken from data/10_Testreferenzjahre_TRY/metadata_testreferenceyears.pdf
     "wind_turbine_name": "2019COE_DW100_100kW_27.6",  # assumption: Wind turbine class "Commercial", source: https://www.osti.gov/servlets/purl/2479271?utm_source=consensus and https://github.com/NREL/turbine-models
@@ -41,7 +51,11 @@ modelchain_data = {
     "power_output_model": "power_curve",  # 'power_curve' (default) or
     # 'power_coefficient_curve'
     "density_correction": False,  # False (default) or True
-    "obstacle_height": 0,  # default: 0
+    "obstacle_height": args["displacement_height"] / 0.7, # windpowerlib
+    # estimates d = 0.7 * obstacle_height internally, so back solve for the
+     # obstacle_height that reproduces our measured displacement_height.
+     # Applied from BLENDING_HEIGHT to hub_height (second extrapolation
+     # stage) - see read_and_preprocess_weather_data() for the first stage.
     "hellman_exp": None,  # None (default) or None
 }
 
@@ -104,6 +118,41 @@ def resolve_year(weatherdata_name, year=None):
     raise ValueError("args['year'] must be between 2000 and 2500.")
 
 
+def extrapolate_to_blending_height(wind_speed_10m, roughness_length_freifeld, blending_height):
+     """Extrapolate TRY 10 m wind speed to the blending height under freifeld assumptions.
+
+     TRY wind_speed time series at 10 m are referenced to WMO standard exposure
+     (open terrain / short grass, z0 ~ 0.03 m, no displacement height) rather than
+     to the actual local urban surface. Combining this 10 m value directly with
+     the local urban roughness_length (and a non-zero displacement height) in a
+     single log-profile step is not valid here: since displacement_height (~16.57 m)
+     exceeds the 10 m reference height, (10 - displacement_height) would be negative
+     and the log-profile undefined.
+
+     This function performs the first of two extrapolation stages (an Internal
+     Boundary Layer / exposure-correction approach): 10 m (freifeld) -> blending
+     height, using freifeld parameters only (roughness_length_freifeld, d=0). The
+     second stage (blending height -> hub height, using the local urban
+     roughness_length and displacement_height) is then carried out by windpowerlib's
+     own logarithmic profile via modelchain_data['obstacle_height'].
+
+     Source: WMO Guide to Meteorological Instruments and Methods of Observation;
+     Wieringa, J. (1976), QJRMS; Zhao et al. (2022), Meteorological Applications,
+     DOI: 10.1002/met.2094.
+
+     Args:
+         wind_speed_10m (pd.Series): Raw TRY wind speed at 10 m [m/s].
+         roughness_length_freifeld (float): Freifeld roughness length [m], e.g. 0.03.
+         blending_height (float): Target height for the first extrapolation stage [m].
+
+     Returns:
+         pd.Series: Wind speed extrapolated to blending_height [m/s].
+     """
+     return wind_speed_10m * (
+         np.log(blending_height / roughness_length_freifeld)
+         / np.log(10 / roughness_length_freifeld)
+     )
+
 def read_and_preprocess_weather_data(weatherdata_file):
     """Read and preprocess a TRY weather file into the windpowerlib MultiIndex format.
 
@@ -111,6 +160,12 @@ def read_and_preprocess_weather_data(weatherdata_file):
     temperature from °C to Kelvin, adds a constant roughness-length column, and
     returns a DataFrame with a two-level column MultiIndex as expected by windpowerlib
     (see data/windpowerlib_weather.csv for the reference structure).
+
+    The raw 10 m wind_speed is first extrapolated to BLENDING_HEIGHT under
+    freifeld assumptions via extrapolate_to_blending_height() before being
+    labeled with the local roughness_length. This accounts for the mismatch
+    between the TRY reference exposure (open terrain) and the actual local
+    urban displacement height (see modelchain_data['obstacle_height']).
 
     The calendar year is resolved automatically from the filename via resolve_year().
     Column names and measurement heights for the MultiIndex are taken from
@@ -135,6 +190,14 @@ def read_and_preprocess_weather_data(weatherdata_file):
     df = df.rename(
         columns={"pressure_surface": "pressure", "air_temperature_mean": "temperature"}
     )
+
+    # Stage 1 of the two-stage extrapolation: 10 m (freifeld) -> BLENDING_HEIGHT.
+    # Stage 2 (BLENDING_HEIGHT -> hub_height, urban roughness/displacement) is
+    # done by windpowerlib itself via modelchain_data['obstacle_height'].
+    df["wind_speed"] = extrapolate_to_blending_height(
+        df["wind_speed"], args["roughness_length_freifeld"], BLENDING_HEIGHT
+    )
+
     df["roughness_length"] = args["roughness_length"]
 
     # transfer temperature from °C to Kelvin
@@ -146,7 +209,6 @@ def read_and_preprocess_weather_data(weatherdata_file):
     )
 
     return df
-
 
 def preprocess_nrel_turbine_model(nrel_turbine_model_path):
     columns = ["Wind Speed [m/s]", "Power [kW]"]
