@@ -40,6 +40,12 @@ Leistungskurven von Kleinwindanlagen aus dem NREL Turbine Models Datensatz. Die 
 
 Jede CSV-Datei enthält zwei Spalten: `Wind Speed \[m/s\]` und `Power \[kW\]`. Der Dateiname kodiert Hersteller, Modell, Nennleistung und Rotordurchmesser. Das Modell `2019COE_DW100_100kW_27.6` wird als Standard-Windenergieanlage in `calc_wind_timeseries.py` verwendet.
 
+### raw/pv_config/
+
+Konfiguration der PV-Flächenanteile (`pv_config.csv`). Jede Zeile beschreibt eine Montageausrichtung mit den Spalten `technology` (`pv_roof`, `pv_facade`), `tilt` (Neigungswinkel in Grad), `azimuth` (Azimutwinkel in Grad) und `weight` (Anteil an der installierten PV-Fläche dieser Technologie). Die Gewichte sind aus der Auswertung der Dach- und Fassadenausrichtungen im Quartier abgeleitet und summieren sich je Technologie auf 1.
+
+Wird von `calc_pv_timeseries.py` eingelesen, um die nach Ausrichtung getrennten GSEE-Zeitreihen zu je einer Zeitreihe pro Technologie zu gewichten.
+
 ### raw/solar_thermal/
 
 Parameterdatei für Solarthermie-Kollektoren (`solar_thermal_parameters.csv`). Enthält die technischen Kennwerte der modellierten Kollektoren (z. B. optischer Wirkungsgrad, Wärmedurchgangskoeffizient), die als Grundlage für die Berechnung stündlicher Solarthermie-Ertragsprofile in `get_solar_thermal_profiles.py` dienen.
@@ -92,6 +98,14 @@ Ausgabe von `get_demand_profiles.py`. Enthält zwei Arten von Dateien:
 ### datasets/wind_profiles/
 
 Normierte stündliche Windleistungszeitreihen, eine Datei pro TRY-Wetterdatei. Der Dateiname folgt dem Schema `wind_timeseries-{try_dateiname}-{year}.csv`. Jede Datei enthält eine einzige Spalte `wind_profile` mit Werten im Bereich \[0, 1\], normiert auf die Nennleistung der modellierten Windanlage. Erzeugt von `calc_wind_timeseries.py`.
+
+### datasets/gsee_timeseries/
+
+Normierte stündliche PV-Einspeisezeitreihen pro Montageausrichtung, eine Datei pro TRY-Wetterdatei nach dem Schema `gsee_timeseries-{dateiname}-{jahr}.csv`. Die Spalten bilden einen MultiIndex aus `(tilt, azimut)`. Erzeugt von `calc_gsee_timeseries.py`.
+
+### datasets/pv_profiles/
+
+Normierte stündliche PV-Einspeisezeitreihen pro Technologie, eine Datei pro Wetterszenario nach dem Schema `pv_timeseries-{name}-{jahr}.csv`, mit je einer Spalte `pv_roof` und `pv_facade`. Erzeugt von `calc_pv_timeseries.py`.
 
 ---
 
