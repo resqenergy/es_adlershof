@@ -49,25 +49,33 @@ site_dir = "site"
 # Read more: https://zensical.org/docs/setup/navigation/
 nav = [
   { "Übersicht" = "index.md" },
-  { "Einrichtung" = "setup.md" },
+  { "Installation und Setup" = "setup.md" },
   { "Datenstrukturen" = "datenstrukturen.md" },
   { "Skripte" = [
-    { "Gebäudeflächen zusammenführen" = "scripts/get_total_area_and_units.md" },
-    { "Flächenprognose" = "scripts/get_area_per_type_of_use_projection.md" },
-    { "NPRO-Gebäudesimulationen" = "scripts/get_demands_per_building.md" },
-    { "Bedarfsprofile aggregieren" = "scripts/get_demand_profiles.md" },
-    { "PV-Zeitreihen vorberechnen (GSEE)" = "scripts/calc_gsee_timeseries.md" },
-    { "PV-Zeitreihen zu Technologie-Profilen" = "scripts/calc_pv_timeseries.md" },
-    { "Abwärme-Stundenprofile" = "scripts/get_waste_heat_profiles.md" },
-    { "COP Abwärme-WP" = "scripts/calc_heat_waste_cop.md" },
-    { "Abwärme-Kapazitäten" = "scripts/calc_heat_waste_power.md" },
-    { "Teltow-Kanal Wärmemenge" = "scripts/calc_waermemenge_teltowkanal.md" },
-    { "Windleistungs-Zeitreihen" = "scripts/calc_wind_timeseries.md" },
-    { "Solarthermie-Profile" = "scripts/get_solar_thermal_profiles.md" },
-    { "Technikkatalog aufbereiten" = "scripts/prepare_technikkatalog.md" },
-    { "Kapazitätskosten" = "scripts/preprocess_capacity_costs.md" },
-    { "COP Luftwärmepumpen" = "scripts/preprocess_hp_air_cop.md" },
-    { "Kosten Luftwärmepumpen" = "scripts/preprocess_hp_air_cost.md" },
+    { "Übersicht" = "scripts/skripte.md" },
+    { "Energiebedarfe" = [
+      { "Gebäudeflächen zusammenführen" = "scripts/get_total_area_and_units.md" },
+      { "Flächenprognose" = "scripts/get_area_per_type_of_use_projection.md" },
+      { "Bedarfzeitreihen je Gebäudetyp (NPRO)" = "scripts/get_demands_per_building.md" },
+      { "Bedarfzeitreihen aggregieren" = "scripts/get_demand_profiles.md" },
+    ]},
+    { "Energieversorgung: EE & Abwärme" = [
+      { "PV-Zeitreihen vorberechnen (GSEE)" = "scripts/calc_gsee_timeseries.md" },
+      { "PV-Zeitreihen: Dach-PV, Fassaden-PV" = "scripts/calc_pv_timeseries.md" },
+      { "Kleinwindkraftanlagen-Zeitreihen" = "scripts/calc_wind_timeseries.md" },
+      { "Solarthermie-Zeitreihen" = "scripts/get_solar_thermal_profiles.md" },
+      { "Abwärme-Zeitreihen" = "scripts/get_waste_heat_profiles.md" },
+      { "Wärmepumpe-COP: Abwärme" = "scripts/calc_heat_waste_cop.md"},
+      { "Wärmepumpe-COP: Luft" = "scripts/preprocess_hp_air_cop.md" },
+      { "Abwärme-Potential: Teltowkanal" = "scripts/calc_waermemenge_teltowkanal.md"},
+      { "Abwärme-Potentiale: Sonstige" = "scripts/calc_heat_waste_power.md" },
+
+    ]},
+    { "Technoökonomische Parameter" = [
+      { "Technikkatalog aufbereiten" = "scripts/prepare_technikkatalog.md" },
+      { "Investitionskosten (CAPEX)" = "scripts/preprocess_capacity_costs.md" },
+      { "Kosten Wärmepumpe: Luft" = "scripts/preprocess_hp_air_cost.md" },
+    ]},
   ]},
 ]
 

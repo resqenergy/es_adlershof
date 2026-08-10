@@ -1,4 +1,4 @@
-# Einrichtung und Ausführung
+# Installation und Setup
 
 ## Installation
 

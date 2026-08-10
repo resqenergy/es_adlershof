@@ -6,10 +6,10 @@ Kombiniert die normalisierten, nach Ausrichtung getrennten PV-Einspeise-Zeitreih
 
 ## Eingaben
 
-| Pfad | Beschreibung |
-|------|--------------|
-| `raw/pv_config/pv_config.csv` | Konfiguration der PV-Flächenanteile. Spalten: `technology` (`pv_roof`, `pv_facade`), `tilt` (Montage-Neigungswinkel in Grad), `azimuth` (Montage-Azimutwinkel in Grad), `weight` (Anteil der installierten PV-Fläche dieser Technologie bei dieser Neigung/Azimut). `weight` summiert sich pro Technologie über alle ihre Neigungs-/Azimut-Zeilen auf 1 |
-| `datasets/gsee_timeseries/*gsee_timeseries*.csv` | Normalisierte PV-Einspeise-Zeitreihen pro `(tilt, azimuth)`, erzeugt von `calc_gsee_timeseries.py` |
+| Pfad | Beschreibung                                                                                                                                                                                                                                                                                                                                                                           |
+|------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `raw/pv_config/pv_config.csv` | Konfiguration der PV-Flächenanteile. Spalten: `technology` (`pv_roof`, `pv_facade`), `tilt` (Montage-Neigungswinkel in Grad), `azimuth` (Montage-Azimutwinkel in Grad, ((90:"E"),(180:"S"),(270:"W")), `weight` (Anteil der installierten PV-Fläche dieser Technologie bei dieser Neigung/Azimut). `weight` summiert sich pro Technologie über alle ihre Neigungs-/Azimut-Zeilen auf 1 |
+| `datasets/gsee_timeseries/*gsee_timeseries*.csv` | Normalisierte PV-Einspeise-Zeitreihen pro `(tilt, azimuth)`, erzeugt von `calc_gsee_timeseries.py`                                                                                                                                                                                                                                                                                     |
 
 > **Hinweis:** Jede in `pv_config.csv` referenzierte `(tilt, azimuth)`-Kombination muss als Spalte in der GSEE-Zeitreihendatei vorhanden sein, d. h. sie muss von `calc_gsee_timeseries.py`'s `args["tilt"]` / `args["azimut"]` abgedeckt sein (aktuell `tilt=[30, 90]`, `azimut=[90, 135, 180, 225, 270]`). Wird `pv_config.csv` um eine neue Neigung oder Azimut erweitert, ohne die GSEE-Zeitreihe dafür neu zu erzeugen, führt dies zu einem `KeyError`.
 
