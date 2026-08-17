@@ -1,8 +1,10 @@
 """Module to aggregate demands per scenario extracted from NPRO buildings."""
 
 import json
-import pandas as pd
 import pathlib
+
+import altair as alt
+import pandas as pd
 from settings import DATASETS_DIR
 from utils.metadata import write_metadata
 
@@ -17,6 +19,58 @@ def get_scenario_info(folder_name):
     topology = "_".join(parts[3:])
     climate = "_".join(parts[1:3])
     return year, climate, topology
+
+
+def plot_total_demands(df_demand_transformed: pd.DataFrame) -> alt.Chart:
+    """Build interactive chart comparing annual demand totals across scenarios.
+
+    A dropdown isolates a single demand type (column "name"); within that
+    type, one bar per scenario (column "year_climate") is shown, with legend
+    clicks toggling which scenarios are highlighted.
+
+    Args:
+        df_demand_transformed: Long-format demand totals with columns
+            "year_climate", "name", "amount".
+
+    Returns:
+        Interactive Altair chart.
+    """
+    year_climate_order = sorted(
+        df_demand_transformed["year_climate"].unique(),
+        key=lambda yc: 0 if yc.startswith("statusquo") else int(yc.split("_")[0]),
+    )
+
+    name_dropdown = alt.binding_select(
+        options=sorted(df_demand_transformed["name"].unique()), name="Demand type: "
+    )
+    name_param = alt.param(
+        value="electricity-non_residential-demand", bind=name_dropdown
+    )
+
+    scenario_selection = alt.selection_point(fields=["year_climate"], bind="legend")
+
+    return (
+        alt.Chart(df_demand_transformed)
+        .transform_calculate(amount_mwh="datum.amount / 1000")
+        .mark_bar()
+        .encode(
+            x=alt.X("year_climate:N", title="Scenario", sort=year_climate_order),
+            y=alt.Y("amount_mwh:Q", title="Annual demand [MWh]"),
+            color=alt.Color(
+                "year_climate:N", title="Scenario", sort=year_climate_order
+            ),
+            opacity=alt.condition(scenario_selection, alt.value(1.0), alt.value(0.1)),
+            tooltip=[
+                alt.Tooltip("year_climate:N", title="Scenario"),
+                alt.Tooltip("amount_mwh:Q", title="Annual demand [MWh]", format=",.1f"),
+            ],
+        )
+        .add_params(name_param, scenario_selection)
+        .transform_filter(alt.datum.name == name_param)
+        .properties(
+            title="Annual Demand Comparison Across Scenarios", width=900, height=400
+        )
+    )
 
 
 def aggregate_demands():
@@ -128,6 +182,9 @@ def aggregate_demands():
     df_demand_transformed["name"] = df_demand_transformed["name"] + "-demand"
     df_demand_transformed.to_csv(PROFILES_DIR / "total_demands.csv", index=False)
 
+    chart_path = PROFILES_DIR / "total_demands_chart.html"
+    plot_total_demands(df_demand_transformed).save(chart_path)
+
     # Save point 2: demand_profiles
     profile_output_files = []
     for (year, climate), df_prof in all_profiles.items():
@@ -146,7 +203,7 @@ def aggregate_demands():
         script=__file__,
         description="Normalized hourly demand profiles (electricity, heat, cooling, mobility) and annual totals per scenario, aggregated from NPRO building simulations.",
         inputs=[BUILDINGS_DIR],
-        outputs=[PROFILES_DIR / "total_demands.csv", *profile_output_files],
+        outputs=[PROFILES_DIR / "total_demands.csv", chart_path, *profile_output_files],
         params={},
         sources=[],
     )

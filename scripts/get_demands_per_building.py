@@ -11,6 +11,8 @@ from npro.settings import SCENARIOS_DIR, WEATHER_DIR
 from settings import DATASETS_DIR, CONFIG_DIR, logger
 from utils.metadata import write_metadata
 
+SCENARIOS_DIR.mkdir(exist_ok=True, parents=True)
+
 AREAS_FORECAST_DIR = DATASETS_DIR / "areas_forecast"
 
 BUILDING_SHARES_PATH = CONFIG_DIR / "building_shares.yaml"
