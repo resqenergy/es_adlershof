@@ -132,8 +132,12 @@ def create_all_resq_scenarios() -> None:
     weather_files = []
     output_files = []
     for weather_file in WEATHER_DIR.glob("*.csv"):
+        try:
+            period = weather_file.stem.split(".")[1]
+        except IndexError:
+            # Period isn't present in filename, skip
+            continue
         logger.info(f"Creating scenario for {weather_file.stem}")
-        period = weather_file.stem.split(".")[1]
         year = period_mapping[period]
         climate = weather_file.stem.split(".")[0][4:]
         weather_files.append(weather_file)
