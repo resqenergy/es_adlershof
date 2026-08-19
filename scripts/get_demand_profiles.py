@@ -172,7 +172,7 @@ def aggregate_demands():
         data_for_df1.append(row)
 
     df_total = pd.DataFrame(data_for_df1)
-    df_total = df_total.groupby(["year_climate"]).first().reset_index()
+    df_total = df_total.groupby(["year_climate"]).sum().reset_index()
     df_total.fillna(0, inplace=True)
 
     # Adapt data to be used by oemof-pipe element-wise data application
