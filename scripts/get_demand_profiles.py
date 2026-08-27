@@ -114,12 +114,14 @@ def aggregate_demands():
                 # electricity: plugLoadsProfile
                 # mobility: emobProfile
                 # heat: spaceHeatProfile + dhwProfile
-                # cool: spaceCoolProfile + processCoolProfile
+                # cool_space: spaceCoolProfile
+                # cool_process: processCoolProfile
 
                 electricity_profile = df["plugLoadsProfile"]
                 mobility_profile = df["emobProfile"]
                 heat_profile = df["spaceHeatProfile"] + df["dhwProfile"]
-                cool_profile = df["spaceCoolProfile"] + df["processCoolProfile"]
+                cool_space_profile = df["spaceCoolProfile"]
+                cool_process_profile = df["processCoolProfile"]
 
                 # Point 1: Sum for yearly demands
                 key = (year_climate, topology, res_type)
@@ -128,19 +130,22 @@ def aggregate_demands():
                         "electricity": 0.0,
                         "mobility": 0.0,
                         "heat": 0.0,
-                        "cool": 0.0,
+                        "cool_space": 0.0,
+                        "cool_process": 0.0,
                     }
 
                 yearly_demands[key]["electricity"] += electricity_profile.sum()
                 yearly_demands[key]["mobility"] += mobility_profile.sum()
                 yearly_demands[key]["heat"] += heat_profile.sum()
-                yearly_demands[key]["cool"] += cool_profile.sum()
+                yearly_demands[key]["cool_space"] += cool_space_profile.sum()
+                yearly_demands[key]["cool_process"] += cool_process_profile.sum()
 
                 for demand_name, profile in [
                     ("electricity", electricity_profile),
                     ("mobility", mobility_profile),
                     ("heat", heat_profile),
-                    ("cool", cool_profile),
+                    ("cool_space", cool_space_profile),
+                    ("cool_process", cool_process_profile),
                 ]:
                     if demand_name == "heat":
                         col_name = f"{demand_name}_{topology}-{res_type}"
@@ -195,6 +200,7 @@ def aggregate_demands():
             df_prof / df_total[df_total["year_climate"] == f"{year}_{climate}"].iloc[0]
         )
         df_normalized["timeindex"] = timeindex
+        df_normalized = df_normalized.fillna(0.0)
         df_normalized.to_csv(PROFILES_DIR / filename, index=False)
         profile_output_files.append(PROFILES_DIR / filename)
 
