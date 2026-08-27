@@ -17,6 +17,24 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 # Functions
 # =========================
 def get_bev_charging_timeseries(input_file, year):
+    """
+    This function reads the bev_charging input files and extracts
+    the overall cumulative charging demand for electric vehicles.
+
+    Parameters
+    ----------
+    input_file : str
+        Path to the bev charging timeseries.
+
+    year : str
+        Respective year of the bev charging input file.
+
+    Returns
+    -------
+    output_file : df
+        Hourly resampled timeseries for electric vehicle demand.
+
+    """
     BEV_CHARGING = pd.read_csv(input_file, header=3, sep=";", thousands=".")
 
     # Set timestep as index
