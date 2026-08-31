@@ -79,8 +79,10 @@ def create_wasteheat_profiles(scenario_name: str, year: int):
     central_heat = central_heat / central_heat.sum()
 
     central_cool = (
-        demand_profiles["cool-non_residential"].values
-        + demand_profiles["cool-residential"].values
+        demand_profiles["cool_process-non_residential"].values
+        + demand_profiles["cool_space-non_residential"].values
+        + demand_profiles["cool_process-residential"].values
+        + demand_profiles["cool_space-residential"].values
     )
     central_cool = central_cool / central_cool.sum()
 
