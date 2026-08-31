@@ -46,6 +46,8 @@ elements:
 
   aquifer_heatpump:
     component: aquifer_heatpump
+    sequences:
+      - cop
     instances:
       - name: heatpump_aquifer
         electricity_bus: electricity
