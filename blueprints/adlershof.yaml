@@ -44,6 +44,14 @@ elements:
     sequences:
       - efficiency
 
+  aquifer_heatpump:
+    component: aquifer_heatpump
+    instances:
+      - name: heatpump_aquifer
+        electricity_bus: electricity
+        aquifer_bus: aquifer
+        heat_bus: heat_central
+
   pth:
     component: conversion
     instances:

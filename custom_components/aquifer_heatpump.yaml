@@ -1,0 +1,69 @@
+
+busses:
+  - electricity_bus
+  - aquifer_bus
+  - heat_bus
+
+sequences:
+
+attributes:
+  region:
+    type: str
+    unit: n/a
+    description: Country code
+  name:
+    type: str
+    unit: n/a
+    description: Name
+  type:
+    type: str
+    unit: n/a
+    description: Type
+  carrier:
+    type: str
+    unit: n/a
+    description: Energy carrier
+  tech:
+    type: str
+    unit: n/a
+    description: Technology
+  electricity_bus:
+    type: str
+    unit: n/a
+    description: The input bus this component is connected to
+  aquifer_bus:
+    type: str
+    unit: n/a
+    description: The aquifer bus input this component is connected to
+  heat_bus:
+    type: str
+    unit: n/a
+    description: The output bus this component is connected to
+  cop:
+    type: float
+    unit: n/a
+    description: The output bus this component is connected to
+  capacity:
+    type: float
+    unit: MW
+    description: Installed capacity
+  capacity_cost:
+    type: float
+    unit: Eur/MW
+    description: Annualized costs of capacity expansion
+  carrier_cost:
+    type: float
+    unit: Eur/MWh
+    description: Cost per unit of used fuel
+  marginal_cost:
+    type: float
+    unit: Eur/MWh
+    description: Marginal cost
+  expandable:
+    type: boolean
+    unit: n/a
+    description: Capacity can be expanded
+  capacity_potential:
+    type: float
+    unit: MW
+    description: Maximum invest capacity in unit of output capacity
