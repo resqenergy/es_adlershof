@@ -64,6 +64,25 @@ The KWW technology catalog for heat planning (as of December 2025) as a flat CSV
 
 The technology catalog contains cost and efficiency parameters (investment costs, operating costs, efficiencies, lifetimes) for all technologies used in the energy system model. It is read by `prepare_technikkatalog.py` and transformed into the oemof-pipe input format.
 
+### raw/bev_charging/
+
+Quarter hourly charging-power cumulated in kW for electric vehicles in Adlershof for different use-cases in a CSV file.
+
+The files contain different demand aggregations. The first aggregation level is local and commuter demand. The second level contains use-cases such as:
+
+- `Single/Two-occupant house and Multi-occupant house`
+- `Employer`
+- `Public Space`
+- `Retail`
+- `HPC Hub urban and HPC Hub highway`
+- `Depot`
+
+Files:
+
+- `ts_bev_charging_2025.csv`
+- `ts_bev_charging_2035.csv`
+- `ts_bev_charging_2050.csv`
+
 ---
 
 ## Intermediate data (datasets/)

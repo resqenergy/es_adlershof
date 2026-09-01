@@ -64,6 +64,27 @@ Der KWW-Technikkatalog Wärmeplanung (Stand Dezember 2025) als flache CSV-Datei 
 
 Der Technikkatalog enthält Kosten- und Effizienzparameter (Investitionskosten, Betriebskosten, Wirkungsgrade, Lebensdauern) für alle im Energiesystemmodell verwendeten Technologien. Er wird von `prepare_technikkatalog.py` eingelesen und in das oemof-pipe-Eingabeformat transformiert.
 
+### raw/bev_charging/
+
+Kumulierte Ladeleistung in kW pro Viertelstunde für Elektrofahrzeuge in Adlershof für verschiedene Anwendungsfälle in einer CSV-Datei.
+
+Die Dateien enthalten verschiedene Aggregationsebenen des Bedarfs. Die erste Aggregationsebene umfasst den lokalen Bedarf und den Pendlerbedarf. Die zweite Ebene enthält Anwendungsfälle wie:
+
+- `Einfamilienhaus/Zweifamilienhaus und Mehrfamilienhaus`
+- `Arbeitgeber`
+- `Öffentlicher Raum`
+- `Einzelhandel`
+- `HPC-Hub innerörtlicher und HPC-Hub außerörtlicher Straßen`
+- `Lokales Gewerbe`
+
+Dateien:
+
+- `ts_bev_charging_2025.csv`
+- `ts_bev_charging_2035.csv`
+- `ts_bev_charging_2050.csv` 
+
+Übersetzt mit DeepL.com (kostenlose Version)
+
 ---
 
 ## Zwischendaten (datasets/)
