@@ -14,7 +14,6 @@ from utils.scenario import parse_weather_filename
 WEATHER_DATA_DIR = RAW_DIR / "weather"
 TURBINE_MODELS_NREL = RAW_DIR / "wind_turbine_models"
 RESULTS_DIR = DATASETS_DIR / "wind_profiles"
-RESULTS_DIR.mkdir(exist_ok=True)
 
 RUN_CONFIG_DATA = {
     "year": None,
@@ -305,7 +304,9 @@ def run_windpowerlib(turbine_model, MODELCHAIN_DATA, weather_windpowerlib):
     return my_turbine
 
 
-if __name__ == "__main__":
+def main():
+    RESULTS_DIR.mkdir(exist_ok=True)
+
     input_files = []
     output_files = []
 
@@ -344,7 +345,6 @@ if __name__ == "__main__":
                 RESULTS_DIR
                 / f"wind_timeseries-{file.stem}-{wind_timeseries_normalized.index.year[0]}.csv"
             )
-            RESULTS_DIR.mkdir(exist_ok=True)
             wind_timeseries_normalized.to_csv(result_path)
             output_files.append(result_path)
 
@@ -362,3 +362,7 @@ if __name__ == "__main__":
             "weather_columns": WEATHER_COLUMNS,
         },
     )
+
+
+if __name__ == "__main__":
+    main()
