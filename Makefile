@@ -42,6 +42,9 @@ pv_timeseries:
 bev_timeseries:
 	uv run -m scripts.get_bev_charging_profiles
 
+wind_timeseries:
+	uv run -m scripts.calc_wind_timeseries
+
 parameters:
 	uv run -m scripts.prepare_technikkatalog
 	uv run -m scripts.prepare_technologies
