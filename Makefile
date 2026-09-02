@@ -5,7 +5,7 @@ GSEE_PYTHON := $(shell conda info --base)/envs/gsee37/bin/python
 
 .PHONY: all areas areas_forecast npro_scenarios npro_buildings demand_profiles wasteheat_profiles wasteheat_cops wasteheat_capacities solar_thermal gsee_timeseries pv_timeseries wind_timeseries parameters datapackage export_datapackage docs
 
-all: areas areas_forecast npro_scenarios npro_buildings demand_profiles wasteheat_profiles wasteheat_cops wasteheat_capacities solar_thermal gsee_timeseries pv_timeseries wind_timeseries parameters datapackage
+all: areas areas_forecast npro_scenarios npro_buildings demand_profiles wasteheat_profiles wasteheat_cops wasteheat_capacities solar_thermal gsee_timeseries pv_timeseries wind_timeseries bev_timeseries parameters datapackage
 
 areas:
 	uv run -m scripts.get_total_area_and_units
@@ -42,6 +42,9 @@ pv_timeseries:
 
 wind_timeseries:
 	uv run -m scripts.calc_wind_timeseries
+
+bev_timeseries:
+    uv run -m scripts.get_bev_charging_profiles
 
 parameters:
 	uv run -m scripts.prepare_technikkatalog
