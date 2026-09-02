@@ -317,7 +317,7 @@ if __name__ == "__main__":
     turbine_model = preprocess_nrel_turbine_model(turbine_model_path)
 
     for file in WEATHER_DATA_DIR.iterdir():
-        if file.is_file() and file.suffix == ".csv" in file.name:
+        if file.is_file() and file.suffix == ".csv":
             if (
                 RUN_CONFIG_DATA["year"] is None
                 and parse_weather_filename(file, PERIOD_YEARS) is None
@@ -344,6 +344,7 @@ if __name__ == "__main__":
                 RESULTS_DIR
                 / f"wind_timeseries-{file.stem}-{wind_timeseries_normalized.index.year[0]}.csv"
             )
+            RESULTS_DIR.mkdir(exist_ok=True)
             wind_timeseries_normalized.to_csv(result_path)
             output_files.append(result_path)
 
