@@ -38,6 +38,9 @@ gsee_timeseries:
 pv_timeseries:
 	uv run -m scripts.calc_pv_timeseries
 
+wind_timeseries:
+	uv run -m scripts.calc_wind_timeseries
+
 parameters:
 	uv run -m scripts.prepare_technikkatalog
 	uv run -m scripts.preprocess_capacity_costs
