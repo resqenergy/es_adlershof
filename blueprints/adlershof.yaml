@@ -193,3 +193,59 @@ elements:
       - name: heat_central-export
         bus: heat_central
         capacity: 1000000000
+
+  shortages:
+    component: shortage
+    instances:
+      - name: electricity-shortage
+        bus: electricity
+        capacity: 1000000000
+        marginal_cost: 1000000000
+      - name: gas-shortage
+        bus: gas
+        capacity: 1000000000
+        marginal_cost: 1000000000
+      - name: heat_central-shortage
+        bus: heat_central
+        capacity: 1000000000
+        marginal_cost: 1000000000
+      - name: heat_decentral-shortage
+        bus: heat_decentral
+        capacity: 1000000000
+        marginal_cost: 1000000000
+      - name: heat_lt_central-shortage
+        bus: heat_lt_central
+        capacity: 1000000000
+        marginal_cost: 1000000000
+      - name: cool-shortage
+        bus: cool
+        capacity: 1000000000
+        marginal_cost: 1000000000
+
+  excesses:
+    component: excess
+    instances:
+      - name: electricity-excess
+        bus: electricity
+        capacity: 1000000000
+        marginal_cost: 1000000000
+      - name: gas-excess
+        bus: gas
+        capacity: 1000000000
+        marginal_cost: 1000000000
+      - name: heat_central-excess
+        bus: heat_central
+        capacity: 1000000000
+        marginal_cost: 1000000000
+      - name: heat_decentral-excess
+        bus: heat_decentral
+        capacity: 1000000000
+        marginal_cost: 1000000000
+      - name: heat_lt_central-excess
+        bus: heat_lt_central
+        capacity: 1000000000
+        marginal_cost: 1000000000
+      - name: cool-excess
+        bus: cool
+        capacity: 1000000000
+        marginal_cost: 1000000000
