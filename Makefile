@@ -39,10 +39,11 @@ pv_timeseries:
 	uv run -m scripts.calc_pv_timeseries
 
 bev_timeseries:
-    uv run -m scripts.get_bev_charging_profiles
+	uv run -m scripts.get_bev_charging_profiles
 
 parameters:
 	uv run -m scripts.prepare_technikkatalog
+	uv run -m scripts.prepare_technologies
 	uv run -m scripts.preprocess_capacity_costs
 
 datapackage:

@@ -3,8 +3,8 @@ import pandas as pd
 from settings import RAW_DIR, DATASETS_DIR
 from utils.metadata import write_metadata
 
-TECHNOLOGIES_DIR = RAW_DIR / "technologies"
-OUTPUT_DIR = DATASETS_DIR / "technologies"
+TECHNOLOGIES_DIR = RAW_DIR / "technology_data"
+OUTPUT_DIR = DATASETS_DIR / "technology_data"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 YEARS = (2025, 2035, 2050)
@@ -29,8 +29,8 @@ def melt_years_with_sources(parameter_df_raw: pd.DataFrame) -> pd.DataFrame:
     ]
     year_frames = [
         parameter_df_raw[[*id_cols, year, f"source_{year}"]]
-        .rename(columns={year: "value", f"source_{year}": "source"})
-        .assign(scenario=year)
+        .rename(columns={year: "var_value", f"source_{year}": "source"})
+        .assign(scenario=f"scenario_{year}")
         for year in YEARS
     ]
     return pd.concat(year_frames, ignore_index=True)

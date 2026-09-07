@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 from utils.economics import annuity
-from settings import DATASETS_DIR, RAW_DIR
+from settings import DATASETS_DIR, RAW_DIR, logger
 from utils.metadata import write_metadata
 
 TECHNOLOGY_OUTPUT_DIR = DATASETS_DIR / "technology_capacity_cost"
@@ -74,19 +74,18 @@ def calculate_annual_cost(
     # Convert to DataFrame and save
     res_df = pd.DataFrame(capacity_costs)
     res_df.to_csv(output_file, index=False, sep=";")
-    print(f"Saved results to {output_file}")
+    logger.info(f"Saved results to {output_file}")
 
 
 if __name__ == "__main__":
-    # calculate_annual_cost(
-    #     PREPROCESSED_DIR / "scalars" / "costs_efficiencies.csv",
-    #     PREPROCESSED_DIR / "scalars" / "capacity_costs.csv",
-    # )
-    tech_input = DATASETS_DIR / "technology_cost" / "kww_technikkatalog.csv"
-    tech_output = TECHNOLOGY_OUTPUT_DIR / "kww_technikkatalog_capacity_cost.csv"
+    kww_input = DATASETS_DIR / "technology_cost" / "kww_technikkatalog.csv"
+    kww_output = TECHNOLOGY_OUTPUT_DIR / "kww_technikkatalog_capacity_cost.csv"
+    tech_input = DATASETS_DIR / "technology_data" / "cost.csv"
+    tech_output = TECHNOLOGY_OUTPUT_DIR / "technology_cost.csv"
     solar_input = RAW_DIR / "solar_thermal" / "solar_thermal_parameters.csv"
     solar_output = SOLAR_OUTPUT_DIR / "solar_thermal_capacity_cost.csv"
 
+    calculate_annual_cost(kww_input, kww_output, scenario_key="scenario")
     calculate_annual_cost(tech_input, tech_output, scenario_key="scenario")
     calculate_annual_cost(solar_input, solar_output)
 
@@ -94,6 +93,15 @@ if __name__ == "__main__":
         TECHNOLOGY_OUTPUT_DIR,
         script=__file__,
         description="Annualized capacity costs for district heating technologies, computed from overnight CAPEX, lifetime, WACC, and fixed O&M costs.",
+        inputs=[kww_input],
+        outputs=[kww_output],
+        params={"wacc": WACC},
+        sources=[],
+    )
+    write_metadata(
+        TECHNOLOGY_OUTPUT_DIR,
+        script=__file__,
+        description="Annualized capacity costs for components.",
         inputs=[tech_input],
         outputs=[tech_output],
         params={"wacc": WACC},

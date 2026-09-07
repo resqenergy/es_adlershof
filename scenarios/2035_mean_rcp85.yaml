@@ -6,6 +6,21 @@ elements:
     scenario: "scenario_2035"
   - path: datasets/technology_capacity_cost/kww_technikkatalog_capacity_cost.csv
     scenario: "scenario_2035"
+  - path: datasets/technology_data/capacity.csv
+    scenario: "scenario_2035"
+  - path: datasets/technology_data/capacity_potential.csv
+    scenario: "scenario_2035"
+  - path: datasets/technology_data/cost.csv
+    scenario: "scenario_2035"
+  - path: datasets/technology_data/efficiency.csv
+    scenario: "scenario_2035"
+  - path: datasets/technology_data/input_output_relation.csv
+    scenario: "scenario_2035"
+  - path: datasets/technology_data/loss_rate.csv
+    scenario: "scenario_2035"
+# FIXME: Add when technology cost are ready
+#  - path: datasets/technology_capacity_cost/technology_cost.csv
+#    scenario: "scenario_2035"
   - path: raw/solar_thermal/solar_thermal_parameters.csv
     column_mapping:
       scenario_key: scenario
