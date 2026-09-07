@@ -6,7 +6,6 @@ requires-python = ">=3.13"
 dependencies = [
     "minio>=7.2.20",
     "coolprop>=7.2.0",
-    "npro",
     "openpyxl>=3.1.5",
     "pandas>=3.0.2",
     "python-dotenv>=1.2.2",
@@ -20,11 +19,12 @@ dependencies = [
     "windpowerlib>=0.2.2",
     "frictionless[aws]>=5.19.0",
     "altair>=6.2.2",
+    "npro",
 ]
 
 [tool.uv.sources]
-npro = { git = "https://github.com/resqenergy/npro" }
 oemof-pipe = { git = "https://github.com/rl-institut/oemof_pipe" }
+npro = { git = "https://github.com/resqenergy/npro" }
 
 [dependency-groups]
 dev = [

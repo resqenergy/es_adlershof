@@ -1865,8 +1865,8 @@ wheels = [
 
 [[package]]
 name = "npro"
-version = "0.1.5"
-source = { git = "https://github.com/resqenergy/npro#cf0e2a1e12dbd0edcdd0c99f3f19f5bdc640fccc" }
+version = "0.2.0"
+source = { git = "https://github.com/resqenergy/npro#68999fd9ac8353a1a58496714399558bd539ae92" }
 dependencies = [
     { name = "dotenv" },
     { name = "loguru" },
