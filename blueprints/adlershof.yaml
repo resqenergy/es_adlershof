@@ -42,14 +42,14 @@ elements:
 
   aquifer_heatpump:
     component: aquifer_heatpump
-    sequences:
-      - cop
     instances:
       - name: heatpump_aquifer
         electricity_bus: electricity
         aquifer_bus: aquifer
         heat_bus: heat_central
         expandable: True
+    sequences:
+      - heatpump-geothermal
 
   volatile:
     component: volatile
