@@ -3,54 +3,54 @@ raw_dir: .
 
 elements:
   - path: datasets/technology_cost/kww_technikkatalog.csv
-    scenario: "scenario_2035"
+    scenario: "scenario_2050"
   - path: datasets/technology_capacity_cost/kww_technikkatalog_capacity_cost.csv
-    scenario: "scenario_2035"
+    scenario: "scenario_2050"
   - path: datasets/technology_data/capacity.csv
-    scenario: "scenario_2035"
+    scenario: "scenario_2050"
   - path: datasets/technology_data/capacity_potential.csv
-    scenario: "scenario_2035"
+    scenario: "scenario_2050"
   - path: datasets/technology_data/cost.csv
-    scenario: "scenario_2035"
+    scenario: "scenario_2050"
   - path: datasets/technology_data/efficiency.csv
-    scenario: "scenario_2035"
+    scenario: "scenario_2050"
   - path: datasets/technology_data/input_output_relation.csv
-    scenario: "scenario_2035"
+    scenario: "scenario_2050"
   - path: datasets/technology_data/loss_rate.csv
-    scenario: "scenario_2035"
+    scenario: "scenario_2050"
   - path: datasets/technology_capacity_cost/technology_cost.csv
-    scenario: "scenario_2035"
+    scenario: "scenario_2050"
   - path: raw/solar_thermal/solar_thermal_parameters.csv
     column_mapping:
       scenario_key: scenario
-    scenario: "scenario_2035"
+    scenario: "scenario_2050"
   - path: datasets/solar_thermal/solar_thermal_capacity_cost.csv
     column_mapping:
       scenario_key: scenario
-    scenario: "scenario_2035"
+    scenario: "scenario_2050"
   - path: datasets/demand_profiles/total_demands.csv
     column_mapping:
       year_climate: scenario
-    scenario: "2035_mean_rcp85"
+    scenario: "2050_mean_rcp85"
   - path: datasets/wasteheat_capacity/capacity.csv
-    scenario: "2035_mean_rcp85"
+    scenario: "2050_mean_rcp85"
 
 sequences:
-  - path: datasets/wasteheat_cop/cop_2035.csv
+  - path: datasets/wasteheat_cop/cop_2050.csv
     sequence_name: heatpumps_profile
-  - path: datasets/wasteheat_profiles/2035_mean_rcp85.csv
+  - path: datasets/wasteheat_profiles/2050_mean_rcp85.csv
     sequence_name: heatpumps_profile
-  - path: datasets/demand_profiles/2035_mean_rcp85.csv
+  - path: datasets/demand_profiles/2050_mean_rcp85.csv
     sequence_name: demands_profile
-  - path: datasets/solar_thermal_profiles/solar_thermal_profile_try_mean_rcp85.p2.csv
+  - path: datasets/solar_thermal_profiles/solar_thermal_profile_try_mean_rcp85.p3.csv
     sequence_name: volatile_profile
     column_mapping:
       solar_thermal_power: heat_lt_central-solarthermal-profile
-  - path: datasets/wind_profiles/wind_timeseries-try_mean_rcp85.p2-2035.csv
+  - path: datasets/wind_profiles/wind_timeseries-try_mean_rcp85.p3-2050.csv
     sequence_name: volatile_profile
     column_mapping:
       wind_profile: wind-profile
-  - path: datasets/pv_profiles/pv_timeseries-try_mean_rcp85-2035.csv
+  - path: datasets/pv_profiles/pv_timeseries-try_mean_rcp85-2050.csv
     sequence_name: volatile_profile
     column_mapping:
       pv_facade: pv_facade-profile

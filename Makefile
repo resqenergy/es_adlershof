@@ -1,6 +1,6 @@
 
-SCENARIO ?= 2035_mean_rcp85
-YEAR ?= 2035
+SCENARIO ?= 2050_mean_rcp85
+YEAR ?= 2050
 GSEE_PYTHON := $(shell conda info --base)/envs/gsee37/bin/python
 
 all: areas areas_forecast npro_scenarios npro_buildings demand_profiles wasteheat_profiles wasteheat_cops wasteheat_capacities solar_thermal gsee_timeseries pv_timeseries bev_timeseries parameters datapackage
