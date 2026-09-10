@@ -87,7 +87,7 @@ def get_npro_buildings(
             existing_units: int = current_units - new_units
             buildings[f"{building_name}_existing"] = {
                 "based_on": based_on,
-                "floorArea": current_area,
+                "floorArea": current_area / current_units * existing_units,
                 "numApart": existing_units,
                 "buildingSubtype": "existing",
                 "calculate_cooling_demand": True,
@@ -98,8 +98,8 @@ def get_npro_buildings(
                 continue
             buildings[f"{building_name}_new"] = {
                 "based_on": based_on,
-                "floorArea": str(current_area),
-                "numApart": str(new_units),
+                "floorArea": current_area / current_units * new_units,
+                "numApart": new_units,
                 "buildingSubtype": "newBuild",
                 "calculate_cooling_demand": True,
                 "shOption": "heatLoad",  # Needed so that space heating depends on weather
