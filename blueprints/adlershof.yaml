@@ -69,12 +69,6 @@ elements:
       - name: heat_decentral-solarthermal
         bus: heat_decentral
         expandable: True
-      - name: heat_central-heat_recovery
-        bus: heat_central
-        expandable: True
-      - name: heat_lt_central-heat_recovery
-        bus: heat_lt_central
-        expandable: True
 
   storages:
     component: storage
