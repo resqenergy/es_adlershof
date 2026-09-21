@@ -10,6 +10,7 @@ from typing import Any
 from npro.settings import SCENARIOS_DIR, WEATHER_DIR
 from settings import DATASETS_DIR, CONFIG_DIR, logger
 from utils.metadata import write_metadata
+from utils.scenario import parse_weather_filename
 
 SCENARIOS_DIR.mkdir(exist_ok=True, parents=True)
 
@@ -128,18 +129,18 @@ def create_npro_scenario(
 
 def create_all_resq_scenarios() -> None:
     """Create all resq scenarios."""
-    period_mapping = {"p1": "statusquo", "p2": "2035", "p3": "2050"}
     weather_files = []
     output_files = []
     for weather_file in WEATHER_DIR.glob("*.csv"):
-        try:
-            period = weather_file.stem.split(".")[1]
-        except IndexError:
-            # Period isn't present in filename, skip
+        weather_info = parse_weather_filename(weather_file)
+        if weather_info is None:
+            logger.info(
+                f"Skipping {weather_file.name}: no recognized period in filename"
+            )
             continue
         logger.info(f"Creating scenario for {weather_file.stem}")
-        year = period_mapping[period]
-        climate = weather_file.stem.split(".")[0][4:]
+        year = "statusquo" if weather_info.year == 2025 else str(weather_info.year)
+        climate = weather_info.climate
         weather_files.append(weather_file)
 
         for topology in ("central", "decentral", "low_temp_central"):

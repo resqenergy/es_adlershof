@@ -20,10 +20,10 @@ from npro.settings import WEATHER_DIR
 from settings import DATASETS_DIR
 from loguru import logger
 from utils.metadata import write_metadata
+from utils.scenario import parse_weather_filename
 
 SOLAR_DIR = DATASETS_DIR / "solar_thermal_profiles"
 SOLAR_DIR.mkdir(exist_ok=True)
-PERIODS = {"p1": 2025, "p2": 2035, "p3": 2050}
 
 # Values taken from https://www.duurzaamloket.nl/DBF/PDF_Downloads/DS_4592.pdf
 ETA_0 = 0.718
@@ -247,9 +247,11 @@ if __name__ == "__main__":
     input_files = []
     output_files = []
     for file in WEATHER_DIR.glob("*.csv"):
-        period = file.stem.split(".")[1]
-        year = PERIODS[period]
-        calculate_solar_thermal_power_for_weather(file, year)
+        weather_info = parse_weather_filename(file)
+        if weather_info is None:
+            logger.info(f"Skipping {file.name}: no recognized period in filename")
+            continue
+        calculate_solar_thermal_power_for_weather(file, weather_info.year)
         input_files.append(file)
         output_files.append(SOLAR_DIR / f"solar_thermal_profile_{file.stem}.csv")
     write_metadata(

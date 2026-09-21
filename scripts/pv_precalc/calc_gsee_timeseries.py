@@ -8,11 +8,18 @@ import pandas as pd
 import warnings
 
 from settings import RAW_DIR, DATASETS_DIR
+from utils.scenario import parse_weather_filename
 
 WEATHERDATA_DIR = RAW_DIR / "weather"
 RESULTS_DIR = DATASETS_DIR / "gsee_timeseries"
 RESULTS_DIR.mkdir(exist_ok=True)
 
+PERIOD_YEARS = {
+    "p1": 2025,
+    "p2": 2035,
+    "p3": 2050,
+    "reference": 2011,
+}  # eigene Annahme hstorisches Referenzjahr
 
 args = {
     "year": None,
@@ -31,25 +38,17 @@ args = {
 
 
 def resolve_year(weatherdata_name, year=args["year"]):
-    period_map = {
-        "p1": 2020,
-        "p2": 2035,
-        "p3": 2050,
-        "reference": 2011,
-    }  # eigene Annahme hstorisches Referenzjahr
+    weather_info = parse_weather_filename(Path(weatherdata_name), PERIOD_YEARS)
 
-    # Check if any period key is present in the name
-    period_in_name = next((k for k in period_map if k in weatherdata_name), None)
-
-    if year is not None and period_in_name is not None:
+    if year is not None and weather_info is not None:
         raise ValueError(
             "Ambiguous input: Provide either args['year'] OR valid weatherdata file and name including "
             "('p1', 'p2', 'p3') in WEATHERDATA_NAME - not both."
         )
 
     if year is None:
-        if period_in_name is not None:
-            return period_map[period_in_name]
+        if weather_info is not None:
+            return weather_info.year
         raise ValueError(
             "Missing year: WEATHERDATA_NAME must include 'p1', 'p2', or 'p3', "
             "or provide args['year'] manually."
@@ -175,6 +174,11 @@ if __name__ == "__main__":
 
     for file in WEATHERDATA_DIR.iterdir():
         if file.is_file() and ".csv" in file.name:
+            if (
+                args["year"] is None
+                and parse_weather_filename(file, PERIOD_YEARS) is None
+            ):
+                continue
 
             year = resolve_year(file.name)
             df_weatherdata = read_and_prepare_weatherdata(file, year)
