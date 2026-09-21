@@ -27,7 +27,7 @@ wasteheat_cops:
 	uv run -m scripts.calc_heat_waste_cop $(YEAR)
 
 wasteheat_capacities:
-	uv run -m scripts.calc_heat_waste_power
+	uv run -m scripts.calc_heat_waste_power $(SCENARIO) $(YEAR)
 
 solar_thermal:
 	uv run -m scripts.get_solar_thermal_profiles

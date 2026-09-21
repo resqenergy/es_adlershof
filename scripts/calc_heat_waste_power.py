@@ -1,6 +1,7 @@
 """Calculate waste heat pump capacity potentials from energy profiles and COP time series."""
 
 import pandas as pd
+import sys
 
 from settings import RAW_DIR, DATASETS_DIR
 from utils.metadata import write_metadata
@@ -142,8 +143,10 @@ def get_static_hp_data(scenario: str, year: int) -> list[dict]:
 
 
 if __name__ == "__main__":
-    _scenario = "2035_mean_rcp85"
-    _year = 2035
+    if len(sys.argv) <= 2:
+        raise ValueError("Scenario and year must be set.")
+    _scenario = sys.argv[1]
+    _year = int(sys.argv[2])
     dynamic_capacities = get_dynamic_hp_powers(_scenario, _year)
     static_capacities_and_flh = get_static_hp_data(_scenario, _year)
     df = pd.DataFrame(dynamic_capacities + static_capacities_and_flh)
