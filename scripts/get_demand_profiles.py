@@ -51,7 +51,7 @@ def plot_total_demands(df_demand_transformed: pd.DataFrame) -> alt.Chart:
 
     return (
         alt.Chart(df_demand_transformed)
-        .transform_calculate(amount_mwh="datum.amount / 1000")
+        .transform_calculate(amount_mwh="datum.amount")
         .mark_bar()
         .encode(
             x=alt.X("year_climate:N", title="Scenario", sort=year_climate_order),
@@ -166,6 +166,7 @@ def aggregate_demands():
     for (year_climate, topology, res_type), values in yearly_demands.items():
         row = {"year_climate": year_climate}
         for demand_name, val in values.items():
+            val = val / 1000  # from kWh -> MWh
             if demand_name == "heat":
                 key = f"{demand_name}_{topology}-{res_type}"
             else:
