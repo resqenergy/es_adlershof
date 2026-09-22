@@ -38,6 +38,8 @@ elements:
 sequences:
   - path: datasets/wasteheat_cop/cop_2035.csv
     sequence_name: heatpumps_profile
+  - path: datasets/wasteheat_cop/cop_2035.csv
+    sequence_name: flh_heatpumps_profile
   - path: datasets/wasteheat_profiles/2035_mean_rcp85.csv
     sequence_name: heatpumps_profile
   - path: datasets/demand_profiles/2035_mean_rcp85.csv
