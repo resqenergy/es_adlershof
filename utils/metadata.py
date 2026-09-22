@@ -1,10 +1,17 @@
 """Utility for writing dataset metadata JSON files."""
 
+from __future__ import annotations
+
 import json
 import subprocess
+import sys
 from datetime import datetime
 from pathlib import Path
-from typing import TypedDict
+
+if sys.version_info >= (3, 8):
+    from typing import TypedDict
+else:
+    from typing_extensions import TypedDict
 
 from settings import ROOT_DIR
 

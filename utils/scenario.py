@@ -1,5 +1,7 @@
 """Helpers for extracting scenario metadata from TRY weather filenames."""
 
+from __future__ import annotations
+
 import re
 from dataclasses import dataclass
 from pathlib import Path
