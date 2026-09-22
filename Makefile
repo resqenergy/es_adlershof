@@ -1,6 +1,7 @@
 
 SCENARIO ?= 2050_mean_rcp85
 YEAR ?= 2050
+STARTTIME ?= "$(YEAR)-01-01 00:00:00"
 GSEE_PYTHON := $(shell conda info --base)/envs/gsee37/bin/python
 
 all: areas areas_forecast npro_scenarios npro_buildings demand_profiles wasteheat_profiles wasteheat_cops wasteheat_capacities solar_thermal gsee_timeseries pv_timeseries bev_timeseries parameters datapackage
@@ -47,7 +48,7 @@ parameters:
 	uv run -m scripts.preprocess_capacity_costs
 
 datapackage:
-	uv run oemof-pipe blueprint -f adlershof
+	uv run oemof-pipe blueprint -f adlershof --start $(STARTTIME) --periods 8760
 	uv run oemof-pipe scenario -f adlershof $(SCENARIO)
 
 export_datapackage:
