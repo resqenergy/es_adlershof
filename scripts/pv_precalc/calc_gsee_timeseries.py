@@ -8,6 +8,7 @@ import pandas as pd
 import warnings
 
 from settings import RAW_DIR, DATASETS_DIR
+from utils.metadata import write_metadata
 from utils.scenario import parse_weather_filename
 
 WEATHERDATA_DIR = RAW_DIR / "weather"
@@ -171,7 +172,8 @@ def run_gsee(df_weatherdata, year, args=args):
 
 
 if __name__ == "__main__":
-
+    input_files = []
+    output_files = []
     for file in WEATHERDATA_DIR.iterdir():
         if file.is_file() and ".csv" in file.name:
             if (
@@ -188,5 +190,18 @@ if __name__ == "__main__":
             filename = file.name.split(".")
             result_path = RESULTS_DIR / f"gsee_timeseries-{filename[0]}-{year}.csv"
             gsee_timeseries.to_csv(result_path)
+            input_files.append(file)
+            output_files.append(result_path)
 
             print(f"Gsee timeseries successfully saved to: {result_path}")
+
+    if not output_files:
+        raise FileNotFoundError(f"No weather files found in {WEATHERDATA_DIR}")
+    write_metadata(
+        RESULTS_DIR,
+        script=__file__,
+        description="Hourly PV feed-in time series per tilt/azimuth orientation, computed with GSEE from TRY weather data.",
+        inputs=input_files,
+        outputs=output_files,
+        params={**args, "period_years": PERIOD_YEARS},
+    )

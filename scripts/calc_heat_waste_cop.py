@@ -92,6 +92,7 @@ if __name__ == "__main__":
             "target_temperature_K": TARGET_TEMPERATURE,
             "quality_grade": QUALITY_GRADE,
         },
+        filename=f"cop_{_year}.metadata.json",
         sources=[
             {
                 "name": "Wasserportal Berlin – canal water temperature (station 5866700)",

@@ -40,6 +40,16 @@ The `Makefile` is the central tool for running the data pipeline.
 Each target corresponds to a processing step.
 Running all pipeline steps only requires `make all`.
 
+### Skip & Rebuild {#skip-rebuild}
+
+Steps whose output already exists are skipped, so `make all` only computes what is missing.
+
+- **Datasets** are complete once their metadata file exists (`datasets/<dataset>/metadata.json`, or `<output_stem>.metadata.json` for the per-scenario wasteheat files). If an upstream dataset is rebuilt, all downstream datasets are rebuilt as well.
+- **`datasets/npro_buildings/`**, **`datapackages/adlershof_{YEAR}/`** and **`datapackages/adlershof_{SCENARIO}/`** are only checked for existence. They are never rebuilt automatically, in particular not the (slow) NPRO simulation.
+- Changes to scripts, `raw/` or `config/` are **not** detected.
+
+To force a rebuild, delete the dataset folder or file, or run `make -B <target>` (e.g. `make -B wasteheat_cops YEAR=2035`). Note that `-B` also rebuilds all prerequisites of the target.
+
 Finally, the finished data package can be uploaded to S3 storage with `make export_datapackage`.
 
 The project documentation can be generated locally with `make docs`.

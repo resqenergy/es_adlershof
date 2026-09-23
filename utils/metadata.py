@@ -91,24 +91,28 @@ def write_metadata(
     params: dict,
     description: str,
     sources: list[Source] | None = None,
+    filename: str = "metadata.json",
 ) -> None:
-    """Write a metadata.json file to the given output directory.
+    """Write a metadata JSON file to the given output directory.
 
-    Creates or overwrites metadata.json in output_dir with provenance
+    Creates or overwrites the metadata file in output_dir with provenance
     information about the dataset: which script produced it, from which
     inputs, with which parameters, and when.
 
     Args:
-        output_dir: Directory where metadata.json is written.
+        output_dir: Directory where the metadata file is written.
         script: Path to the producing script — pass __file__.
         inputs: Input file paths consumed by the script.
         outputs: Output file paths written by the script.
         params: Script parameters used for this run.
         description: Human-readable description of the dataset.
         sources: Raw external data sources. Defaults to [].
+        filename: Name of the metadata file. Use a per-file name (e.g.
+            `cop_2050.metadata.json`) when one directory holds several
+            independently produced outputs.
 
     Raises:
-        OSError: If metadata.json cannot be written.
+        OSError: If the metadata file cannot be written.
     """
     metadata = {
         "description": description,
@@ -121,6 +125,6 @@ def write_metadata(
         "sources": sources if sources is not None else [],
     }
 
-    output_path = Path(output_dir) / "metadata.json"
+    output_path = Path(output_dir) / filename
     with output_path.open("w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2, cls=_MetadataEncoder)

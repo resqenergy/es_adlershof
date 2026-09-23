@@ -14,7 +14,7 @@ Derives thermal capacity potentials for all waste-heat heat pump components. A d
 
 ## Outputs
 
-**Path:** `datasets/wasteheat_capacity/capacity.csv`
+**Path:** `datasets/wasteheat_capacity/capacity_{scenario}.csv` (Metadata: `capacity_{scenario}.metadata.json`)
 
 | Column | Description |
 |--------|-------------|

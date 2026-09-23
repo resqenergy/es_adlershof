@@ -3,6 +3,7 @@
 import pandas as pd
 
 from settings import RAW_DIR, DATASETS_DIR
+from utils.metadata import write_metadata
 
 PV_CONFIG_FILE = RAW_DIR / "pv_config" / "pv_config.csv"
 GSEE_TIMESERIES_DIR = DATASETS_DIR / "gsee_timeseries"
@@ -46,6 +47,8 @@ def calc_pv_feedin(gsee_timeseries_file):
 
 
 if __name__ == "__main__":
+    input_files = []
+    output_files = []
     for file in GSEE_TIMESERIES_DIR.iterdir():
         if file.is_file() and "gsee_timeseries" in file.name:
 
@@ -55,5 +58,18 @@ if __name__ == "__main__":
             result_path = RESULTS_DIR / f"pv_timeseries-{filename[1]}-{filename[2]}"
 
             pv_timeseries.to_csv(result_path)
+            input_files.append(file)
+            output_files.append(result_path)
 
             print(f"PV timeseries successfully saved to: {result_path}")
+
+    if not output_files:
+        raise FileNotFoundError(f"No gsee timeseries found in {GSEE_TIMESERIES_DIR}")
+    write_metadata(
+        RESULTS_DIR,
+        script=__file__,
+        description="Hourly PV feed-in time series per technology (roof, facade), weighted from GSEE orientation time series.",
+        inputs=[PV_CONFIG_FILE, *input_files],
+        outputs=output_files,
+        params={},
+    )

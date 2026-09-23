@@ -14,7 +14,7 @@ Disaggregiert jährliche Abwärmepotenziale in stündliche Profile je Temperatur
 
 ## Ausgaben
 
-**Pfad:** `datasets/wasteheat_profiles/{szenario}.csv`
+**Pfad:** `datasets/wasteheat_profiles/{szenario}.csv` (Metadaten: `{szenario}.metadata.json`)
 
 | Spalte | Beschreibung |
 |--------|-------------|

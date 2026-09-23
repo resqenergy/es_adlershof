@@ -8,7 +8,6 @@ from utils.metadata import write_metadata
 
 OUTPUT_DIR = DATASETS_DIR / "wasteheat_capacity"
 OUTPUT_DIR.mkdir(exist_ok=True)
-OUTPUT_FILE = OUTPUT_DIR / "capacity.csv"
 
 PERCENTILE = 95
 
@@ -150,7 +149,8 @@ if __name__ == "__main__":
     dynamic_capacities = get_dynamic_hp_powers(_scenario, _year)
     static_capacities_and_flh = get_static_hp_data(_scenario, _year)
     df = pd.DataFrame(dynamic_capacities + static_capacities_and_flh)
-    df.to_csv(OUTPUT_FILE, index=False)
+    output_file = OUTPUT_DIR / f"capacity_{_scenario}.csv"
+    df.to_csv(output_file, index=False)
     write_metadata(
         OUTPUT_DIR,
         script=__file__,
@@ -160,7 +160,8 @@ if __name__ == "__main__":
             DATASETS_DIR / "wasteheat_cop" / f"cop_{_year}.csv",
             DATASETS_DIR / "wasteheat_profiles" / f"{_scenario}.csv",
         ],
-        outputs=[OUTPUT_FILE],
+        outputs=[output_file],
         params={"scenario": _scenario, "year": _year, "percentile": PERCENTILE},
         sources=[],
+        filename=f"{output_file.stem}.metadata.json",
     )

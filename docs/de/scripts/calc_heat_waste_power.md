@@ -14,7 +14,7 @@ Leitet thermische Kapazitätspotenziale für alle Abwärme-Wärmepumpen-Komponen
 
 ## Ausgaben
 
-**Pfad:** `datasets/wasteheat_capacity/capacity.csv`
+**Pfad:** `datasets/wasteheat_capacity/capacity_{szenario}.csv` (Metadaten: `capacity_{szenario}.metadata.json`)
 
 | Spalte | Beschreibung |
 |--------|-------------|

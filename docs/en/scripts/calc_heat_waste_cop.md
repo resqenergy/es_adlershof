@@ -14,7 +14,7 @@ All other source temperatures are defined as constants in the script (no input f
 
 ## Outputs
 
-**Path:** `datasets/wasteheat_cop/cop_{year}.csv`
+**Path:** `datasets/wasteheat_cop/cop_{year}.csv` (Metadata: `cop_{year}.metadata.json`)
 
 | Column | Source temperature | Description |
 |--------|----------------|-------------|

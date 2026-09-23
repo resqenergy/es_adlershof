@@ -14,7 +14,7 @@ Alle anderen Quelltemperaturen sind im Skript als Konstanten definiert (keine Ei
 
 ## Ausgaben
 
-**Pfad:** `datasets/wasteheat_cop/cop_{jahr}.csv`
+**Pfad:** `datasets/wasteheat_cop/cop_{jahr}.csv` (Metadaten: `cop_{jahr}.metadata.json`)
 
 | Spalte | Quelltemperatur | Beschreibung |
 |--------|----------------|-------------|

@@ -32,7 +32,7 @@ elements:
     column_mapping:
       year_climate: scenario
     scenario: "2035_mean_rcp85"
-  - path: datasets/wasteheat_capacity/capacity.csv
+  - path: datasets/wasteheat_capacity/capacity_2035_mean_rcp85.csv
     scenario: "2035_mean_rcp85"
 
 sequences:

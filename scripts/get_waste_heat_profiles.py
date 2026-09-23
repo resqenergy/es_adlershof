@@ -271,6 +271,7 @@ def create_wasteheat_profiles(scenario_name: str, year: int):
         ],
         outputs=[output_file],
         params={"scenario": scenario_name, "year": year},
+        filename=f"{output_file.stem}.metadata.json",
     )
 
 

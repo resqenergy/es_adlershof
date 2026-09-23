@@ -14,7 +14,7 @@ Disaggregates annual waste-heat potentials into hourly profiles per temperature 
 
 ## Outputs
 
-**Path:** `datasets/wasteheat_profiles/{scenario}.csv`
+**Path:** `datasets/wasteheat_profiles/{scenario}.csv` (Metadata: `{scenario}.metadata.json`)
 
 | Column | Description |
 |--------|-------------|

@@ -91,6 +91,8 @@ Dateien:
 
 Der Ordner `datasets/` enthält alle von den Vorverarbeitungsskripten erzeugten Zwischendaten. Sie dienen als Eingabe für oemof-pipe und werden nicht manuell bearbeitet. Jeder Unterordner entspricht einem Verarbeitungsschritt der Pipeline.
 
+Die meisten Unterordner enthalten eine `metadata.json` mit Provenienzinformationen (Skript, Eingaben, Ausgaben, Parameter, Git-Commit). Datensätze, die je Szenario oder Jahr erzeugt werden (`wasteheat_profiles`, `wasteheat_cop`, `wasteheat_capacity`), tragen Szenario bzw. Jahr im Dateinamen und haben eine Metadatendatei pro Ausgabedatei (`{ausgabe_stem}.metadata.json`, z. B. `cop_2050.metadata.json`). Die Metadatendatei wird zuletzt geschrieben und dient dem Makefile als Fertig-Markierung (siehe [Setup](setup.md#skip-rebuild)).
+
 ### datasets/areas/
 
 Zusammengeführte Nutzflächen (m²) und Nutzeinheiten pro Gebäudetyp und Cluster, getrennt nach den drei Wärmeversorgungstopologien (`central`, `decentral`, `low_temp_central`). Die Daten entstehen durch Zusammenführung der Unternehmens- und Wohngebäude-CSVs aus `raw/cluster/`. Erzeugt von `get_total_area_and_units.py`.
@@ -135,7 +137,7 @@ Normierte stündliche PV-Einspeisezeitreihen pro Technologie, eine Datei pro Wet
 Der Ordner `datapackages/` enthält die fertigen oemof.tabular-Datenpakete, die von oemof-pipe aus Blueprint und Szenariodaten zusammengestellt werden. Die Struktur folgt dem [Frictionless Data Standard](https://frictionlessdata.io/).
 Die Datenpakete werden erzeugt durch `oemof-pipe blueprint` (Templatedatei mit leeren Einträgen) und `oemof-pipe scenario` (Datenpaket pro Szenario):
 
-- `datapackages/adlershof/` — Basisdatenpaket, erzeugt durch `oemof-pipe blueprint`. Enthält alle technologieunabhängigen Strukturen.
+- `datapackages/adlershof_{YEAR}/` — Basisdatenpaket, erzeugt durch `oemof-pipe blueprint`. Enthält alle technologieunabhängigen Strukturen; der Zeitindex beginnt in `{YEAR}`.
 - `datapackages/adlershof_{SCENARIO}/` — Szenarienspezifisches Datenpaket, erzeugt durch `oemof-pipe scenario`. Enthält die für das Szenario angepassten Kapazitäten, Bedarfe und Zeitreihen.
 
 ### Verzeichnisstruktur
