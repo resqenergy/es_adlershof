@@ -17,6 +17,7 @@ def get_scenario_info(folder_name):
     parts = folder_name.split("_")
     year = parts[0]
     topology = "_".join(parts[3:])
+    topology = "lt_central" if topology == "low_temp_central" else topology
     climate = "_".join(parts[1:3])
     return year, climate, topology
 
