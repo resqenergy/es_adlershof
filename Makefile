@@ -53,8 +53,8 @@ parameters:
 	uv run -m scripts.preprocess_capacity_costs
 
 datapackage:
-	uv run oemof-pipe blueprint -f adlershof --start $(STARTTIME) --periods 8760
-	uv run oemof-pipe scenario -f adlershof $(SCENARIO)
+	uv run oemof-pipe blueprint -f adlershof --start $(STARTTIME) --periods 8760 --target adlershof_$(YEAR)
+	uv run oemof-pipe scenario -f adlershof_$(YEAR) --target adlershof_$(SCENARIO) $(SCENARIO)
 
 export_datapackage:
 	uv run -m utils.export_to_s3 adlershof_$(SCENARIO)
