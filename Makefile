@@ -35,7 +35,7 @@ DATASETS := $(AREAS) $(AREAS_FORECAST) $(NPRO_SCENARIOS) $(NPRO_BUILDINGS) $(DEM
 
 .PHONY: all areas areas_forecast npro_scenarios npro_buildings demand_profiles wasteheat_profiles wasteheat_cops wasteheat_capacities solar_thermal gsee_timeseries pv_timeseries bev_timeseries wind_timeseries parameters datapackage export_datapackage docs
 
-all: areas areas_forecast npro_scenarios npro_buildings demand_profiles wasteheat_profiles wasteheat_cops wasteheat_capacities solar_thermal gsee_timeseries pv_timeseries bev_timeseries wind_timeseries parameters datapackage
+all: datapackage
 
 areas: $(AREAS)
 $(AREAS):
