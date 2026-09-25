@@ -36,7 +36,6 @@ STATIC_HEATPUMPS = ("Abwasser", "Spree & Teltow-Kanal", "Geothermie mitteltief")
 def get_energy(technology: str, year: int) -> float:
     year_column = YEAR_INDEX_LOOKUP[year]
     energy_total = float(WASTEHEAT_POTENTIAL_ENERGIES.loc[technology].iloc[year_column])
-    energy_total *= 1000  # MWh -> kWh
     return energy_total
 
 
@@ -46,7 +45,6 @@ def get_power(technology: str) -> float:
             ",", "."
         )
     )
-    power *= 1000  # MW -> kW
     return power
 
 
@@ -84,7 +82,7 @@ def calculate_thermal_power(
     print(f"Full load hours: {energy_total / power_thermal:.0f} h")
     print("------------")
 
-    return power_thermal * 1000  # in kW
+    return power_thermal
 
 
 def get_dynamic_hp_powers(scenario: str, year: int) -> list[dict]:
@@ -107,7 +105,6 @@ def get_dynamic_hp_powers(scenario: str, year: int) -> list[dict]:
     technologies.remove("timeindex")
     capacities = []
     for tech in technologies:
-        print(tech)
         capacity = calculate_thermal_power(
             df_energy[f"{tech}-low_temperature_potential"],
             df_cop[f"{tech}-efficiency"],

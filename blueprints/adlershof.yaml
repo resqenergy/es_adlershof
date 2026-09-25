@@ -49,7 +49,7 @@ elements:
         heat_bus: heat_central
         expandable: True
     sequences:
-      - heatpump-geothermal
+      - capacity_potential
 
   volatile:
     component: volatile
