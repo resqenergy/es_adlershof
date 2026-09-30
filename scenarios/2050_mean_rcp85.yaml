@@ -42,6 +42,8 @@ sequences:
     sequence_name: flh_heatpumps_profile
   - path: datasets/wasteheat_profiles/2050_mean_rcp85.csv
     sequence_name: heatpumps_profile
+  - path: datasets/heatpump_air_cop/cop_2050_mean_rcp85.csv
+    sequence_name: heatpumps_profile
   - path: datasets/demand_profiles/2050_mean_rcp85.csv
     sequence_name: demands_profile
   - path: datasets/solar_thermal_profiles/solar_thermal_profile_try_mean_rcp85.p3.csv

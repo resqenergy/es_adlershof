@@ -1,27 +1,34 @@
-"""Module to generate COP timeseries for heatpumps."""
+"""Module to generate air-source heatpump COP timeseries for all weather scenarios."""
+
+from pathlib import Path
 
 import pandas as pd
 
 from settings import DATASETS_DIR, RAW_DIR
 from utils.metadata import write_metadata
+from utils.scenario import parse_weather_filename
 
 WEATHER_DIR = RAW_DIR / "weather"
-TEMPERATURE_LOW_COLUMN = "temp_air"
+TEMPERATURE_LOW_COLUMN = "air_temperature_mean"
 
-RESULT_DIR = DATASETS_DIR / "heatpump_air"
-RESULT_FILENAME = "ts_hp_air_cop.csv"
-RESULT_COLUMN_NAME = "heatpump_air-profile"
+RESULT_DIR = DATASETS_DIR / "heatpump_air_cop"
+RESULT_COLUMN_NAME = "heatpump_air-efficiency"
 
 QUALITY_GRADE = 0.4
 KELVIN = 273.15
-
-DEFAULT_REGION = "AD"
-DEFAULT_YEAR = 2050
-DEFAULT_TEMP_HIGH = 50.0
+TEMP_HIGH = 50.0  # in °C
 
 
-def calculate_cop(temp_low: pd.Series, temp_high: pd.Series) -> pd.Series:
-    """Calculate COP for given temperatures."""
+def calculate_cop(temp_low: pd.Series, temp_high: float) -> pd.Series:
+    """Calculate COP for given source and sink temperatures.
+
+    Args:
+        temp_low: Source (ambient air) temperature in °C.
+        temp_high: Sink temperature in °C.
+
+    Returns:
+        COP time series.
+    """
     temp_high_k = temp_high + KELVIN
     temp_low_k = temp_low + KELVIN
     cop = temp_high_k / (temp_high_k - temp_low_k) * QUALITY_GRADE
@@ -29,41 +36,46 @@ def calculate_cop(temp_low: pd.Series, temp_high: pd.Series) -> pd.Series:
     return cop
 
 
-def get_temperature_low(region: str, year: int) -> pd.Series:
-    """Read low temperature profile from file for given year."""
+def calculate_cop_for_weather(weather_file: Path, scenario: str, year: int) -> None:
+    """Calculate COP profile for one weather file and write CSV and metadata.
 
-    filename = WEATHER_DIR / f"weatherdata_{region}_{year}.csv"
-    if not filename.exists():
-        error_msg = f"Could not find temperature profile file {filename}."
-        raise FileNotFoundError(error_msg)
+    Args:
+        weather_file: TRY weather CSV file.
+        scenario: Scenario name used in output filenames.
+        year: Year used for the time index.
+    """
+    temp_low = pd.read_csv(weather_file, sep=";")[TEMPERATURE_LOW_COLUMN]
+    cop = calculate_cop(temp_low, TEMP_HIGH)
+    cop.index = pd.date_range(start=f"{year}-01-01", freq="h", periods=len(cop))
+    cop.index.name = "timeindex"
 
-    temperature_low = pd.read_csv(filename)[TEMPERATURE_LOW_COLUMN]
-    return temperature_low
-
-
-if __name__ == "__main__":
-    temp_low_series = get_temperature_low(region=DEFAULT_REGION, year=DEFAULT_YEAR)
-    temp_high_series = pd.Series([DEFAULT_TEMP_HIGH] * len(temp_low_series))
-    cop_series = calculate_cop(temp_low_series, temp_high_series)
-    timeindex = pd.date_range(
-        start=f"{DEFAULT_YEAR}-01-01", freq="h", periods=len(cop_series)
-    )
-    cop_series.index = timeindex
-    cop_series.index.name = "timeindex"
-    result_path = RESULT_DIR / RESULT_FILENAME
-    cop_series.to_csv(result_path, sep=";", index=True)
-    RESULT_DIR.mkdir(parents=True, exist_ok=True)
+    result_path = RESULT_DIR / f"cop_{scenario}.csv"
+    cop.to_csv(result_path)
     write_metadata(
         RESULT_DIR,
         script=__file__,
         description="Hourly COP time series for air-source heat pump, computed from ambient air temperature using a fixed quality grade.",
-        inputs=[WEATHER_DIR / f"weatherdata_{DEFAULT_REGION}_{DEFAULT_YEAR}.csv"],
+        inputs=[weather_file],
         outputs=[result_path],
         params={
-            "region": DEFAULT_REGION,
-            "year": DEFAULT_YEAR,
-            "temp_high_C": DEFAULT_TEMP_HIGH,
+            "scenario": scenario,
+            "year": year,
+            "temp_high_C": TEMP_HIGH,
             "quality_grade": QUALITY_GRADE,
         },
+        filename=f"cop_{scenario}.metadata.json",
         sources=[],
     )
+
+
+if __name__ == "__main__":
+    RESULT_DIR.mkdir(parents=True, exist_ok=True)
+    for file in WEATHER_DIR.glob("*.csv"):
+        weather_info = parse_weather_filename(file)
+        if weather_info is None:
+            continue
+        # Same scenario naming as get_demands_per_building
+        year_name = "statusquo" if weather_info.year == 2025 else str(weather_info.year)
+        calculate_cop_for_weather(
+            file, f"{year_name}_{weather_info.climate}", weather_info.year
+        )
