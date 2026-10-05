@@ -1982,8 +1982,8 @@ wheels = [
 
 [[package]]
 name = "oemof-pipe"
-version = "0.4.0"
-source = { git = "https://github.com/rl-institut/oemof_pipe#1c32b855fc1476db362e6dfdee5383ffdc286231" }
+version = "0.4.1"
+source = { git = "https://github.com/rl-institut/oemof_pipe#7e727f2c2f7946d0437fff24503c9ece1999525b" }
 dependencies = [
     { name = "duckdb" },
     { name = "frictionless" },
