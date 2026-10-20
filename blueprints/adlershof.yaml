@@ -124,7 +124,7 @@ elements:
   backpressures:
     component: backpressure
     instances:
-      - name: bhkw
+      - name: chp
         fuel_bus: gas
         electricity_bus: electricity
         heat_bus: heat_central
