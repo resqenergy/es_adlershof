@@ -23,3 +23,11 @@ Domain glossary for the es_adlershof data pipeline.
   `oemof-pipe blueprint`, with empty entries.
 - **Datapackage** — scenario datapackage `datapackages/adlershof_{SCENARIO}/`
   built by `oemof-pipe scenario` from the blueprint and datasets.
+- **Technikkatalog** — KWW technology catalogue for heat planning; source of
+  cost, efficiency and lifetime parameters per technology and size
+  (Dimensionierung).
+- **Spezifische Investitionskosten** — overnight investment cost per unit of
+  thermal capacity (source: €/kWth; a cost per power, not per energy).
+  Includes **Zusätzliche Kosten**.
+- **Zusätzliche Kosten** — additional investment cost per unit of thermal
+  capacity (€/kWth), listed separately in the Technikkatalog.

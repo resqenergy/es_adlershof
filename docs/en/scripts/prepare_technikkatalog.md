@@ -35,6 +35,8 @@ The mapping of technology catalog entries to model components is defined in the 
 
 For new technologies: extend `TECHNOLOGY_MAPPING`, then re-run the script.
 
+The technology catalog provides costs per kWth (capacity) and per MWhth (energy). `CAPACITY_UNIT` in `utils/technikkatalog.py` (`"kW"` or `"MW"`, default `"MW"`) sets the output unit of `capacity_cost_overnight`, `fixom_cost` and `marginal_cost`. With `"MW"`: €/MWth, €/MWth/a, €/MWhth. With `"kW"`: €/kWth, €/kWth/a, €/kWhth.
+
 ## Algorithm
 
 1. Call `get_technology_data(TECHNOLOGY_MAPPING)` from `utils/technikkatalog.py`

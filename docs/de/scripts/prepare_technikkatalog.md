@@ -35,6 +35,8 @@ Das Mapping von Technikkatalog-Einträgen auf Modellkomponenten ist im Skript al
 
 Für neue Technologien: Mapping in `TECHNOLOGY_MAPPING` erweitern, dann Skript erneut ausführen.
 
+Der Technikkatalog liefert Kosten pro kWth (Leistung) und pro MWhth (Energie). `CAPACITY_UNIT` in `utils/technikkatalog.py` (`"kW"` oder `"MW"`, Standard `"MW"`) legt die Ausgabeeinheit von `capacity_cost_overnight`, `fixom_cost` und `marginal_cost` fest. Mit `"MW"`: €/MWth, €/MWth/a, €/MWhth. Mit `"kW"`: €/kWth, €/kWth/a, €/kWhth.
+
 ## Algorithmus
 
 1. `get_technology_data(TECHNOLOGY_MAPPING)` aus `utils/technikkatalog.py` aufrufen

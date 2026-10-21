@@ -39,6 +39,22 @@ PARAMETER_PREPROCESSING = {
 
 FORECAST_YEARS = (2035, 2050)
 
+# Capacity unit of output costs; Technikkatalog gives costs per kWth and per MWhth
+CAPACITY_UNIT = "MW"
+
+UNIT_CONVERSIONS = {
+    "kW": {
+        "capacity_cost_overnight": (1, "€/kWth"),
+        "fixom_cost": (1, "€/kWth/a"),
+        "marginal_cost": (0.001, "€/kWhth"),
+    },
+    "MW": {
+        "capacity_cost_overnight": (1000, "€/MWth"),
+        "fixom_cost": (1000, "€/MWth/a"),
+        "marginal_cost": (1, "€/MWhth"),
+    },
+}
+
 
 # Add forecast
 def calculate_forecast(costs_per_year: dict[int, float], target_year: int) -> float:
@@ -231,6 +247,19 @@ def apply_mappings_and_format(
     return df
 
 
+def convert_units(df: pd.DataFrame, capacity_unit: str) -> pd.DataFrame:
+    """Convert cost parameters from Technikkatalog units (€/kWth, €/MWhth) to given capacity unit."""
+    if capacity_unit not in UNIT_CONVERSIONS:
+        raise ValueError(
+            f"Unknown capacity unit '{capacity_unit}', use one of {list(UNIT_CONVERSIONS)}."
+        )
+    for var_name, (factor, unit) in UNIT_CONVERSIONS[capacity_unit].items():
+        mask = df["var_name"] == var_name
+        df.loc[mask, "var_value"] *= factor
+        df.loc[mask, "Einheit"] = unit
+    return df
+
+
 def get_technology_data(technology_mapping: dict):
     # Load raw data
     raw_data = load_and_clean_data(FLATDATA_FILE_RAW)
@@ -250,4 +279,6 @@ def get_technology_data(technology_mapping: dict):
     parameter_data = apply_mappings_and_format(
         forecast_data, technology_mapping, PARAMETER_MAPPING
     )
-    return parameter_data
+
+    # Convert costs from kWth to CAPACITY_UNIT
+    return convert_units(parameter_data, CAPACITY_UNIT)
