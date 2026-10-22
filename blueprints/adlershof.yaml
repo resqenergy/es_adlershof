@@ -47,7 +47,7 @@ elements:
         electricity_bus: electricity
         aquifer_bus: aquifer
         heat_bus: heat_central
-        expandable: True
+        expandable: False
     sequences:
       - capacity_potential
 
@@ -81,7 +81,7 @@ elements:
         expandable: True
       - name: storage_aquifer
         bus: aquifer
-        expandable: True
+        expandable: False
       - name: storage_pressure
         bus: heat_central
         expandable: True
