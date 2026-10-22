@@ -34,7 +34,7 @@ DATASETS := $(AREAS) $(AREAS_FORECAST) $(NPRO_SCENARIOS) $(NPRO_BUILDINGS) $(DEM
 	$(GSEE_TIMESERIES) $(PV_TIMESERIES) $(BEV_TIMESERIES) $(WIND_TIMESERIES) \
 	$(TECHNIKKATALOG) $(TECHNOLOGIES) $(CAPACITY_COSTS)
 
-.PHONY: all areas areas_forecast npro_scenarios npro_buildings demand_profiles wasteheat_profiles wasteheat_cops wasteheat_capacities heatpump_air_cops solar_thermal gsee_timeseries pv_timeseries bev_timeseries wind_timeseries parameters datapackage export_datapackage docs
+.PHONY: all areas areas_forecast npro_scenarios npro_buildings demand_profiles wasteheat_profiles wasteheat_cops wasteheat_capacities heatpump_air_cops solar_thermal gsee_timeseries pv_timeseries bev_timeseries wind_timeseries parameters datapackage export_datapackage docs test
 
 all: datapackage
 
@@ -120,3 +120,6 @@ export_datapackage:
 docs:
 	uv run zensical build
 	uv run zensical build -f zensical.en.toml
+
+test:
+	uv run pytest

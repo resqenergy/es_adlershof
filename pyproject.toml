@@ -28,5 +28,10 @@ npro = { git = "https://github.com/resqenergy/npro" }
 
 [dependency-groups]
 dev = [
+    "pytest>=9.1.1",
     "zensical>=0.0.45",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
