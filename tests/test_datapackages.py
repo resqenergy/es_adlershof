@@ -40,3 +40,26 @@ def test_expandable_components_have_capacity_cost():
     assert not missing, "Expandable components without capacity cost:\n" + "\n".join(
         missing
     )
+
+def test_expandable_components_have_capacity():
+    datapackages = scenario_datapackages()
+    if not datapackages:
+        pytest.skip("No scenario datapackage found, run `make datapackage` first.")
+
+    missing = []
+    for datapackage in datapackages:
+        for elements_file in sorted((datapackage / "data" / "elements").glob("*.csv")):
+            df = pd.read_csv(elements_file, sep=";")
+            if "expandable" not in df:
+                continue
+            expandable = df[df["expandable"].astype(str).str.lower() == "true"]
+            capacity_columns = [c for c in df.columns if c.endswith("capacity")]
+            for column in capacity_columns:
+                for name in expandable.loc[expandable[column].isna(), "name"]:
+                    missing.append(
+                        f"{datapackage.name}/{elements_file.name}: {name} has no {column}"
+                    )
+
+    assert not missing, "Expandable components without capacity:\n" + "\n".join(
+        missing
+    )
