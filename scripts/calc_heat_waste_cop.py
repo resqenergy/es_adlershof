@@ -34,8 +34,14 @@ def calculate_heat_waste_cops(year: int):
         "https://wasserportal.berlin.de/station.php?anzeige=d&station=5866700&thema=owt",
         data={"sreihe": "ew", "smode": "c", "sdatum": "01.01.2025"},
     )
+    response.raise_for_status()
+    # Wasserportal Berlin currently shows PHP depraction warnings (html) to ich csv-line
+    csv_text="\n".join(
+        line for line in response.text.splitlines() if not line.startswith("<")
+    )
+
     canal_water_temperature_raw = pd.read_csv(
-        StringIO(response.text),
+        StringIO(csv_text),
         sep=";",
         decimal=",",
         index_col="Datum",
