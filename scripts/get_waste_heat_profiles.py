@@ -48,7 +48,6 @@ YEAR_INDEX_LOOKUP = {2025: 0, 2035: 1, 2050: 2}
 def get_energy(technology: str, year: int) -> float:
     year_column = YEAR_INDEX_LOOKUP[year]
     energy_total = float(WASTEHEAT_POTENTIAL_ENERGIES.loc[technology].iloc[year_column])
-    energy_total *= 1000  # MWh -> kWh
     return energy_total
 
 
