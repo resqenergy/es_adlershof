@@ -50,6 +50,10 @@ sequences:
     sequence_name: volatile_profile
     column_mapping:
       solar_thermal_power: heat_lt_central-solarthermal-profile
+  - path: datasets/solar_thermal_profiles/solar_thermal_profile_try_mean_rcp85.p3.csv
+    sequence_name: volatile_profile
+    column_mapping:
+      solar_thermal_power: heat_decentral-solarthermal-profile
   - path: datasets/wind_profiles/wind_timeseries-try_mean_rcp85.p3-2050.csv
     sequence_name: volatile_profile
     column_mapping:
