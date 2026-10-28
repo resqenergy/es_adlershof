@@ -16,7 +16,7 @@ Der Wetter-Ordner wird über `npro.settings.WEATHER_DIR` bestimmt.
 
 | Pfad | Beschreibung |
 |------|--------------|
-| `datasets/solar_thermal_profiles/solar_thermal_profile_<wetterdatei>.csv` | Stündliche Wärmeleistung des Kollektors \[W/m²\], Spalte `solar_thermal_power`, Index `timeindex` |
+| `datasets/solar_thermal_profiles/solar_thermal_profile_<wetterdatei>.csv` | Stündlicher Kapazitätsfaktor des Kollektors (Wärmeleistung pro installiertem MW\_th, Werte zwischen 0 und 1), Spalte `solar_thermal_power`, Index `timeindex`. Summe über alle Stunden = Volllaststunden |
 
 Pro TRY-Wetterdatei wird eine separate Ausgabedatei erstellt. Periodenkennung (`p1`, `p2`, `p3`) im Dateinamen bestimmt das Zieljahr (2025, 2035, 2050).
 
@@ -31,7 +31,11 @@ Alle Parameter sind direkt im Skript als Konstanten definiert:
 | `A2` | 0.018 | Thermischer Verlustkoeffizient 2. Ordnung \[W/(m²·K²)\] |
 | `TILT` | 0° | Neigungswinkel des Kollektors |
 | `AZIMUT` | 20° | Azimutwinkel (Ost von Nord) |
-| `TEMP_INLET` | 50 °C | Vorlauftemperatur des Kollektors |
+| `NETWORK_SUPPLY_TEMP` | 59 °C | Vorlauftemperatur des Niedertemperaturnetzes |
+| `NETWORK_RETURN_TEMP` | 35 °C | Rücklauftemperatur, Annahme (Spreizung 24 K, Rücklauf nicht bekannt) |
+| `TEMP_INLET` | = Rücklauf | Kollektoreintritt |
+| `DELTA_TEMP_N` | 12 K | Halbe Spreizung, Abstand der mittleren Kollektortemperatur zum Eintritt |
+| `RATED_POWER_PER_AREA` | 700 W/m² | Nennleistung des Kollektors (0,7 kW\_th/m²), Normierung auf den Kapazitätsfaktor |
 | `LAT` | 52.43° | Breitengrad (Adlershof, Berlin) |
 | `LONG` | 13.54° | Längengrad (Adlershof, Berlin) |
 
@@ -49,10 +53,11 @@ Kollektorkennwerte stammen aus dem Datenblatt eines Standardflachkollektors (Que
    - Gesamtstrahlung auf Kollektor (`poa_global`) berechnen
 3. Kollektorwirkungsgrad nach EN 12975:
    - `η = η₀ − a₁·ΔT/E − a₂·ΔT²/E`
-   - `ΔT = T_inlet + ΔT_n − T_amb`
+   - `ΔT = T_inlet + ΔT_n − T_amb`, mit `T_amb` stündlich aus den Wetterdaten
    - Wirkungsgrad wird auf 0 begrenzt (kein negativer Ertrag)
-4. Wärmeleistung: `Q = η · E_coll`
-5. Ergebnis als CSV speichern
+4. Wärmeleistung: `Q = η · E_coll` \[W/m²\]
+5. Normierung: `Q / RATED_POWER_PER_AREA` ergibt den Kapazitätsfaktor
+6. Ergebnis als CSV speichern
 
 ## Abhängigkeiten
 

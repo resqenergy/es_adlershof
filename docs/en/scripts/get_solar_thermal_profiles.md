@@ -16,7 +16,7 @@ The weather folder is determined via `npro.settings.WEATHER_DIR`.
 
 | Path | Description |
 |------|--------------|
-| `datasets/solar_thermal_profiles/solar_thermal_profile_<weatherfile>.csv` | Hourly collector heat output \[W/m²\], column `solar_thermal_power`, index `timeindex` |
+| `datasets/solar_thermal_profiles/solar_thermal_profile_<weatherfile>.csv` | Hourly collector capacity factor (heat output per installed MW\_th, values between 0 and 1), column `solar_thermal_power`, index `timeindex`. Sum over all hours = full-load hours |
 
 One output file is created per TRY weather file. The period marker (`p1`, `p2`, `p3`) in the file name determines the target year (2025, 2035, 2050).
 
@@ -31,7 +31,11 @@ All parameters are defined directly as constants in the script:
 | `A2` | 0.018 | Second-order thermal loss coefficient \[W/(m²·K²)\] |
 | `TILT` | 0° | Collector tilt angle |
 | `AZIMUT` | 20° | Azimuth angle (east of north) |
-| `TEMP_INLET` | 50 °C | Collector inlet temperature |
+| `NETWORK_SUPPLY_TEMP` | 59 °C | Supply temperature of the low-temperature network |
+| `NETWORK_RETURN_TEMP` | 35 °C | Return temperature, assumption (24 K spread, return temperature not known) |
+| `TEMP_INLET` | = return | Collector inlet |
+| `DELTA_TEMP_N` | 12 K | Half of the spread, distance of the mean collector temperature to the inlet |
+| `RATED_POWER_PER_AREA` | 700 W/m² | Rated collector power (0.7 kW\_th/m²), used to normalize to the capacity factor |
 | `LAT` | 52.43° | Latitude (Adlershof, Berlin) |
 | `LONG` | 13.54° | Longitude (Adlershof, Berlin) |
 
@@ -49,10 +53,11 @@ Collector characteristics come from the data sheet of a standard flat-plate coll
    - Compute total irradiance on the collector (`poa_global`)
 3. Collector efficiency per EN 12975:
    - `η = η₀ − a₁·ΔT/E − a₂·ΔT²/E`
-   - `ΔT = T_inlet + ΔT_n − T_amb`
+   - `ΔT = T_inlet + ΔT_n − T_amb`, with `T_amb` hourly from the weather data
    - Efficiency is clipped at 0 (no negative yield)
-4. Heat output: `Q = η · E_coll`
-5. Save result as CSV
+4. Heat output: `Q = η · E_coll` \[W/m²\]
+5. Normalization: `Q / RATED_POWER_PER_AREA` gives the capacity factor
+6. Save result as CSV
 
 ## Dependencies
 

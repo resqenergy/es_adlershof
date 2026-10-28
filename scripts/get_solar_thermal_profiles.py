@@ -32,7 +32,14 @@ A2 = 0.018
 
 TILT = 0
 AZIMUT = 20  # South
-TEMP_INLET = 50  # Vorlauftemperatur
+NETWORK_SUPPLY_TEMP = 59  # Vorlauf Niedertemperaturnetz
+# Assumption: return temperature is unknown, 24 K spread is typical for LT networks
+NETWORK_RETURN_TEMP = 35
+TEMP_INLET = NETWORK_RETURN_TEMP  # Kollektoreintritt = Netzrücklauf
+# Mean collector temperature is TEMP_INLET + DELTA_TEMP_N, i.e. the mid-point of the spread
+DELTA_TEMP_N = (NETWORK_SUPPLY_TEMP - NETWORK_RETURN_TEMP) / 2
+# Rated thermal power per collector area (0.7 kW_th/m²), converts W/m² to a capacity factor
+RATED_POWER_PER_AREA = 700
 LAT = 52.43
 LONG = 13.54
 
@@ -228,7 +235,7 @@ def calculate_solar_thermal_power_for_weather(
         A1,
         A2,
         TEMP_INLET,
-        TEMP_INLET - weather_data["air_temperature_mean"].mean(),
+        DELTA_TEMP_N,
         weather_data["radiation_downwelling"],
         weather_data["radiation_diffuse"],
         weather_data["air_temperature_mean"],
@@ -237,6 +244,8 @@ def calculate_solar_thermal_power_for_weather(
     solar_thermal_data.rename(
         {"collectors_heat": "solar_thermal_power"}, axis=1, inplace=True
     )
+    # Capacity factor: output per installed MW_th, so that sum(profile) = full-load hours
+    solar_thermal_data["solar_thermal_power"] /= RATED_POWER_PER_AREA
     solar_thermal_data.index.name = "timeindex"
     output_path = SOLAR_DIR / f"solar_thermal_profile_{weather_filename.stem}.csv"
     solar_thermal_data["solar_thermal_power"].to_csv(output_path, index=True)
@@ -267,6 +276,8 @@ if __name__ == "__main__":
             "tilt_deg": TILT,
             "azimuth_deg": AZIMUT,
             "temp_inlet_C": TEMP_INLET,
+            "delta_temp_n_K": DELTA_TEMP_N,
+            "rated_power_W_per_m2": RATED_POWER_PER_AREA,
             "lat": LAT,
             "lon": LONG,
         },
