@@ -199,7 +199,8 @@ def aggregate_demands():
         year_str = 2025 if year == "statusquo" else year
         timeindex = pd.date_range(f"{year_str}-01-01", periods=8760, freq="h")
         df_normalized = (
-            df_prof / df_total[df_total["year_climate"] == f"{year}_{climate}"].iloc[0]
+            df_prof
+            / (df_total[df_total["year_climate"] == f"{year}_{climate}"].iloc[0] * 1000)
         )
         df_normalized["timeindex"] = timeindex
         df_normalized = df_normalized.fillna(0.0)
