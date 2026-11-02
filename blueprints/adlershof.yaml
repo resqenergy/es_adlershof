@@ -88,6 +88,9 @@ elements:
       - name: storage_buffer
         bus: heat_decentral
         expandable: True
+      - name: storage_buffer
+        bus: heat_lt_central
+        expandable: True
 
   conversion:
     component: conversion
@@ -120,6 +123,14 @@ elements:
         from_bus: heat_central
         to_bus: aquifer
         expandable: True
+      - name: heat_lt_central-heat_exchanger
+        from_bus: heat_lt_central
+        to_bus: heat_central
+        expandable: False
+      - name: heat_central-heat_exchanger
+        from_bus: heat_central
+        to_bus: heat_lt_central
+        expandable: False
 
   backpressures:
     component: backpressure
