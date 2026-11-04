@@ -63,11 +63,15 @@ elements:
       - name: wind
         bus: electricity
         expandable: True
-      - name: heat_lt_central-solarthermal
-        bus: heat_lt_central
-        expandable: True
       - name: heat_decentral-solarthermal
         bus: heat_decentral
+        expandable: True
+
+  dispatchable:
+    component: dispatchable
+    instances:
+      - name: heat_lt_central-solarthermal
+        bus: heat_lt_central
         expandable: True
 
   storages:
