@@ -16,6 +16,8 @@ DEMAND_PROFILES := datasets/demand_profiles/metadata.json
 WASTEHEAT_PROFILES := datasets/wasteheat_profiles/$(SCENARIO).metadata.json
 WASTEHEAT_COPS := datasets/wasteheat_cop/cop_$(YEAR).metadata.json
 WASTEHEAT_CAPACITIES := datasets/wasteheat_capacity/capacity_$(SCENARIO).metadata.json
+# calc_heat_exchanger writes both datasets; the max-profile metadata is written last and serves as marker.
+HEAT_EXCHANGERS := datasets/heat_exchanger_max_profiles/max_$(SCENARIO).metadata.json
 HEATPUMP_AIR_COPS := datasets/heatpump_air_cop/cop_$(SCENARIO).metadata.json
 SOLAR_THERMAL := datasets/solar_thermal_profiles/metadata.json
 GSEE_TIMESERIES := datasets/gsee_timeseries/metadata.json
@@ -30,11 +32,11 @@ BLUEPRINT := datapackages/adlershof_$(YEAR)
 DATAPACKAGE := datapackages/adlershof_$(SCENARIO)
 
 DATASETS := $(AREAS) $(AREAS_FORECAST) $(NPRO_SCENARIOS) $(NPRO_BUILDINGS) $(DEMAND_PROFILES) \
-	$(WASTEHEAT_PROFILES) $(WASTEHEAT_COPS) $(WASTEHEAT_CAPACITIES) $(HEATPUMP_AIR_COPS) $(SOLAR_THERMAL) \
+	$(WASTEHEAT_PROFILES) $(WASTEHEAT_COPS) $(WASTEHEAT_CAPACITIES) $(HEAT_EXCHANGERS) $(HEATPUMP_AIR_COPS) $(SOLAR_THERMAL) \
 	$(GSEE_TIMESERIES) $(PV_TIMESERIES) $(BEV_TIMESERIES) $(WIND_TIMESERIES) \
 	$(TECHNIKKATALOG) $(TECHNOLOGIES) $(CAPACITY_COSTS)
 
-.PHONY: all areas areas_forecast npro_scenarios npro_buildings demand_profiles wasteheat_profiles wasteheat_cops wasteheat_capacities heatpump_air_cops solar_thermal gsee_timeseries pv_timeseries bev_timeseries wind_timeseries parameters datapackage export_datapackage docs test
+.PHONY: all areas areas_forecast npro_scenarios npro_buildings demand_profiles wasteheat_profiles wasteheat_cops wasteheat_capacities heat_exchangers heatpump_air_cops solar_thermal gsee_timeseries pv_timeseries bev_timeseries wind_timeseries parameters datapackage export_datapackage docs test
 
 all: datapackage
 
@@ -69,6 +71,10 @@ $(WASTEHEAT_COPS):
 wasteheat_capacities: $(WASTEHEAT_CAPACITIES)
 $(WASTEHEAT_CAPACITIES): $(WASTEHEAT_COPS) $(WASTEHEAT_PROFILES)
 	uv run -m scripts.calc_heat_waste_power $(SCENARIO) $(YEAR)
+
+heat_exchangers: $(HEAT_EXCHANGERS)
+$(HEAT_EXCHANGERS): $(DEMAND_PROFILES)
+	uv run -m scripts.calc_heat_exchanger $(SCENARIO)
 
 heatpump_air_cops: $(HEATPUMP_AIR_COPS)
 $(HEATPUMP_AIR_COPS):
