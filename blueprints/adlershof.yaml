@@ -63,11 +63,15 @@ elements:
       - name: wind
         bus: electricity
         expandable: True
-      - name: heat_lt_central-solarthermal
-        bus: heat_lt_central
-        expandable: True
       - name: heat_decentral-solarthermal
         bus: heat_decentral
+        expandable: True
+
+  dispatchable:
+    component: dispatchable
+    instances:
+      - name: heat_lt_central-solarthermal
+        bus: heat_lt_central
         expandable: True
 
   storages:
@@ -87,6 +91,9 @@ elements:
         expandable: True
       - name: storage_buffer
         bus: heat_decentral
+        expandable: True
+      - name: heat_lt_central-storage_buffer
+        bus: heat_lt_central
         expandable: True
 
   conversion:
@@ -120,6 +127,18 @@ elements:
         from_bus: heat_central
         to_bus: aquifer
         expandable: True
+      - name: heat_central-heat_exchanger
+        from_bus: heat_central
+        to_bus: heat_lt_central
+        expandable: False
+
+  heat_exchangers:
+    component: conversion_max
+    instances:
+      - name: heat_lt_central-heat_exchanger
+        from_bus: heat_lt_central
+        to_bus: heat_central
+        expandable: False
 
   backpressures:
     component: backpressure

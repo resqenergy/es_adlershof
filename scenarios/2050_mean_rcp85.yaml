@@ -34,6 +34,8 @@ elements:
     scenario: "2050_mean_rcp85"
   - path: datasets/wasteheat_capacity/capacity_2050_mean_rcp85.csv
     scenario: "2050_mean_rcp85"
+  - path: datasets/heat_exchanger_capacity/capacity_2050_mean_rcp85.csv
+    scenario: "2050_mean_rcp85"
 
 sequences:
   - path: datasets/wasteheat_cop/cop_2050.csv
@@ -46,8 +48,10 @@ sequences:
     sequence_name: heatpumps_profile
   - path: datasets/demand_profiles/2050_mean_rcp85.csv
     sequence_name: demands_profile
+  - path: datasets/heat_exchanger_max_profiles/max_2050_mean_rcp85.csv
+    sequence_name: heat_exchangers_profile
   - path: datasets/solar_thermal_profiles/solar_thermal_profile_try_mean_rcp85.p3.csv
-    sequence_name: volatile_profile
+    sequence_name: dispatchable_profile
     column_mapping:
       solar_thermal_power: heat_lt_central-solarthermal-profile
   - path: datasets/solar_thermal_profiles/solar_thermal_profile_try_mean_rcp85.p3.csv
