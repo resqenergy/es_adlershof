@@ -69,6 +69,7 @@ nav = [
       { "Wärmepumpe-COP: Luft" = "scripts/preprocess_hp_air_cop.md" },
       { "Abwärme-Potential: Teltowkanal" = "scripts/calc_waermemenge_teltowkanal.md"},
       { "Abwärme-Potentiale: Sonstige" = "scripts/calc_heat_waste_power.md" },
+      { "Wärmetauscher LT ↔ HT" = "scripts/calc_heat_exchanger.md" },
 
     ]},
     { "Technoökonomische Parameter" = [

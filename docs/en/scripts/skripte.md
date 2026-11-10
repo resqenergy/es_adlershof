@@ -22,6 +22,7 @@ This page gives a short overview of all data-pipeline processing scripts. They a
 | [Hourly waste-heat profiles](get_waste_heat_profiles.md) | `get_waste_heat_profiles.py` | Disaggregates annual waste-heat potentials into hourly profiles per temperature level. |
 | [COP waste-heat heat pumps](calc_heat_waste_cop.md) | `calc_heat_waste_cop.py` | Computes hourly COP time series for six waste-heat heat pump components from their source temperatures. |
 | [Waste-heat capacities](calc_heat_waste_power.md) | `calc_heat_waste_power.py` | Derives thermal capacity potentials for all waste-heat heat pump components. |
+| [Heat exchangers LT ↔ HT](calc_heat_exchanger.md) | `calc_heat_exchanger.py` | Computes the nominal capacities of the heat exchangers between the HT and LT networks and the hourly feed-in profile LT → HT. |
 | [Teltow Canal heat quantity](calc_waermemenge_teltowkanal.md) | `calc_waermemenge_teltowkanal.py` | Estimates the mean usable heat output of the Teltow Canal as a heat pump source from flow and temperature data. |
 | [COP air heat pumps](preprocess_hp_air_cop.md) | `preprocess_hp_air_cop.py` | Computes an hourly COP time series for air heat pumps using the Carnot approach. |
 

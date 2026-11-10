@@ -13,9 +13,9 @@ MAX_PROFILE_DIR.mkdir(exist_ok=True)
 
 DEMAND_PROFILES_DIR = DATASETS_DIR / "demand_profiles"
 
-T_SUP_HT = 110
-T_RET_HT = 55
-DELTA_T_RL_PERM = 10
+T_SUP_HT = 110 # in °C, preliminary assumption
+T_RET_HT = 55  # in °C, preliminary assumption
+DELTA_T_RL_PERM = 10 #in °C, preliminary assumption
 
 HT_CARRIERS = ("heat_central-residential", "heat_central-non_residential")
 LT_CARRIER = "heat_lt_central-residential"

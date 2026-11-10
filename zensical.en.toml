@@ -45,6 +45,7 @@ nav = [
       { "Heat pump COP: air" = "scripts/preprocess_hp_air_cop.md" },
       { "Waste-heat potential: Teltow Canal" = "scripts/calc_waermemenge_teltowkanal.md" },
       { "Waste-heat potentials: other" = "scripts/calc_heat_waste_power.md" },
+      { "Heat exchangers LT ↔ HT" = "scripts/calc_heat_exchanger.md" },
     ]},
     { "Techno-economic parameters" = [
       { "Prepare technology catalog" = "scripts/prepare_technikkatalog.md" },

@@ -22,6 +22,7 @@ Diese Seite gibt einen kurzen Überblick über alle Verarbeitungsskripte der Dat
 | [Abwärme-Stundenprofile](get_waste_heat_profiles.md) | `get_waste_heat_profiles.py` | Disaggregiert jährliche Abwärmepotenziale in stündliche Profile je Temperaturniveau. |
 | [COP Abwärme-WP](calc_heat_waste_cop.md) | `calc_heat_waste_cop.py` | Berechnet stündliche COP-Zeitreihen für sechs Abwärme-Wärmepumpen-Komponenten anhand ihrer Quelltemperaturen. |
 | [Abwärme-Kapazitäten](calc_heat_waste_power.md) | `calc_heat_waste_power.py` | Leitet thermische Kapazitätspotenziale für alle Abwärme-Wärmepumpen-Komponenten ab. |
+| [Wärmetauscher LT ↔ HT](calc_heat_exchanger.md) | `calc_heat_exchanger.py` | Berechnet die Nennleistungen der Wärmetauscher zwischen HT- und LT-Netz sowie das stündliche Einspeiseprofil LT → HT. |
 | [Teltow-Kanal Wärmemenge](calc_waermemenge_teltowkanal.md) | `calc_waermemenge_teltowkanal.py` | Schätzt die mittlere nutzbare Wärmeleistung des Teltow-Kanals als Wärmepumpen-Quelle aus Durchfluss- und Temperaturdaten. |
 | [COP Luftwärmepumpen](preprocess_hp_air_cop.md) | `preprocess_hp_air_cop.py` | Berechnet eine stündliche COP-Zeitreihe für Luftwärmepumpen nach dem Carnot-Ansatz. |
 
